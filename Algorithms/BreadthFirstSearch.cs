@@ -5,38 +5,45 @@ namespace GraphAlgorithmVisualizer.Algorithms
 {
     internal class BreadthFirstSearch
     {
-        /*public static List<BFSRecord> PeformOn(Graph graph, Vertex start)
+        public static void Perform(Graph graph, Vertex start, out Dictionary<Vertex, Vertex> previousVertex, out Dictionary<Vertex, int> distance)
         {
-            List<BFSRecord> results = new List<BFSRecord>();
-            foreach (Vertex vertex in graph.Vertices)
-            {
-                results.Add(new BFSRecord(vertex, null, int.MaxValue));
-            }
-            SpecialQueue<Vertex> queue = new SpecialQueue<Vertex>(graph.Vertices.Count);
-            queue.Inject(start);
+            previousVertex = new Dictionary<Vertex, Vertex>();
+            distance = new Dictionary<Vertex, int>();
+            Queue<Vertex> queue = new Queue<Vertex>();
+            if (!graph.Contains(start))
+                throw new System.Exception("Start Vertex was not found on Graph's Vertices list.");
 
-            while (queue.Size > 0)
+            foreach (Vertex vertex in graph.VerticesArray)
             {
-                Vertex ejectedVertex = queue.Eject();
-                foreach (Edge edge in graph.Edges)
+                previousVertex.Add(vertex, null);
+                distance.Add(vertex, int.MaxValue);
+            }
+
+            distance[start] = 0;
+            queue.Enqueue(start);
+
+            while (queue.Count != 0)
+            {
+                Vertex dequeuedVertex = queue.Dequeue();
+                foreach (Edge edge in graph.EdgesArray)
                 {
-                    if (results.Find))
+                    if (edge.IsDirectional && !edge.Start.Equals(dequeuedVertex))
+                        continue;
+                    else if (!edge.IsDirectional && (!edge.Start.Equals(dequeuedVertex) || !edge.End.Equals(dequeuedVertex)))
+                        continue;
+                    else
+                    {
+                        Vertex matchedVertex = edge.Start.Equals(dequeuedVertex) ? edge.Start : edge.End;
+                        Vertex otherVertex = edge.Start.Equals(dequeuedVertex) ? edge.End : edge.Start;
+                        if (distance[matchedVertex] == int.MaxValue)
+                        {
+                            queue.Enqueue(matchedVertex);
+                            distance[matchedVertex] = distance[otherVertex] + 1;
+                            previousVertex[matchedVertex] = otherVertex;
+                        }
+                    }
                 }
             }
-        }*/
-    }
-
-    internal class BFSRecord
-    {
-        public Vertex Vertex;
-        public Vertex PreviousVertex;
-        public int Distance;
-
-        public BFSRecord(Vertex vertex, Vertex previousVertex, int distance)
-        {
-            Vertex = vertex;
-            PreviousVertex = previousVertex;
-            Distance = distance;
         }
     }
 }
