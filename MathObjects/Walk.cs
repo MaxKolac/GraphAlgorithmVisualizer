@@ -46,11 +46,11 @@ namespace GraphAlgorithmVisualizer.MathObjects
 
         public void AddVertex(Vertex addedVertex)
         {
-            if (!graph.Vertices.Contains(addedVertex))
+            if (!graph.Contains(addedVertex))
                 throw new GraphException("Attempted to add a Vertex which the Graph did not have listed in its Vertecies list.");
-            if (graph.IsDirectional && !graph.Edges.Contains(new Edge(Vertices.Last().Value, addedVertex, graph.IsDirectional)))
+            if (graph.IsDirectional && !graph.Contains(new Edge(Vertices.Last().Value, addedVertex, graph.IsDirectional)))
                 throw new GraphException("Attempted to add a Vertex which is not on the finish of any directional Edges coming out of the Walk's last added Vertex, according to Graph's Edges list.");
-            else if (!graph.IsDirectional && !graph.Edges.Contains(new Edge(addedVertex, Vertices.Last().Value, graph.IsDirectional)))
+            else if (!graph.IsDirectional && !graph.Contains(new Edge(addedVertex, Vertices.Last().Value, graph.IsDirectional)))
                 throw new GraphException("Attempted to add a Vertex which is not on the start or finish of any bidirectional Edges.");
             //Type = CheckType();
             Vertices.Add(Length + 1, addedVertex);
@@ -60,7 +60,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
 
         public void AddEdge(Edge addedEdge)
         {
-            if (!graph.Edges.Contains(addedEdge))
+            if (!graph.Contains(addedEdge))
                 throw new GraphException("Attempted to add an Edge which the Graph did not have listed in its Edges list.");
             if (!Vertices.Last().Value.Equals(addedEdge.Start))
                 throw new GraphException("Attempted to add an Edge which did not start from the Walk's last Vertex.");

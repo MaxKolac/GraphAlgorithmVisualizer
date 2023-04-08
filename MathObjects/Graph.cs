@@ -1,6 +1,7 @@
-﻿using GraphAlgorithmVisualizer.Exceptions;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Text;
+using GraphAlgorithmVisualizer.Exceptions;
 
 namespace GraphAlgorithmVisualizer.MathObjects
 {
@@ -12,15 +13,39 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// <summary>
         /// A List of all <c>Vertices</c> inside the graph.
         /// </summary>
-        public readonly List<Vertex> Vertices = new List<Vertex>();
+        private readonly List<Vertex> Vertices = new List<Vertex>();
         /// <summary>
         /// A List of all <c>Edges inside the graph.</c>
         /// </summary>
-        public readonly List<Edge> Edges = new List<Edge>();
+        private readonly List<Edge> Edges = new List<Edge>();
         /// <summary>
         /// Whether or not the <c>Graph</c> is considered to be directional or not.
         /// </summary>
         public readonly bool IsDirectional;
+        /// <summary>
+        /// An array containing all of the <c>Graph</c>'s vertices.
+        /// </summary>
+        public Vertex[] VerticesArray => Vertices.ToArray();
+        /// <summary>
+        /// An array containing all of the <c>Graph</c>'s edges.
+        /// </summary>
+        public Edge[] EdgesArray => Edges.ToArray();
+        /// <returns>
+        /// A <c>Vertex</c> from the <c>Graph</c>'s vertices list under the provided <c>index</c>.
+        /// </returns>
+        public Vertex V(int index) => Vertices[index];
+        /// <returns>
+        /// An <c>Edge</c> from the <c>Graph</c>'s edges list under the provided <c>index</c>.
+        /// </returns>
+        public Edge E(int index) => Edges[index];
+        /// <returns>
+        /// The amount of vertices in this <c>Graph</c>.
+        /// </returns>
+        public int VerticesCount => Vertices.Count;
+        /// <returns>
+        /// The amount of edges in this <c>Graph</c>.
+        /// </returns>
+        public int EdgesCount => Edges.Count;
 
         /// <summary>
         /// Creates a new <c>Graph</c>.
@@ -51,10 +76,37 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public void AddEdge(Edge e)
         {
             if (Edges.Contains(e))
-                Debug.Write("Warning! Added a duplicate Edge to the Edges list.");
+                Console.WriteLine("Warning! Added a duplicate Edge to the Edges list.");
             if (!Vertices.Contains(e.Start) || !Vertices.Contains(e.End))
                 throw new GraphException("Attempted to add an Edge whose Start/End does not exist in the Vertices list.");
             Edges.Add(e);
+            Vertices[Vertices.IndexOf(e.Start)].AddEdge(e);
+            Vertices[Vertices.IndexOf(e.End)].AddEdge(e);
+        }
+        /// <param name="v">The <c>Vertex</c> to look for in this <c>Graph</c>.</param>
+        /// <returns>True, if the <c>Graph</c> contains the provided vertex on its Vertices list.</returns>
+        public bool Contains(Vertex v) => Vertices.Contains(v);
+        /// <param name="v">The <c>Edge</c> to look for in this <c>Graph</c>.</param>
+        /// <returns>True, if the <c>Graph</c> contains the provided edge on its Edges list.</returns>
+        public bool Contains(Edge e) => Edges.Contains(e);
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine("Vertices: ");
+            builder.Append("\t{ ");
+            for (int i = 0; i < Vertices.Count; i++)
+                builder.Append($"{i} ");
+            builder.AppendLine("}");
+            builder.AppendLine("Edges: ");
+            builder.Append("\t{ ");
+            for (int i = 0; i < Edges.Count; i++)
+            {
+                builder.Append($"({Vertices.IndexOf(E(i).Start)}");
+                builder.Append(E(i).IsDirectional ? "-->" : "<->");
+                builder.Append($"{Vertices.IndexOf(E(i).End)}) ");
+            }
+            builder.AppendLine("}");
+            return builder.ToString();
         }
     }
 }
