@@ -56,7 +56,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             {
                 if (e.Start.Equals(this))
                     OutgoingEdges.Add(e);
-                else if (e.Start.Equals(this))
+                else if (e.End.Equals(this))
                     IncomingEdges.Add(e);
             }
             else

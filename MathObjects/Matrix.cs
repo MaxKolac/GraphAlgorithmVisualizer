@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace GraphAlgorithmVisualizer.MathObjects
+﻿namespace GraphAlgorithmVisualizer.MathObjects
 {
     internal class Matrix
     {
