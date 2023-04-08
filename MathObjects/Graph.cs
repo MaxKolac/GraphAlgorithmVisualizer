@@ -56,15 +56,27 @@ namespace GraphAlgorithmVisualizer.MathObjects
         {
             IsDirectional = isDirectional;
             for (int i = 0; i < verticesCount; i++)
-                AddVertex();
+                AddVertex(i);
         }
 
         /// <summary>
-        /// Adds a new empty <c>Vertex</c>.
+        /// Adds a new empty <c>Vertex</c> with a specified identifier in the form of an index.
         /// </summary>
-        public void AddVertex() => Vertices.Add(new Vertex(IsDirectional));
+        public void AddVertex(int index)
+        {
+            foreach (Vertex v in Vertices)
+                if (v.Index == index)
+                    throw new GraphException("Attempted to add a Vertex to a Graph with an already occupied Index.");
+            Vertices.Add(new Vertex(index, IsDirectional));
+        }
         /// <summary>
-        /// Adds an <c>Edge</c> to connect two <c>Vertices</c>.
+        /// Creates a new <c>Edge</c> between two vertices and adds it to the Edges list.
+        /// </summary>
+        /// <param name="v1">Start Vertex of the Edge.</param>
+        /// <param name="v2">End Vertex of the Edge.</param>
+        public void AddEdge(Vertex v1, Vertex v2) => AddEdge(new Edge(v1, v2, IsDirectional));
+        /// <summary>
+        /// Directly adds an <c>Edge</c> object to Edges list.
         /// </summary>
         /// <param name="e">The <c>Edge</c> to be added.</param>
         /// <exception cref="GraphException">Thrown if any of the following is true:
@@ -80,8 +92,8 @@ namespace GraphAlgorithmVisualizer.MathObjects
             if (!Vertices.Contains(e.Start) || !Vertices.Contains(e.End))
                 throw new GraphException("Attempted to add an Edge whose Start/End does not exist in the Vertices list.");
             Edges.Add(e);
-            Vertices[Vertices.IndexOf(e.Start)].AddEdge(e);
-            Vertices[Vertices.IndexOf(e.End)].AddEdge(e);
+            //Vertices[Vertices.IndexOf(e.Start)].AddEdge(e);
+            //Vertices[Vertices.IndexOf(e.End)].AddEdge(e);
         }
         /// <param name="v">The <c>Vertex</c> to look for in this <c>Graph</c>.</param>
         /// <returns>True, if the <c>Graph</c> contains the provided vertex on its Vertices list.</returns>

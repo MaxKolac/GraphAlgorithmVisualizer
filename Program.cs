@@ -33,10 +33,16 @@ namespace GraphAlgorithmVisualizer
             Console.WriteLine(graph.ToString());
             Console.ReadKey();
 
+            //TODO: debug this shit
             BreadthFirstSearch.Perform(graph, graph.V(2), out Dictionary<Vertex, Vertex> previousVertex, out Dictionary<Vertex, int> distance);
 
-            Console.WriteLine(previousVertex.ToString());
-            Console.WriteLine(distance.ToString());
+            Console.WriteLine("previousVertex Dictionary: ");
+            foreach (KeyValuePair<Vertex, Vertex> pair in previousVertex)
+                Console.WriteLine($"\t{pair.Key}\t|\t{pair.Value}");
+
+            Console.WriteLine("distance Dictionary: ");
+            foreach (KeyValuePair<Vertex, int> pair in distance)
+                Console.WriteLine($"\t{pair.Key}\t|\t{pair.Value}");
             Console.ReadKey();
         }
     }
