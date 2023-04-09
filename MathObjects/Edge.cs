@@ -21,5 +21,10 @@
             End = end;
             IsDirectional = isDirectional;
         }
+
+        public override string ToString()
+        {
+            return IsDirectional ? $"({Start.Index}->{End.Index})" : $"({Start.Index}-{End.Index})" ;
+        }
     }
 }
