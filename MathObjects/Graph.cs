@@ -7,6 +7,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
 {
     /// <summary>
     /// By mathematical definition, a non-empty collection of <c>Vertices</c> and <c>Edges</c> that connect them.
+    /// Keep in mind that vertices' IDs of a <c>Graph</c> start from 0.
     /// </summary>
     internal class Graph 
     {
@@ -60,7 +61,11 @@ namespace GraphAlgorithmVisualizer.MathObjects
         }
 
         /// <summary>
-        /// Adds a new empty <c>Vertex</c> with a specified identifier in the form of an index.
+        /// Appens a new Vertex and autofills its ID to be the amount of vertices.
+        /// </summary>
+        public void AddVertex() => AddVertex(Vertices.Count);
+        /// <summary>
+        /// Adds a new <c>Vertex</c> with a specified identifier in the form of an index.
         /// </summary>
         public void AddVertex(int index)
         {
@@ -100,23 +105,19 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public bool Contains(Vertex v) => Vertices.Contains(v);
         /// <param name="v">The <c>Edge</c> to look for in this <c>Graph</c>.</param>
         /// <returns>True, if the <c>Graph</c> contains the provided edge on its Edges list.</returns>
-        public bool Contains(Edge e) => Edges.Contains(e);
+        public bool Contains(Edge e) => IsDirectional ? Edges.Contains(e) : Edges.Contains(e) || Edges.Contains(new Edge(e.End, e.Start, IsDirectional));
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("Vertices: ");
             builder.Append("\t{ ");
-            for (int i = 0; i < Vertices.Count; i++)
-                builder.Append($"{i} ");
+            foreach (Vertex v in Vertices)
+                builder.Append($"{v} ");
             builder.AppendLine("}");
             builder.AppendLine("Edges: ");
             builder.Append("\t{ ");
-            for (int i = 0; i < Edges.Count; i++)
-            {
-                builder.Append($"({Vertices.IndexOf(E(i).Start)}");
-                builder.Append(E(i).IsDirectional ? "-->" : "<->");
-                builder.Append($"{Vertices.IndexOf(E(i).End)}) ");
-            }
+            foreach (Edge e in Edges)
+                builder.Append($"{e} ");
             builder.AppendLine("}");
             return builder.ToString();
         }
