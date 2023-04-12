@@ -81,6 +81,13 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// <param name="v2">End Vertex of the Edge.</param>
         public void AddEdge(Vertex v1, Vertex v2) => AddEdge(new Edge(v1, v2, IsDirectional));
         /// <summary>
+        /// Creates a new <c>Edge</c> between two vertices and adds it to the Edges list. This method assigns the new Edge the specified distance.
+        /// </summary>
+        /// <param name="v1">Start Vertex of the Edge.</param>
+        /// <param name="v2">End Vertex of the Edge.</param>
+        /// <param name="distance">The distance of the new Edge.</param>
+        public void AddEdge(Vertex v1, Vertex v2, int distance) => AddEdge(new Edge(v1, v2, IsDirectional, distance));
+        /// <summary>
         /// Directly adds an <c>Edge</c> object to Edges list.
         /// </summary>
         /// <param name="e">The <c>Edge</c> to be added.</param>

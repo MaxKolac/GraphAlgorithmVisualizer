@@ -14,12 +14,20 @@
         /// Defines if the <c>Edge</c> allows travel in both directions. If <c>true</c>, then only stepping from <c>Start</c> to <c>End</c> vertices is allowed. 
         /// </summary>
         public readonly bool IsDirectional;
+        /// <summary>
+        /// Optional property used by some graph algorithm. Determines the abstract "length" this edge has.
+        /// </summary>
+        public readonly int? Distance;
 
         public Edge(Vertex start, Vertex end, bool isDirectional) 
         {
             Start = start;
             End = end;
             IsDirectional = isDirectional;
+        }
+        public Edge(Vertex start, Vertex end, bool isDirectional, int distance) : this(start, end, isDirectional)
+        {
+            Distance = distance;
         }
 
         /// <summary>
@@ -43,7 +51,10 @@
         
         public override string ToString()
         {
-            return IsDirectional ? $"({Start.Index}->{End.Index})" : $"({Start.Index}-{End.Index})" ;
+            string arrow = IsDirectional ? "->" : "-";
+            return Distance is null ?
+                $"({Start.Index}{arrow}{End.Index})" :
+                $"({Start.Index}{arrow}{End.Index} [{Distance}])";
         }
     }
 }
