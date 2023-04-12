@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\Algorithm.cs" />
     <Compile Include="Algorithms\AlgorithmTests.cs" />
     <Compile Include="Algorithms\BreadthFirstSearch.cs" />
     <Compile Include="Algorithms\DepthFirstSearch.cs" />
