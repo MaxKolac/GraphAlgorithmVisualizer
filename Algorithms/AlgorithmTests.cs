@@ -56,5 +56,10 @@ namespace GraphAlgorithmVisualizer.Algorithms
             Console.WriteLine(dfs.ToString());
             Console.ReadKey();
         }
+
+        public static void DjikstraTest()
+        {
+
+        }
     }
 }
