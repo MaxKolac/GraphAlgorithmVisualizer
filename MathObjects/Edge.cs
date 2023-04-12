@@ -1,4 +1,6 @@
-﻿namespace GraphAlgorithmVisualizer.MathObjects
+﻿using GraphAlgorithmVisualizer.Exceptions;
+
+namespace GraphAlgorithmVisualizer.MathObjects
 {
     internal class Edge
     {
@@ -27,6 +29,8 @@
         }
         public Edge(Vertex start, Vertex end, bool isDirectional, int distance) : this(start, end, isDirectional)
         {
+            if (distance <= 0)
+                throw new GraphException("Attempted to create an Edge with non-positive Distance.");
             Distance = distance;
         }
 
