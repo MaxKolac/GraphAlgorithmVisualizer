@@ -9,26 +9,36 @@ namespace GraphAlgorithmVisualizer.Algorithms
     {
         protected Dictionary<Vertex, bool> visited;
         protected Dictionary<Vertex, Vertex> previousVertex;
+        protected Dictionary<Vertex, int> distance;
         protected Graph graph;
 
         public bool WasVisited(Vertex v) => visited[v];
         public Vertex PreviousVertexOf(Vertex v) => previousVertex[v];
-        public Vertex StartVertex { get; protected set; }
+        public int DistanceOf(Vertex vertex) => distance[vertex];
+        public Vertex StartVertex { get; private set; }
 
         protected Algorithm(Graph graph)
         {
             visited = new Dictionary<Vertex, bool>();
             previousVertex = new Dictionary<Vertex, Vertex>();
+            distance = new Dictionary<Vertex, int>();
             this.graph = graph;
         }
 
         /// <summary>
-        /// Clears all Algorithm inherited Dictionaries of its KeyValuePairs.
+        /// Clears all Algorithm inherited Dictionaries of its previous KeyValuePairs and adds empty KeyValuePairs for each of Graph's Vertex with default values.
         /// </summary>
         protected void ClearDictionaries()
         {
             visited.Clear();
             previousVertex.Clear();
+            distance.Clear();
+            foreach (Vertex vertex in graph.VerticesArray)
+            {
+                previousVertex.Add(vertex, null);
+                distance.Add(vertex, 0);
+                visited.Add(vertex, false);
+            }
         }
         /// <summary>
         /// Sets StartVertex to the provided Vertex, only if it is a part of the <c>Graph</c>.
@@ -42,7 +52,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
             StartVertex = v;
         }
         /// <summary>
-        /// Analyzes the <c>Graph</c>and fills the <c>previousVertex</c> and <c>distance</c> dictionaries with algorithm results.
+        /// Analyzes the <c>Graph</c> and fills the <c>previousVertex</c> and <c>distance</c> dictionaries with algorithm results.
         /// </summary>
         /// <param name="start">The <c>Vertex</c> from the <c>Graph</c> which will be a starting point for the algorithm.</param>
         public abstract void Perform(Vertex start);
@@ -56,6 +66,10 @@ namespace GraphAlgorithmVisualizer.Algorithms
 
             builder.AppendLine("previousVertex Dictionary: ");
             foreach (KeyValuePair<Vertex, Vertex> pair in previousVertex)
+                builder.AppendLine($"\t{pair.Key}\t|\t{pair.Value}");
+
+            builder.AppendLine("distance Dictionary: ");
+            foreach (KeyValuePair<Vertex, int> pair in distance)
                 builder.AppendLine($"\t{pair.Key}\t|\t{pair.Value}");
             return builder.ToString();
         }

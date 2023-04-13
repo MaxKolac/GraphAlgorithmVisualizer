@@ -18,13 +18,10 @@ namespace GraphAlgorithmVisualizer.Algorithms
         {
             SetStartVertex(start);
             ClearDictionaries();
+
             outgoingEdges.Clear();
             foreach (Vertex v in graph.VerticesArray)
-            {
-                visited.Add(v, false);
-                previousVertex.Add(v, null);
                 outgoingEdges.Add(v, new List<Vertex>());
-            }
 
             GoDownBranch(start);
             while (visited.Values.Contains(false))
