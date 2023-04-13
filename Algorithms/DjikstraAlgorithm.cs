@@ -16,6 +16,27 @@ namespace GraphAlgorithmVisualizer.Algorithms
         {
             SetStartVertex(start);
             ClearDictionaries();
+
+            heap.Clear();
+            foreach (Vertex v in graph.VerticesArray)
+                heap.Insert(v);
+
+            do
+            {
+                Vertex currentVertex = heap.DeleteMin();
+                visited[currentVertex] = true;
+                foreach (Edge edge in graph.EdgesArray)
+                {
+                    if (!edge.IsStartingFrom(currentVertex))
+                        continue;
+                    if (distance[edge.End] > distance[edge.Start] + edge.Distance)
+                    {
+                        distance[edge.End] = distance[edge.Start] + (edge.Distance ?? 0);
+                        previousVertex[edge.End] = edge.Start;
+                        heap.DecreaseKey(edge.End);
+                    }
+                }
+            } while (!heap.IsEmpty);
         }
 
         public override string ToString()

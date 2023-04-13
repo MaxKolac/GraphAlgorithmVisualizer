@@ -59,7 +59,26 @@ namespace GraphAlgorithmVisualizer.Algorithms
 
         public static void DjikstraTest()
         {
+            Graph graph = new Graph(true, 5);
+            graph.AddEdge(graph.V(0), graph.V(1), 4);
+            graph.AddEdge(graph.V(0), graph.V(2), 2);
 
+            graph.AddEdge(graph.V(1), graph.V(2), 3);
+            graph.AddEdge(graph.V(1), graph.V(3), 2);
+            graph.AddEdge(graph.V(1), graph.V(4), 3);
+
+            graph.AddEdge(graph.V(2), graph.V(1), 1);
+            graph.AddEdge(graph.V(2), graph.V(3), 4);
+            graph.AddEdge(graph.V(2), graph.V(4), 5);
+
+            graph.AddEdge(graph.V(4), graph.V(3), 1);
+            Console.WriteLine(graph.ToString());
+            Console.ReadKey();
+
+            DjikstraAlgorithm djikstra = new DjikstraAlgorithm(graph);
+            djikstra.Perform(graph.V(0));
+            Console.WriteLine(djikstra.ToString());
+            Console.ReadKey();
         }
     }
 }
