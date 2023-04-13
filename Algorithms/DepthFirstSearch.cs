@@ -16,9 +16,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
 
         public override void Perform(Vertex start)
         {
-            SetStartVertex(start);
-            ClearDictionaries();
-
+            base.Perform(start);
             outgoingEdges.Clear();
             foreach (Vertex v in graph.VerticesArray)
                 outgoingEdges.Add(v, new List<Vertex>());

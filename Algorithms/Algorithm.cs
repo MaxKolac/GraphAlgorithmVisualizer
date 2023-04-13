@@ -7,10 +7,10 @@ namespace GraphAlgorithmVisualizer.Algorithms
 {
     internal abstract class Algorithm
     {
-        protected Dictionary<Vertex, bool> visited;
-        protected Dictionary<Vertex, Vertex> previousVertex;
-        protected Dictionary<Vertex, int> distance;
-        protected Graph graph;
+        protected readonly Dictionary<Vertex, bool> visited;
+        protected readonly Dictionary<Vertex, Vertex> previousVertex;
+        protected readonly Dictionary<Vertex, int> distance;
+        protected readonly Graph graph;
 
         public bool WasVisited(Vertex v) => visited[v];
         public Vertex PreviousVertexOf(Vertex v) => previousVertex[v];
@@ -28,7 +28,8 @@ namespace GraphAlgorithmVisualizer.Algorithms
         /// <summary>
         /// Clears all Algorithm inherited Dictionaries of its previous KeyValuePairs and adds empty KeyValuePairs for each of Graph's Vertex with default values.
         /// </summary>
-        protected void ClearDictionaries()
+        /// <param name="setStartingDistanceAsIntMax">If <c>true</c>, new entries in distance dictionary will begin with the value of <c>Int.MaxValue</c>. If false, they start with the value of 0.</param>
+        protected void ClearDictionaries(bool setStartingDistanceAsIntMax)
         {
             visited.Clear();
             previousVertex.Clear();
@@ -36,7 +37,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
             foreach (Vertex vertex in graph.VerticesArray)
             {
                 previousVertex.Add(vertex, null);
-                distance.Add(vertex, 0);
+                distance.Add(vertex, setStartingDistanceAsIntMax ? int.MaxValue : 0);
                 visited.Add(vertex, false);
             }
         }
@@ -55,7 +56,11 @@ namespace GraphAlgorithmVisualizer.Algorithms
         /// Analyzes the <c>Graph</c> and fills the <c>previousVertex</c> and <c>distance</c> dictionaries with algorithm results.
         /// </summary>
         /// <param name="start">The <c>Vertex</c> from the <c>Graph</c> which will be a starting point for the algorithm.</param>
-        public abstract void Perform(Vertex start);
+        public virtual void Perform(Vertex start)
+        {
+            SetStartVertex(start);
+            ClearDictionaries(false);
+        }
 
         public override string ToString()
         {

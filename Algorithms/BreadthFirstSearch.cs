@@ -11,8 +11,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
 
         public override void Perform(Vertex start)
         {
-            SetStartVertex(start);
-            ClearDictionaries();
+            base.Perform(start);
             Queue<Vertex> queue = new Queue<Vertex>();
             queue.Enqueue(start);
 
@@ -35,7 +34,5 @@ namespace GraphAlgorithmVisualizer.Algorithms
                 visited[dequeuedVertex] = true;
             }
         }
-
-        public override string ToString() => base.ToString();
     }
 }
