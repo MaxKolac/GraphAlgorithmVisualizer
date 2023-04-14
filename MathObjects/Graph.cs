@@ -103,6 +103,8 @@ namespace GraphAlgorithmVisualizer.MathObjects
                 Console.WriteLine("Warning! Added a duplicate Edge to the Edges list.");
             if (!Vertices.Contains(e.Start) || !Vertices.Contains(e.End))
                 throw new GraphException("Attempted to add an Edge whose Start/End does not exist in the Vertices list.");
+            if (e.IsDirectional == IsDirectional)
+                throw new GraphException("Attempted to add a mismatching Edge to a Graph. Objects did not have the same value of IsDirectional.");
             Edges.Add(e);
             //Vertices[Vertices.IndexOf(e.Start)].AddEdge(e);
             //Vertices[Vertices.IndexOf(e.End)].AddEdge(e);
@@ -113,6 +115,61 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// <param name="v">The <c>Edge</c> to look for in this <c>Graph</c>.</param>
         /// <returns>True, if the <c>Graph</c> contains the provided edge on its Edges list.</returns>
         public bool Contains(Edge e) => IsDirectional ? Edges.Contains(e) : Edges.Contains(e) || Edges.Contains(new Edge(e.End, e.Start, IsDirectional));
+        /// <summary>
+        /// Removes the lastly added Vertex and all Edges connected to it.
+        /// </summary>
+        public void RemoveVertex() => RemoveVertex(Vertices.Count - 1);
+        /// <summary>
+        /// Removes the Vertex with the matching Index and all connected Edges.
+        /// </summary>
+        /// <param name="index">The Index of the Vertex to remove.</param>
+        /// <exception cref="GraphException">Thrown if program couldn't find a matching Vertex or if the Graph's Vertices list was empty.</exception>
+        /// <exception cref="IndexOutOfRangeException">Thrown if index was out of Vertices List's bounds.</exception>
+        public void RemoveVertex(int index)
+        {
+            if (Vertices.Count == 0)
+                throw new GraphException("Attempted to remove a Vertex from a Graph with no vertices");
+            if (index < 0 || Vertices.Count <= index)
+                throw new IndexOutOfRangeException("index");
+
+            Vertex matchedVertex = null;
+            foreach (Vertex v in Vertices)
+            {
+                if (v.Index == index)
+                {
+                    matchedVertex = v;
+                    break;
+                }
+            }
+
+            if (matchedVertex is null)
+                throw new GraphException("Could not find a Vertex with the specified Index to remove.");
+
+            foreach (Edge e in Edges)
+            {
+                if (e.Start.Equals(matchedVertex) || e.End.Equals(matchedVertex))
+                    Edges.Remove(e);
+            }
+        }
+        /// <summary>
+        /// Removes an Edge with matching Start and End vertices from the Edges list.
+        /// </summary>
+        /// <param name="v1">The Start Vertex of the Edge to remove.</param>
+        /// <param name="v2">The End Vertex of the Edge to remove.</param>
+        public void RemoveEdge(Vertex v1, Vertex v2) => RemoveEdge(new Edge(v1, v2, IsDirectional));
+        /// <summary>
+        /// Removes the specified Edge from the Edges list.
+        /// </summary>
+        /// <param name="edge">The Edge object to remove.</param>
+        public void RemoveEdge(Edge edge)
+        {
+            foreach (Edge e in Edges)
+            {
+                if (e.Equals(edge))
+                    Edges.Remove(edge);
+            }
+        }
+
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
