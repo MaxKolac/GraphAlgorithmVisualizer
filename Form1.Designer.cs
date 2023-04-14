@@ -1,6 +1,6 @@
 ﻿namespace GraphAlgorithmVisualizer
 {
-    partial class MainForm
+    partial class Form1
     {
         /// <summary>
         /// Wymagana zmienna projektanta.
@@ -28,34 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.PB_Canvas = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.PB_Canvas)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // PB_Canvas
-            // 
-            this.PB_Canvas.Location = new System.Drawing.Point(12, 12);
-            this.PB_Canvas.Name = "PB_Canvas";
-            this.PB_Canvas.Size = new System.Drawing.Size(776, 426);
-            this.PB_Canvas.TabIndex = 0;
-            this.PB_Canvas.TabStop = false;
-            // 
-            // MainForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.PB_Canvas);
-            this.Name = "MainForm";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.PB_Canvas)).EndInit();
-            this.ResumeLayout(false);
-
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox PB_Canvas;
     }
 }
 
