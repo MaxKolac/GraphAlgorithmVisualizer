@@ -32,14 +32,6 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// </summary>
         public Edge[] EdgesArray => Edges.ToArray();
         /// <returns>
-        /// A <c>Vertex</c> from the <c>Graph</c>'s vertices list under the provided <c>index</c>.
-        /// </returns>
-        public Vertex V(int index) => Vertices[index];
-        /// <returns>
-        /// An <c>Edge</c> from the <c>Graph</c>'s edges list under the provided <c>index</c>.
-        /// </returns>
-        public Edge E(int index) => Edges[index];
-        /// <returns>
         /// The amount of vertices in this <c>Graph</c>.
         /// </returns>
         public int VerticesCount => Vertices.Count;
@@ -115,9 +107,38 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// <param name="v">The <c>Edge</c> to look for in this <c>Graph</c>.</param>
         /// <returns>True, if the <c>Graph</c> contains the provided edge on its Edges list.</returns>
         public bool Contains(Edge e) => IsDirectional ? Edges.Contains(e) : Edges.Contains(e) || Edges.Contains(new Edge(e.End, e.Start, IsDirectional));
+        /// <param name="index">The Index to look for in the Vertices list.</param>
+        /// <returns>Vertex with the specified Index.</returns>
+        /// <exception cref="GraphException">Thrown if no Vertex with such Index is found.</exception>
+        public Vertex GetVertex(int index)
+        {
+            foreach (Vertex v in Vertices)
+                if (v.Index == index) return v;
+            throw new GraphException("Could not find a Vertex with the specified Index.");
+        }
+        /// <param name="startVertexIndex">The Index of the Start Vertex.</param>
+        /// <param name="endVertexIndex">The Index of the End Vertex.</param>
+        /// <returns>An Edge object which can be considered to start from the starting Vertex and end in the ending Vertex.</returns>
+        /// <exception cref="GraphException">Thrown if no matching Edge was found in Edges list.</exception>
+        public Edge GetEdge(int startVertexIndex, int endVertexIndex)
+        {
+            foreach (Edge e in Edges)
+                if (e.IsStartingFrom(GetVertex(startVertexIndex)) && e.IsEndingIn(GetVertex(endVertexIndex)))
+                    return e;
+            throw new GraphException("Could not find an Edge which would start and end in the provided vertices.");
+
+        }
+        /// <summary>
+        /// A short alias of the GetEdge() method.
+        /// </summary>
         /// <summary>
         /// Removes the lastly added Vertex and all Edges connected to it.
         /// </summary>
+        public Edge E(int startVertexIndex, int endVertexIndex) => GetEdge(startVertexIndex, endVertexIndex);
+        /// <summary>
+        /// A short alias of the GetVertex() method.
+        /// </summary>
+        public Vertex V(int index) => GetVertex(index);
         public void RemoveVertex() => RemoveVertex(Vertices.Count - 1);
         /// <summary>
         /// Removes the Vertex with the matching Index and all connected Edges.
