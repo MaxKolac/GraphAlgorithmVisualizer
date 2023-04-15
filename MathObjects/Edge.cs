@@ -1,9 +1,15 @@
-﻿using GraphAlgorithmVisualizer.Exceptions;
+﻿using System.Drawing;
+using GraphAlgorithmVisualizer.Exceptions;
+using GraphAlgorithmVisualizer.Visualization;
 
 namespace GraphAlgorithmVisualizer.MathObjects
 {
-    internal class Edge
+    internal class Edge : IVisualizable
     {
+        private Point position;
+        public int X { get { return position.X; } set { position = new Point(position.X, value); } }
+        public int Y { get { return position.Y; } set { position = new Point(value, position.Y); } }
+
         /// <summary>
         /// <c>Vertex</c> from which the <c>Edge</c> begins. Only matters if the <c>Edge</c> is directional.
         /// </summary>
@@ -21,14 +27,11 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// </summary>
         public readonly int? Distance;
 
-        public Edge(Vertex start, Vertex end, bool isDirectional) 
+        public Edge(Vertex start, Vertex end, bool isDirectional, int? distance)
         {
             Start = start;
             End = end;
             IsDirectional = isDirectional;
-        }
-        public Edge(Vertex start, Vertex end, bool isDirectional, int distance) : this(start, end, isDirectional)
-        {
             if (distance <= 0)
                 throw new GraphException("Attempted to create an Edge with non-positive Distance.");
             Distance = distance;
@@ -52,7 +55,19 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// If the <c>Edge</c> isn't directional, <c>true</c> is returned if the provided <c>Vertex</c> is either Start or End.
         /// </returns>
         public bool IsEndingIn(Vertex v) => IsDirectional ? End.Equals(v) : Start.Equals(v) || End.Equals(v);
-        
+
+        public void MoveTo(int x, int y) => position = new Point(x, y);
+        public void Draw(Graphics graphics)
+        {
+            graphics.DrawLine(DrawingTools.GlobalPen, Start.X, Start.Y, End.X, End.Y);
+            if (IsDirectional)
+            {
+                //TODO: draw arrow's end
+            }
+            if (Distance is null) return;
+            //TODO: draw distance String
+        }
+
         public override string ToString()
         {
             string arrow = IsDirectional ? "->" : "-";
