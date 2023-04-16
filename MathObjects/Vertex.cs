@@ -35,8 +35,10 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public void MoveTo(int x, int y) => position = new Point(x, y);
         public void Draw(Graphics graphics)
         {
-            graphics.DrawEllipse(DrawingTools.GlobalPen, X - 6, Y - 6, 12, 12);
-            graphics.DrawString($"{Index}", DrawingTools.GlobalFont, DrawingTools.GlobalBrush, X, Y);
+            int size = 20;
+            graphics.FillEllipse(DrawingTools.DefaultBackColor, X - (size / 2), Y - (size / 2), size, size);
+            graphics.DrawEllipse(DrawingTools.DefaultOutline, X - (size / 2), Y - (size / 2), size, size);
+            graphics.DrawString($"{Index}", DrawingTools.DefaultFont, DrawingTools.DefaultFontColor, X - (size / 2) + 3, Y - (size / 2));
         }
 
         public override string ToString()
