@@ -7,13 +7,13 @@ namespace GraphAlgorithmVisualizer.Visualization
     /// </summary>
     internal interface IVisualizable
     {
-        int X { get; set; }
-        int Y { get; set; }
+        //int X { get; set; }
+        //int Y { get; set; }
 
         /// <summary>
         /// Changes the object's coordinates to (x,y).
         /// </summary>
-        void MoveTo(int x, int y);
+        //void MoveTo(int x, int y);
         /// <summary>
         /// Draws the visual representation of the object on the specified Graphics.
         /// </summary>
