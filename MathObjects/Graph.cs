@@ -14,8 +14,8 @@ namespace GraphAlgorithmVisualizer.MathObjects
     internal class Graph : IVisualizable
     {
         private Point position;
-        public int X { get { return position.X; } set { position = new Point(position.X, value); } }
-        public int Y { get { return position.Y; } set { position = new Point(value, position.Y); } }
+        public int X { get { return position.X; } set { position = new Point(value, position.Y); } }
+        public int Y { get { return position.Y; } set { position = new Point(position.X, value); } }
 
         /// <summary>
         /// A List of all <c>Vertices</c> inside the graph.
@@ -57,7 +57,14 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public int EdgesCount => Edges.Count;
 
         /// <summary>
-        /// Creates a new <c>Graph</c>.
+        /// Creates a new empty Graph.
+        /// </summary>
+        /// <param name="isDirectional">Whether or not the <c>Graph</c> will be directional or not.</param>
+        public Graph(bool isDirectional) : this(isDirectional, 0) 
+        {
+        }
+        /// <summary>
+        /// Creates a new Graph with a collection of vertices.
         /// </summary>
         /// <param name="isDirectional">Whether or not the <c>Graph</c> will be directional or not.</param>
         /// <param name="verticesCount">With how many vertices should the <c>Graph</c> be created.</param>
@@ -94,7 +101,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// </summary>
         /// <param name="v1">Start Vertex of the Edge.</param>
         /// <param name="v2">End Vertex of the Edge.</param>
-        public void AddEdge(Vertex v1, Vertex v2) => AddEdge(new Edge(v1, v2, IsDirectional, null));
+        public void AddEdge(Vertex v1, Vertex v2) => AddEdge(new Edge(v1, v2, IsDirectional));
         /// <summary>
         /// Creates a new <c>Edge</c> between two vertices and adds it to the Edges list. This method assigns the new Edge the specified distance.
         /// </summary>
@@ -118,7 +125,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
                 Console.WriteLine("Warning! Added a duplicate Edge to the Edges list.");
             if (!Vertices.Contains(e.Start) || !Vertices.Contains(e.End))
                 throw new GraphException("Attempted to add an Edge whose Start/End does not exist in the Vertices list.");
-            if (e.IsDirectional == IsDirectional)
+            if (e.IsDirectional != IsDirectional)
                 throw new GraphException("Attempted to add a mismatching Edge to a Graph. Objects did not have the same value of IsDirectional.");
             Edges.Add(e);
         }
@@ -128,8 +135,25 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public bool Contains(Vertex v) => Vertices.Contains(v);
         /// <param name="v">The <c>Edge</c> to look for in this <c>Graph</c>.</param>
         /// <returns>True, if the <c>Graph</c> contains the provided edge on its Edges list.</returns>
-        public bool Contains(Edge e) => IsDirectional ? Edges.Contains(e) : Edges.Contains(e) || Edges.Contains(new Edge(e.End, e.Start, IsDirectional, e.Distance));
+        public bool Contains(Edge e)
+        {
+            if (IsDirectional) return Edges.Contains(e);
+            return e.Distance is null ?
+                Edges.Contains(e) || Edges.Contains(new Edge(e.End, e.Start, IsDirectional)) :
+                Edges.Contains(e) || Edges.Contains(new Edge(e.End, e.Start, IsDirectional, (int)e.Distance));
+        }
 
+        /// <summary>
+        /// A short alias of the GetVertex() method.
+        /// </summary>
+        public Vertex V(int index) => GetVertex(index);
+        /// <summary>
+        /// A short alias of the GetEdge() method.
+        /// </summary>
+        /// <summary>
+        /// Removes the lastly added Vertex and all Edges connected to it.
+        /// </summary>
+        public Edge E(int startVertexIndex, int endVertexIndex) => GetEdge(startVertexIndex, endVertexIndex);
         /// <param name="index">The Index to look for in the Vertices list.</param>
         /// <returns>Vertex with the specified Index.</returns>
         /// <exception cref="GraphException">Thrown if no Vertex with such Index is found.</exception>
@@ -152,17 +176,6 @@ namespace GraphAlgorithmVisualizer.MathObjects
             throw new GraphException("Could not find an Edge which would start and end in the provided vertices.");
 
         }
-        /// <summary>
-        /// A short alias of the GetVertex() method.
-        /// </summary>
-        public Vertex V(int index) => GetVertex(index);
-        /// <summary>
-        /// A short alias of the GetEdge() method.
-        /// </summary>
-        /// <summary>
-        /// Removes the lastly added Vertex and all Edges connected to it.
-        /// </summary>
-        public Edge E(int startVertexIndex, int endVertexIndex) => GetEdge(startVertexIndex, endVertexIndex);
 
         /// <summary>
         /// Removes the last added Vertex and all Edges connected to it.
@@ -212,14 +225,14 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// </summary>
         /// <param name="v1">The Start Vertex of the Edge to remove.</param>
         /// <param name="v2">The End Vertex of the Edge to remove.</param>
-        public void RemoveEdge(Vertex v1, Vertex v2) => RemoveEdge(new Edge(v1, v2, IsDirectional, null));
+        public void RemoveEdge(Vertex v1, Vertex v2) => RemoveEdge(new Edge(v1, v2, IsDirectional));
         /// <summary>
         /// Removes an Edge with matching Start and End vertices from the Edges list.
         /// </summary>
         /// <param name="v1">The Start Vertex of the Edge to remove.</param>
         /// <param name="v2">The End Vertex of the Edge to remove.</param>
         /// <param name="distance">The Distance of the Edge to remove.</param>
-        public void RemoveEdge(Vertex v1, Vertex v2, int? distance) => RemoveEdge(new Edge(v1, v2, IsDirectional, distance));
+        public void RemoveEdge(Vertex v1, Vertex v2, int distance) => RemoveEdge(new Edge(v1, v2, IsDirectional, distance));
         /// <summary>
         /// Removes the specified Edge from the Edges list.
         /// </summary>
@@ -236,24 +249,20 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public void MoveTo(int x, int y) => position = new Point(x, y);
         public void Draw(Graphics graphics)
         {
-            //TODO: No need to reinvent the wheel
-            // Look up whatever I did in that previous school project
-            int n = VerticesCount;
-            double TwoPi = Math.PI * 2;
-            double angle = 0;
-            double singleAngle = 360f / n;
-
-            double cosinus = Math.Cos(2f * Math.PI * (360f / n));
-            double sinus = Math.Sin(2f * Math.PI * (360f / n));
-
-            for (int i = 0; i < n; i++)
+            double alpha = Extensions.ToRadians(360d / Vertices.Count);
+            double radius = 50;
+            for (int i = 0; i < Vertices.Count; i++)
             {
-
-                /*vertices[i].MoveTo(
-                    vertices[i].X * cosinus, 
-                    vertices[i].Y *
-                    );*/
+                double totalAngle = alpha * i;
+                GetVertex(i).MoveTo(X + (int)Math.Round(radius * Math.Cos(totalAngle)), Y + (int)Math.Round(radius * Math.Sin(totalAngle)));
             }
+
+            foreach (Edge e in Edges)
+            {
+                e.Draw(graphics);
+            }
+            foreach (Vertex v in Vertices)
+                v.Draw(graphics);
         }
 
         public override string ToString()
