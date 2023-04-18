@@ -13,9 +13,9 @@ namespace GraphAlgorithmVisualizer.MathObjects
     /// </summary>
     internal class Graph : IVisualizable
     {
-        private Point position;
-        public int X { get { return position.X; } set { position = new Point(value, position.Y); } }
-        public int Y { get { return position.Y; } set { position = new Point(position.X, value); } }
+        public Point Position { get; private set; }
+        public int X { get { return Position.X; } set { Position = new Point(value, Position.Y); } }
+        public int Y { get { return Position.Y; } set { Position = new Point(Position.X, value); } }
 
         /// <summary>
         /// A List of all <c>Vertices</c> inside the graph.
@@ -246,23 +246,34 @@ namespace GraphAlgorithmVisualizer.MathObjects
             }
         }
 
-        public void MoveTo(int x, int y) => position = new Point(x, y);
+        public void MoveTo(int x, int y)
+        {
+            int deltaX = Position.X - x;
+            int deltaY = Position.Y - y;
+            Position = new Point(x, y);
+
+            foreach (Vertex v in Vertices)
+                v.MoveTo(v.X + deltaX, v.Y + deltaY);
+        }
         public void Draw(Graphics graphics)
         {
+            foreach (Edge e in Edges)
+                e.Draw(graphics);
+            foreach (Vertex v in Vertices)
+                v.Draw(graphics);
+        }
+        /// <summary>
+        /// Arranges vertices visually in a scheme of a circle, with each Vertex being placed on the edge of that circle, placed apart from each other the same distance.
+        /// </summary>
+        /// <param name="radius">The radius of the circle.</param>
+        public void ArrangeVerticesInCircle(double radius)
+        {
             double alpha = Extensions.ToRadians(360d / Vertices.Count);
-            double radius = 50;
             for (int i = 0; i < Vertices.Count; i++)
             {
                 double totalAngle = alpha * i;
                 GetVertex(i).MoveTo(X + (int)Math.Round(radius * Math.Cos(totalAngle)), Y + (int)Math.Round(radius * Math.Sin(totalAngle)));
             }
-
-            foreach (Edge e in Edges)
-            {
-                e.Draw(graphics);
-            }
-            foreach (Vertex v in Vertices)
-                v.Draw(graphics);
         }
 
         public override string ToString()

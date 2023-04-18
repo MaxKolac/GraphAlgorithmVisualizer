@@ -11,6 +11,9 @@ namespace GraphAlgorithmVisualizer.MathObjects
     /// </summary>
     internal class Edge : IVisualizable
     {
+        private readonly Arrow visualArrow;
+        public int X { get { return visualArrow.X; } set { visualArrow.MoveTo(value, visualArrow.Y); } }
+        public int Y { get { return visualArrow.Y; } set { visualArrow.MoveTo(visualArrow.X, value); } }
 
         /// <summary>
         /// <c>Vertex</c> from which the <c>Edge</c> begins. Only matters if the <c>Edge</c> is directional.
@@ -31,6 +34,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
 
         public Edge(Vertex start, Vertex end, bool isDirectional)
         {
+            visualArrow = new Arrow(Start.Position, End.Position);
             Start = start;
             End = end;
             IsDirectional = isDirectional;
@@ -61,6 +65,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// </returns>
         public bool IsEndingIn(Vertex v) => IsDirectional ? End.Equals(v) : Start.Equals(v) || End.Equals(v);
 
+        public void MoveTo(int x, int y) => visualArrow.MoveTo(x, y);
         public void Draw(Graphics graphics)
         {
             graphics.DrawLine(DrawingTools.DefaultOutline, Start.X, Start.Y, End.X, End.Y);

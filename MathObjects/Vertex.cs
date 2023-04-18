@@ -8,9 +8,9 @@ namespace GraphAlgorithmVisualizer.MathObjects
     /// </summary>
     internal class Vertex : IVisualizable
     {
-        private Point position;
-        public int X { get { return position.X; } set { position = new Point(position.X, value); } }
-        public int Y { get { return position.Y; } set { position = new Point(value, position.Y); } }
+        public Point Position { get; private set; }
+        public int X { get { return Position.X; } set { Position = new Point(Position.X, value); } }
+        public int Y { get { return Position.Y; } set { Position = new Point(value, Position.Y); } }
 
         /// <summary>
         /// A unique integer that identifies this Vertex. Assigned by the Graph which created this Vertex.
@@ -32,7 +32,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             IsDirectional = graphIsDirectional;
         }
 
-        public void MoveTo(int x, int y) => position = new Point(x, y);
+        public void MoveTo(int x, int y) => Position = new Point(x, y);
         public void Draw(Graphics graphics)
         {
             int size = 20;
