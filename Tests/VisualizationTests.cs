@@ -48,15 +48,50 @@ namespace GraphAlgorithmVisualizer.Tests
 
             graph.Draw(graphics);
         }
+
         public static void GraphPositioningTest(Graphics graphics, int pictureBoxWidth, int pictureBoxHeight)
         {
-            Graph graph = new Graph(true, 8);
-            for (int i = 1; i < 8; i++)
+            Graph graph = new Graph(true, true, 8);
+            for (int i = 1; i < graph.VerticesCount; i++)
             {
                 graph.AddEdge(graph[0], graph[i], i * 3);
             }
             graph.MoveTo(pictureBoxWidth / 2, pictureBoxHeight / 2);
+            graph.ArrangeVerticesInCircle(200);
+            graph[0].MoveTo(pictureBoxWidth / 2, pictureBoxHeight / 2);
             graph.Draw(graphics);
+        }
+
+        public static void ArrowTest(Graphics graphics, int pictureBoxWidth, int pictureBoxHeight)
+        {
+            Arrow[] arrows1 = new Arrow[10];
+            Point startingPoint = new Point((pictureBoxWidth / 2) - 300, (pictureBoxHeight / 2) - 200);
+            Point endingPoint = new Point((pictureBoxWidth / 2) - 300, (pictureBoxHeight / 2) + 200);
+            for (int i = 0; i < arrows1.Length; i++)
+            {
+                arrows1[i] = new Arrow(startingPoint, endingPoint);
+                arrows1[i].MoveTo(arrows1[i].X + i * 10, arrows1[i].Y);
+                arrows1[i].Draw(graphics);
+                startingPoint = new Point(startingPoint.X + 50, startingPoint.Y);
+                endingPoint = new Point(endingPoint.X + 50, endingPoint.Y);
+            }
+
+            Arrow[] arrows2 = new Arrow[9];
+            double alpha = Extensions.ToRadians(360d / arrows2.Length);
+            double radius = 50;
+            Point middlePoint = new Point(pictureBoxWidth / 2, pictureBoxHeight / 2);
+            for (int i = 0; i < arrows2.Length; i++)
+            {
+                double totalAngle = alpha * i;
+                arrows2[i] = new Arrow(middlePoint, middlePoint);
+                arrows2[i].MoveEnd(
+                    arrows2[i].Start.X + (int)Math.Round(radius * Math.Cos(totalAngle)),
+                    arrows2[i].Start.Y + (int)Math.Round(radius * Math.Sin(totalAngle))
+                    );
+                arrows2[i].ResetMiddle();
+                arrows2[i].Draw(graphics);
+            }
+
         }
     }
 }

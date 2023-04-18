@@ -17,7 +17,8 @@ namespace GraphAlgorithmVisualizer
             graphics.FillRectangle(new SolidBrush(PB_Canvas.BackColor), 0, 0, PB_Canvas.Width, PB_Canvas.Height);
 
             //VisualizationTests.GraphDrawingTest(graphics, PB_Canvas.Width, PB_Canvas.Height);
-            VisualizationTests.GraphPositioningTest(graphics, PB_Canvas.Width, PB_Canvas.Height);
+            //VisualizationTests.GraphPositioningTest(graphics, PB_Canvas.Width, PB_Canvas.Height);
+            VisualizationTests.ArrowTest(graphics, PB_Canvas.Width, PB_Canvas.Height);
         }
     }
 }
