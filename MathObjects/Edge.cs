@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Drawing;
-using System.Text;
 using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.Visualization;
+using GraphAlgorithmVisualizer.Visualization.Shapes;
 
 namespace GraphAlgorithmVisualizer.MathObjects
 {
     /// <summary>
-    /// A connection between two vertices.
+    /// A connection between two vertices. It can be visually represented either as a simple line or an arrow, pointing towards the End Vertex, if it is directional.
     /// </summary>
     internal class Edge : IVisualizable
     {
@@ -69,49 +69,12 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public void MoveTo(int x, int y) => visualArrow.MoveTo(x, y);
         public void Draw(Graphics graphics)
         {
-            graphics.DrawLine(DrawingTools.DefaultOutline, Start.X, Start.Y, End.X, End.Y);
-            graphics.DrawString($"{Distance}", DrawingTools.DefaultFont, DrawingTools.DefaultFontColor, new Point(Math.Abs(End.X + Start.X) / 2, Math.Abs(End.Y + Start.Y) / 2));
-
-            if (!IsDirectional) return;
-            //This is a mathematical disgrace and a mess and if my university teachers saw this they would throw me out INSTANTLY, but god DAMNIT it works...
-
-            double ArrowArmAngle = Extensions.ToRadians(15d);
-            int ArrowArmLength = 15;
-            int LineEndOffset = 10; //This needs to be Vertex's size / 2
-
-            //TODO: Despite this mess, QuarterAngleOffset still doesn't quite work
-            //Mafs is hard :p, not too proud out of this "wooden else-if'ing"...
-            double QuarterAngleOffset;
-            if (End.X > Start.X && End.Y <= Start.Y)
-                QuarterAngleOffset = Extensions.ToRadians(0);
-            else if (End.X <= Start.X && End.Y < Start.Y)
-                QuarterAngleOffset = Extensions.ToRadians(90);
-            else if (End.X < Start.X && End.Y >= Start.Y)
-                QuarterAngleOffset = Extensions.ToRadians(180);
-            else //if (End.X >= Start.X && End.X > Start.Y)
-                QuarterAngleOffset = Extensions.ToRadians(270);
-
-            int DifferenceY = End.Y - Start.Y;
-            int DifferenceX = End.X - Start.X;
-            double Alpha = (DifferenceX == 0 || DifferenceY == 0) ? QuarterAngleOffset : Math.Atan(Math.Abs(DifferenceY) / Math.Abs(DifferenceX)) + QuarterAngleOffset;
-            double Beta = Extensions.ToRadians(90d - Extensions.ToDegrees(Alpha));
-            Point ArrowArmStartPoint = new Point(End.X - (int)Math.Round(LineEndOffset * Math.Sin(Beta)), End.Y + (int)Math.Round(LineEndOffset * Math.Sin(Alpha)));
-
-            int ArrowOneX = ArrowArmStartPoint.X - (int)Math.Round(ArrowArmLength * Math.Sin(Beta - ArrowArmAngle));
-            int ArrowOneY = ArrowArmStartPoint.Y + (int)Math.Round(ArrowArmLength * Math.Cos(Beta - ArrowArmAngle));
-            int ArrowTwoX = ArrowArmStartPoint.X - (int)Math.Round(ArrowArmLength * Math.Sin(Beta + ArrowArmAngle));
-            int ArrowTwoY = ArrowArmStartPoint.Y + (int)Math.Round(ArrowArmLength * Math.Cos(Beta + ArrowArmAngle));
-
-            graphics.DrawLine(DrawingTools.DefaultOutline, ArrowArmStartPoint, new Point(ArrowOneX, ArrowOneY));
-            graphics.DrawLine(DrawingTools.DefaultOutline, ArrowArmStartPoint, new Point(ArrowTwoX, ArrowTwoY));
-
-            //Debug
-            /*StringBuilder builder = new StringBuilder();
-            builder.AppendLine(this.ToString());
-            builder.AppendLine($"Alpha: {Alpha} ({Extensions.ToDegrees(Alpha)})");
-            builder.AppendLine($"Beta: {Beta} ({Extensions.ToDegrees(Beta)})");
-            builder.AppendLine($"ArrowArmStartPoint: {ArrowArmStartPoint}");
-            Console.WriteLine(builder.ToString());*/
+            if (IsDirectional)
+            {
+                graphics.DrawLine(DrawingTools.DefaultOutline, Start.X, Start.Y, End.X, End.Y);
+                graphics.DrawString($"{Distance}", DrawingTools.DefaultFont, DrawingTools.DefaultFontColor, new Point(Math.Abs(End.X + Start.X) / 2, Math.Abs(End.Y + Start.Y) / 2));
+            }
+            else visualArrow.Draw(graphics);
         }
 
         public override string ToString()
