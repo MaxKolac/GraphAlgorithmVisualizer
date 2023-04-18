@@ -32,7 +32,8 @@ namespace GraphAlgorithmVisualizer.MathObjects
             IsDirectional = graphIsDirectional;
         }
 
-        public void MoveTo(int x, int y) => Position = new Point(x, y);
+        public void SetPosition(int x, int y) => Position = new Point(x, y);
+        public void MovePosition(int deltaX, int deltaY) => Position = new Point(Position.X + deltaX, Position.Y + deltaY);
         public void Draw(Graphics graphics)
         {
             int size = 20;

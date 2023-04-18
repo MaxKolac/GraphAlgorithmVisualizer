@@ -27,16 +27,16 @@ namespace GraphAlgorithmVisualizer.Tests
                 graph.AddEdge(graph[0], graph[i], i * 2);
 
             int offset = 50;
-            graph[0].MoveTo(pictureBoxWidth / 2, pictureBoxHeight / 2);
-            graph[1].MoveTo(graph[0].X - offset, graph[0].Y - offset);
-            graph[2].MoveTo(graph[0].X + offset, graph[0].Y - offset);
-            graph[3].MoveTo(graph[0].X - offset, graph[0].Y + offset);
-            graph[4].MoveTo(graph[0].X + offset, graph[0].Y + offset);
+            graph[0].SetPosition(pictureBoxWidth / 2, pictureBoxHeight / 2);
+            graph[1].SetPosition(graph[0].X - offset, graph[0].Y - offset);
+            graph[2].SetPosition(graph[0].X + offset, graph[0].Y - offset);
+            graph[3].SetPosition(graph[0].X - offset, graph[0].Y + offset);
+            graph[4].SetPosition(graph[0].X + offset, graph[0].Y + offset);
 
-            graph[5].MoveTo(graph[0].X, graph[0].Y - offset * 2);
-            graph[6].MoveTo(graph[0].X + offset * 2, graph[0].Y);
-            graph[7].MoveTo(graph[0].X, graph[0].Y + offset * 2);
-            graph[8].MoveTo(graph[0].X - offset * 2, graph[0].Y);
+            graph[5].SetPosition(graph[0].X, graph[0].Y - offset * 2);
+            graph[6].SetPosition(graph[0].X + offset * 2, graph[0].Y);
+            graph[7].SetPosition(graph[0].X, graph[0].Y + offset * 2);
+            graph[8].SetPosition(graph[0].X - offset * 2, graph[0].Y);
 
             //graph[1, 2].Draw(graphics);
 
@@ -56,21 +56,21 @@ namespace GraphAlgorithmVisualizer.Tests
             {
                 graph.AddEdge(graph[0], graph[i], i * 3);
             }
-            graph.MoveTo(pictureBoxWidth / 2, pictureBoxHeight / 2);
+            graph.SetPosition(pictureBoxWidth / 2, pictureBoxHeight / 2);
             graph.ArrangeVerticesInCircle(200);
-            graph[0].MoveTo(pictureBoxWidth / 2, pictureBoxHeight / 2);
+            graph[0].SetPosition(pictureBoxWidth / 2, pictureBoxHeight / 2);
             graph.Draw(graphics);
         }
 
         public static void ArrowTest(Graphics graphics, int pictureBoxWidth, int pictureBoxHeight)
         {
             Arrow[] arrows1 = new Arrow[10];
-            Point startingPoint = new Point((pictureBoxWidth / 2) - 300, (pictureBoxHeight / 2) - 200);
-            Point endingPoint = new Point((pictureBoxWidth / 2) - 300, (pictureBoxHeight / 2) + 200);
+            Point startingPoint = new Point((pictureBoxWidth / 2) - 150, (pictureBoxHeight / 2) - 100);
+            Point endingPoint = new Point((pictureBoxWidth / 2) - 150, (pictureBoxHeight / 2) + 100);
             for (int i = 0; i < arrows1.Length; i++)
             {
                 arrows1[i] = new Arrow(startingPoint, endingPoint);
-                arrows1[i].MoveTo(arrows1[i].X + i * 10, arrows1[i].Y);
+                arrows1[i].MovePosition(i * 10, 0);
                 arrows1[i].Draw(graphics);
                 startingPoint = new Point(startingPoint.X + 50, startingPoint.Y);
                 endingPoint = new Point(endingPoint.X + 50, endingPoint.Y);
@@ -84,7 +84,7 @@ namespace GraphAlgorithmVisualizer.Tests
             {
                 double totalAngle = alpha * i;
                 arrows2[i] = new Arrow(middlePoint, middlePoint);
-                arrows2[i].MoveEnd(
+                arrows2[i].SetEnd(
                     arrows2[i].Start.X + (int)Math.Round(radius * Math.Cos(totalAngle)),
                     arrows2[i].Start.Y + (int)Math.Round(radius * Math.Sin(totalAngle))
                     );

@@ -11,9 +11,13 @@ namespace GraphAlgorithmVisualizer.Visualization
         int Y { get; set; }
 
         /// <summary>
-        /// Changes the object's coordinates to (x,y).
+        /// Changes the object's coordinates to exact (x,y).
         /// </summary>
-        void MoveTo(int x, int y);
+        void SetPosition(int x, int y);
+        /// <summary>
+        /// Changes the object's coordinaets by the specified deltas from its original position.
+        /// </summary>
+        void MovePosition(int deltaX, int deltaY);
         /// <summary>
         /// Draws the visual representation of the object on the specified Graphics.
         /// </summary>

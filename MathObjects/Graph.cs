@@ -256,19 +256,20 @@ namespace GraphAlgorithmVisualizer.MathObjects
             }
         }
 
-        /// <summary>
-        /// Graph's implementation of MoveTo() method moves its own Position and also moves all of its Vertices' positions by the delta of Graph's its own position.
-        /// </summary>
-        /// <param name="x">The X coordinate of Graph's new position.</param>
-        /// <param name="y">The Y coordinate of Graph's new position.</param>
-        public void MoveTo(int x, int y)
+        public void SetPosition(int x, int y)
         {
             int deltaX = Position.X - x;
             int deltaY = Position.Y - y;
             Position = new Point(x, y);
 
             foreach (Vertex v in Vertices)
-                v.MoveTo(v.X + deltaX, v.Y + deltaY);
+                v.SetPosition(v.X + deltaX, v.Y + deltaY);
+        }
+        public void MovePosition(int deltaX, int deltaY)
+        {
+            Position = new Point(Position.X + deltaX, Position.Y + deltaY);
+            foreach (Vertex v in Vertices)
+                v.MovePosition(deltaX, deltaY);
         }
         public void Draw(Graphics graphics)
         {
@@ -287,7 +288,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             for (int i = 0; i < Vertices.Count; i++)
             {
                 double totalAngle = alpha * i;
-                GetVertex(i).MoveTo(X + (int)Math.Round(radius * Math.Cos(totalAngle)), Y + (int)Math.Round(radius * Math.Sin(totalAngle)));
+                GetVertex(i).SetPosition(X + (int)Math.Round(radius * Math.Cos(totalAngle)), Y + (int)Math.Round(radius * Math.Sin(totalAngle)));
             }
         }
 

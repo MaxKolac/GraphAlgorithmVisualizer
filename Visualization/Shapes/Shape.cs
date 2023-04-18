@@ -16,6 +16,7 @@ namespace GraphAlgorithmVisualizer.Visualization.Shapes
         }
 
         public abstract void Draw(Graphics graphics);
-        public abstract void MoveTo(int x, int y);
+        public abstract void SetPosition(int x, int y);
+        public abstract void MovePosition(int deltaX, int deltaY);
     }
 }

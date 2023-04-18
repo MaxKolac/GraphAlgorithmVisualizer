@@ -3,21 +3,27 @@ using System.Drawing;
 
 namespace GraphAlgorithmVisualizer.Visualization.Shapes
 {
+    /// <summary>
+    /// A curvy line with an arrowhead at the end of it. Represents directional Edges. It starts from Start point and ends in End point, with the Middle point acting as a deformer to make the Arrow appear as a curve. 
+    /// </summary>
     internal class Arrow : Shape
     {
         public Point Start { get; private set; }
         public Point Middle { get; private set; }
         public Point End { get; private set; }
 
+        /// <summary>Angle between arrowhead's arm and the Arrow's line.</summary>
         private readonly double armAngle;
+        /// <summary>The length of arrowhead's arms.</summary>
         private readonly double armLength;
+        /// <summary>The distance between the arrowhead's starting point and the Arrow's End point. Needed so that the arrowhead won't be drawn under the Vertex's visual representation. It should equal Vertex's circle's radius.</summary>
         private const double lineEndOffset = 10d;
 
         public Arrow(Point start, Point end, double armAngle, double armLength) : base((end.X - start.X) / 2, (end.Y - start.Y) / 2)
         {
-            this.Start = start;
+            Start = start;
+            End = end;
             ResetMiddle();
-            this.End = end;
             this.armAngle = armAngle;
             this.armLength = armLength;
         }
@@ -66,16 +72,32 @@ namespace GraphAlgorithmVisualizer.Visualization.Shapes
             graphics.DrawCurve(DrawingTools.DefaultOutline, new Point[] { Start, Middle, End });
         }
         /// <summary>
-        /// Important! Keep in mind that you can't move the Arrow through this method. This method moves ONLY the middle point of the arrow. Use <c>MoveStart()</c> and <c>MoveEnd()</c> instead.
+        /// Important! Keep in mind that you can't set the Arrow's position through this method. This method sets ONLY the middle point of the arrow. Use <c>SetStart()</c> and <c>SetEnd()</c> instead.
         /// </summary>
-        /// <param name="x">The X coordinate to move the middle point to.</param>
-        /// <param name="y">The Y coordinate to move the middle point to.</param>
-        public override void MoveTo(int x, int y) => Middle = new Point(x, y);
+        /// <param name="x">The X coordinate to set the middle point to.</param>
+        /// <param name="y">The Y coordinate to set the middle point to.</param>
+        public override void SetPosition(int x, int y) => Middle = new Point(x, y);
+        /// <summary>
+        /// Important! Keep in mind that you can't move the Arrow's position through this method. This method moves ONLY the middle point of the arrow. Use <c>SetStart()</c> and <c>SetEnd()</c> instead.
+        /// </summary>
+        /// <param name="deltaX">The X coordinate change to apply to the current X value.</param>
+        /// <param name="deltaY">The Y coordinate change to apply to the current Y value.</param>
+        public override void MovePosition(int deltaX, int deltaY) => Middle = new Point(Middle.X + deltaX, Middle.Y + deltaY);
         /// <summary>
         /// Resets the Middle point's position to be exactly in the middle between Start and End positions.
         /// </summary>
         public void ResetMiddle() => Middle = new Point(Start.X + ((End.X - Start.X) / 2), Start.Y + ((End.Y - Start.Y) / 2));
-        public void MoveStart(int x, int y) => Start = new Point(x, y);
-        public void MoveEnd(int x, int y) => End = new Point(x, y);
+        /// <summary>
+        /// Moves the Start point to the given coordinates. Make sure to call Draw() method to update the Arrow's appearance!.
+        /// </summary>
+        /// <param name="x">The X coordinate of the new Start point.</param>
+        /// <param name="y">The Y coordinate of the new Start point.</param>
+        public void SetStart(int x, int y) => Start = new Point(x, y);
+        /// <summary>
+        /// Moves the End point to the given coordinates. Make sure to call Draw() method to update the Arrow's appearance!.
+        /// </summary>
+        /// <param name="x">The X coordinate of the new End point.</param>
+        /// <param name="y">The Y coordinate of the new End point.</param>
+        public void SetEnd(int x, int y) => End = new Point(x, y);
     }
 }
