@@ -9,6 +9,8 @@ namespace GraphAlgorithmVisualizer.MathObjects
 {
     /// <summary>
     /// By mathematical definition, a non-empty collection of <c>Vertices</c> and <c>Edges</c> that connect them.
+    /// It may be directional, which means that all of its Edges act as a "one-way" roads.
+    /// It may use Distances, which means that all of its Edges make use of an additional property called Distance.
     /// Keep in mind that vertices' IDs of a <c>Graph</c> start from 0.
     /// </summary>
     internal class Graph : IVisualizable
@@ -27,6 +29,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         private readonly List<Edge> Edges = new List<Edge>();
         /// <summary>
         /// Whether or not the <c>Graph</c> is considered to be directional or not.
+        /// A directional Graph means that it only accepts directional Edges. Directional Edges act as a "one-way" roads - algorithm travel is only allowed from its Start to End. Undirectional Graph, and therefore undirectional Edges, allow the algorithms to travel both ways.
         /// </summary>
         public readonly bool IsDirectional;
         /// <summary>
@@ -253,6 +256,11 @@ namespace GraphAlgorithmVisualizer.MathObjects
             }
         }
 
+        /// <summary>
+        /// Graph's implementation of MoveTo() method moves its own Position and also moves all of its Vertices' positions by the delta of Graph's its own position.
+        /// </summary>
+        /// <param name="x">The X coordinate of Graph's new position.</param>
+        /// <param name="y">The Y coordinate of Graph's new position.</param>
         public void MoveTo(int x, int y)
         {
             int deltaX = Position.X - x;

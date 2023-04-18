@@ -4,7 +4,7 @@ using GraphAlgorithmVisualizer.Visualization;
 namespace GraphAlgorithmVisualizer.MathObjects
 {
     /// <summary>
-    /// Single point of a Graph with a unique identifing Index. It may be connected to another vertex through an <c>Edge</c>.
+    /// Single point of a Graph with a unique identifing Index. It may be connected to another vertex through an <c>Edge</c>. Visually represented by a simple circle with its Index inside it.
     /// </summary>
     internal class Vertex : IVisualizable
     {
