@@ -24,11 +24,11 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// </summary>
         public readonly Vertex End;
         /// <summary>
-        /// Defines if the <c>Edge</c> allows travel in both directions. If <c>true</c>, then only stepping from <c>Start</c> to <c>End</c> vertices is allowed. 
+        /// Defines if the <c>Edge</c> allows travel in both directions. If <c>true</c>, then only stepping from <c>Start</c> to <c>End</c> vertices is allowed. Additionally, it determines if the Edge will be visualized as an Arrow or a simple line.
         /// </summary>
         public readonly bool IsDirectional;
         /// <summary>
-        /// Optional property used by some graph algorithm. Determines the abstract "length" this edge has.
+        /// Optional property used by some graph algorithms. Represents the abstract metric used to determine the Edge's length in the Graph.
         /// </summary>
         public readonly int? Distance;
 
@@ -38,6 +38,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             Start = start;
             End = end;
             IsDirectional = isDirectional;
+            Distance = null;
         }
         public Edge(Vertex start, Vertex end, bool isDirectional, int distance) : this(start, end, isDirectional)
         {

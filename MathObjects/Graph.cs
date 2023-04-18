@@ -29,6 +29,10 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// Whether or not the <c>Graph</c> is considered to be directional or not.
         /// </summary>
         public readonly bool IsDirectional;
+        /// <summary>
+        /// Whether or not the Edges are required to implement a non-zero, non-null Distance value.
+        /// </summary>
+        public readonly bool UsesDistances;
 
         /// <summary>
         /// Indexer which acts as a shortcut to GetVertex() method.
@@ -60,7 +64,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// Creates a new empty Graph.
         /// </summary>
         /// <param name="isDirectional">Whether or not the <c>Graph</c> will be directional or not.</param>
-        public Graph(bool isDirectional) : this(isDirectional, 0) 
+        public Graph(bool isDirectional, bool usesDistances) : this(isDirectional, usesDistances, 0) 
         {
         }
         /// <summary>
@@ -68,9 +72,10 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// </summary>
         /// <param name="isDirectional">Whether or not the <c>Graph</c> will be directional or not.</param>
         /// <param name="verticesCount">With how many vertices should the <c>Graph</c> be created.</param>
-        public Graph(bool isDirectional, int verticesCount)
+        public Graph(bool isDirectional, bool usesDistances, int verticesCount)
         {
             IsDirectional = isDirectional;
+            UsesDistances = usesDistances;
             for (int i = 0; i < verticesCount; i++)
                 AddVertex(i);
         }
@@ -97,28 +102,22 @@ namespace GraphAlgorithmVisualizer.MathObjects
         }
 
         /// <summary>
-        /// Creates a new <c>Edge</c> between two vertices and adds it to the Edges list.
+        /// Creates a new <c>Edge</c> between two vertices and adds it to the Edges list. If this method is called on a Graph utilizing Distances, new Edge's Distance will be set to 0.
         /// </summary>
         /// <param name="v1">Start Vertex of the Edge.</param>
         /// <param name="v2">End Vertex of the Edge.</param>
-        public void AddEdge(Vertex v1, Vertex v2) => AddEdge(new Edge(v1, v2, IsDirectional));
+        public void AddEdge(Vertex v1, Vertex v2) => AddEdge(UsesDistances ? new Edge(v1, v2, IsDirectional, 0) : new Edge(v1, v2, IsDirectional));
         /// <summary>
-        /// Creates a new <c>Edge</c> between two vertices and adds it to the Edges list. This method assigns the new Edge the specified distance.
+        /// Creates a new <c>Edge</c> between two vertices and adds it to the Edges list. This method assigns the new Edge the specified distance. If distances aren't utilized by the Graph, distance is ignored.
         /// </summary>
         /// <param name="v1">Start Vertex of the Edge.</param>
         /// <param name="v2">End Vertex of the Edge.</param>
         /// <param name="distance">The distance of the new Edge.</param>
-        public void AddEdge(Vertex v1, Vertex v2, int distance) => AddEdge(new Edge(v1, v2, IsDirectional, distance));
+        public void AddEdge(Vertex v1, Vertex v2, int distance) => AddEdge(UsesDistances ? new Edge(v1, v2, IsDirectional, distance) : new Edge(v1, v2, IsDirectional));
         /// <summary>
-        /// Directly adds an <c>Edge</c> object to Edges list.
+        /// Directly adds an copy of <c>Edge</c> object to Edges list.
         /// </summary>
         /// <param name="e">The <c>Edge</c> to be added.</param>
-        /// <exception cref="GraphException">Thrown if any of the following is true:
-        /// <list type="bullet">
-        /// <item>If the list of <c>Vertices</c> doesn't contain one of the vertices the <c>Edge</c> was meant to connect.</item>
-        /// <item>If the program attempts to add a directional edge to a undirectional graph and vice versa.</item>
-        /// </list>
-        /// </exception>
         public void AddEdge(Edge e)
         {
             if (Edges.Contains(e))
@@ -127,6 +126,14 @@ namespace GraphAlgorithmVisualizer.MathObjects
                 throw new GraphException("Attempted to add an Edge whose Start/End does not exist in the Vertices list.");
             if (e.IsDirectional != IsDirectional)
                 throw new GraphException("Attempted to add a mismatching Edge to a Graph. Objects did not have the same value of IsDirectional.");
+            if (UsesDistances && e.Distance is null)
+                throw new GraphException("Attempted to add an Edge without a Distance value to a Graph which requires it to be non-null.");
+            else if (!UsesDistances && !(e.Distance is null))
+            {
+                Console.WriteLine("Warning! Added an Edge with a Distance to a Graph which doesn't utilize Distances! Overwriting it to be null!");
+                Edges.Add(new Edge(e.Start, e.End, IsDirectional));
+                return;
+            }
             Edges.Add(e);
         }
 

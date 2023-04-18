@@ -7,7 +7,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
     {
         public static void BFSTest()
         {
-            Graph graph = new Graph(false, 5);
+            Graph graph = new Graph(false, false, 5);
             graph.AddEdge(graph.V(0), graph.V(1));
             graph.AddEdge(graph.V(0), graph.V(4));
 
@@ -30,7 +30,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
 
         public static void DFSTest()
         {
-            Graph graph = new Graph(false, 13);
+            Graph graph = new Graph(false, false, 13);
             graph.AddEdge(graph.V(0), graph.V(1));
             graph.AddEdge(graph.V(0), graph.V(2));
 
@@ -59,7 +59,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
 
         public static void DjikstraTest()
         {
-            Graph graph = new Graph(true, 5);
+            Graph graph = new Graph(true, true, 5);
             graph.AddEdge(graph.V(0), graph.V(1), 4);
             graph.AddEdge(graph.V(0), graph.V(2), 2);
 

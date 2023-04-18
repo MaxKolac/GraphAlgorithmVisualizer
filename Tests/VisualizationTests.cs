@@ -1,4 +1,6 @@
 ﻿using GraphAlgorithmVisualizer.MathObjects;
+using GraphAlgorithmVisualizer.Visualization.Shapes;
+using System;
 using System.Drawing;
 
 namespace GraphAlgorithmVisualizer.Tests
@@ -7,7 +9,7 @@ namespace GraphAlgorithmVisualizer.Tests
     {
         public static void GraphDrawingTest(Graphics graphics, int pictureBoxWidth, int pictureBoxHeight)
         {
-            Graph graph = new Graph(true, 9);
+            Graph graph = new Graph(true, true, 9);
             /*graph.AddEdge(graph[0], graph[1], 4);
             graph.AddEdge(graph[0], graph[2], 2);
 
