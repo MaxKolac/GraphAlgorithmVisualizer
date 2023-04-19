@@ -12,12 +12,12 @@ namespace GraphAlgorithmVisualizer.Visualization.Shapes
         public Point Middle { get; private set; }
         public Point End { get; private set; }
 
-        /// <summary>Angle between arrowhead's arm and the Arrow's line.</summary>
+        /// <summary>Angle between arrowhead's arm and the Arrow's line measured in degrees.</summary>
         private readonly double armAngle;
         /// <summary>The length of arrowhead's arms.</summary>
         private readonly double armLength;
         /// <summary>The distance between the arrowhead's starting point and the Arrow's End point. Needed so that the arrowhead won't be drawn under the Vertex's visual representation. It should equal Vertex's circle's radius.</summary>
-        private const double lineEndOffset = 10d;
+        private const int lineEndOffset = 10;
 
         public Arrow(Point start, Point end, double armAngle, double armLength) : base((end.X - start.X) / 2, (end.Y - start.Y) / 2)
         {
@@ -27,48 +27,87 @@ namespace GraphAlgorithmVisualizer.Visualization.Shapes
             this.armAngle = armAngle;
             this.armLength = armLength;
         }
-        public Arrow(Point start, Point end) : this(start, end, Extensions.ToRadians(15d), 15d) { }
+        public Arrow(Point start, Point end) : this(start, end, 25, 20) { }
 
         public override void Draw(Graphics graphics)
         {
-            //TODO: Despite this mess, QuarterAngleOffset still doesn't quite work
-            //Mafs is hard :p, not too proud out of this "wooden else-if'ing"...
-            double QuarterAngleOffset;
-            if (End.X > Start.X && End.Y <= Start.Y)
-                QuarterAngleOffset = Extensions.ToRadians(360);
-            else if (End.X <= Start.X && End.Y < Start.Y)
-                QuarterAngleOffset = Extensions.ToRadians(-180);
-            else if (End.X < Start.X && End.Y >= Start.Y)
-                QuarterAngleOffset = Extensions.ToRadians(180);
-            else //if (end.X >= start.X && end.X > start.Y)
-                QuarterAngleOffset = Extensions.ToRadians(-360);
+            double alphaRadians = Math.Asin(
+                    Math.Abs(End.Y - Middle.Y) / 
+                    Math.Sqrt(Math.Pow(End.X - Middle.X, 2) + Math.Pow(End.Y - Middle.Y, 2))
+                );
+            double betaRadians = Extensions.ToRadians(90d) - alphaRadians;
+            double gammaRadians = Extensions.ToRadians(armAngle);
+            Point arrowheadStartPoint;
+            Point armEndOne;
+            Point armEndTwo;
 
-            int DifferenceY = End.Y - Start.Y;
-            int DifferenceX = End.X - Start.X;
-            double Alpha =
-                DifferenceY != 0 && DifferenceX != 0 ?
-                Math.Sin(((Start.Y - End.Y) / Math.Sqrt(Math.Pow(DifferenceX, 2) + Math.Pow(DifferenceY, 2))) + QuarterAngleOffset) :
-                0;
-            /*double Alpha = 
-                (DifferenceX == 0 || DifferenceY == 0) ? 
-                QuarterAngleOffset : 
-                Math.Atan(Math.Abs(DifferenceY) / Math.Abs(DifferenceX)) + QuarterAngleOffset;*/
-            double Beta = Extensions.ToRadians(270d - Extensions.ToDegrees(Alpha));
-            Point ArrowArmStartPoint =
-                new Point(
-                    End.X - (int)Math.Round(lineEndOffset * Math.Sin(Beta)),
-                    End.Y + (int)Math.Round(lineEndOffset * Math.Sin(Alpha))
+            //Determining which quarter of the (X,Y) space the arrow is in
+            //Comment: Yay, it works, me smart :thumbsup:
+            if (End.X > Middle.X && End.Y <= Middle.Y) // 1st
+            {
+                arrowheadStartPoint = new Point(
+                    End.X - (int)Math.Round(lineEndOffset * Math.Cos(alphaRadians)),
+                    End.Y + (int)Math.Round(lineEndOffset * Math.Sin(alphaRadians))
                     );
+                armEndOne = new Point(
+                    arrowheadStartPoint.X - (int)Math.Round(armLength * Math.Sin(betaRadians - gammaRadians)),
+                    arrowheadStartPoint.Y + (int)Math.Round(armLength * Math.Cos(betaRadians - gammaRadians))
+                    );
+                armEndTwo = new Point(
+                    arrowheadStartPoint.X - (int)Math.Round(armLength * Math.Cos(alphaRadians - gammaRadians)),
+                    arrowheadStartPoint.Y + (int)Math.Round(armLength * Math.Sin(alphaRadians - gammaRadians))
+                    );
+            }
+            else if (End.X <= Middle.X && End.Y < Middle.Y) // 2nd
+            {
+                arrowheadStartPoint = new Point(
+                    End.X + (int)Math.Round(lineEndOffset * Math.Cos(alphaRadians)),
+                    End.Y + (int)Math.Round(lineEndOffset * Math.Sin(alphaRadians))
+                    );
+                armEndOne = new Point(
+                    arrowheadStartPoint.X + (int)Math.Round(armLength * Math.Cos(alphaRadians - gammaRadians)),
+                    arrowheadStartPoint.Y + (int)Math.Round(armLength * Math.Sin(alphaRadians - gammaRadians))
+                    );
+                armEndTwo = new Point(
+                    arrowheadStartPoint.X + (int)Math.Round(armLength * Math.Sin(betaRadians - gammaRadians)),
+                    arrowheadStartPoint.Y + (int)Math.Round(armLength * Math.Cos(betaRadians - gammaRadians))
+                    );
+            }
+            else if (End.X < Middle.X && End.Y >= Middle.Y) // 3nd
+            {
+                arrowheadStartPoint = new Point(
+                    End.X + (int)Math.Round(lineEndOffset * Math.Cos(alphaRadians)),
+                    End.Y - (int)Math.Round(lineEndOffset * Math.Sin(alphaRadians))
+                    );
+                armEndOne = new Point(
+                    arrowheadStartPoint.X + (int)Math.Round(armLength * Math.Sin(betaRadians - gammaRadians)),
+                    arrowheadStartPoint.Y - (int)Math.Round(armLength * Math.Cos(betaRadians - gammaRadians))
+                    );
+                armEndTwo = new Point(
+                    arrowheadStartPoint.X + (int)Math.Round(armLength * Math.Cos(alphaRadians - gammaRadians)),
+                    arrowheadStartPoint.Y - (int)Math.Round(armLength * Math.Sin(alphaRadians - gammaRadians))
+                    );
+            }
+            else //if (End.X >= Middle.X && End.Y > Middle.Y) // 4th
+            {
+                int x = (int)Math.Round(lineEndOffset * Math.Cos(alphaRadians));
+                int y = (int)Math.Round(lineEndOffset * Math.Sin(alphaRadians));
+                arrowheadStartPoint = new Point(
+                    End.X - x,
+                    End.Y - y
+                    );
+                armEndOne = new Point(
+                    arrowheadStartPoint.X - (int)Math.Round(armLength * Math.Cos(alphaRadians - gammaRadians)),
+                    arrowheadStartPoint.Y - (int)Math.Round(armLength * Math.Sin(alphaRadians - gammaRadians))
+                    );
+                armEndTwo = new Point(
+                    arrowheadStartPoint.X - (int)Math.Round(armLength * Math.Sin(betaRadians - gammaRadians)),
+                    arrowheadStartPoint.Y - (int)Math.Round(armLength * Math.Cos(betaRadians - gammaRadians))
+                    );
+            }
 
-            //This appear to work fine
-            int ArrowOneX = ArrowArmStartPoint.X - (int)Math.Round(armLength * Math.Sin(Beta - armAngle));
-            int ArrowOneY = ArrowArmStartPoint.Y + (int)Math.Round(armLength * Math.Cos(Beta - armAngle));
-            int ArrowTwoX = ArrowArmStartPoint.X - (int)Math.Round(armLength * Math.Sin(Beta + armAngle));
-            int ArrowTwoY = ArrowArmStartPoint.Y + (int)Math.Round(armLength * Math.Cos(Beta + armAngle));
-
-            //This obviously needs to stay constant
-            graphics.DrawLine(DrawingTools.DefaultOutline, ArrowArmStartPoint, new Point(ArrowOneX, ArrowOneY));
-            graphics.DrawLine(DrawingTools.DefaultOutline, ArrowArmStartPoint, new Point(ArrowTwoX, ArrowTwoY));
+            graphics.DrawLine(DrawingTools.DefaultOutline, arrowheadStartPoint, armEndOne);
+            graphics.DrawLine(DrawingTools.DefaultOutline, arrowheadStartPoint, armEndTwo);
             graphics.DrawCurve(DrawingTools.DefaultOutline, new Point[] { Start, Middle, End });
         }
         /// <summary>
