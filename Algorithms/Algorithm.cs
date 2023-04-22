@@ -5,6 +5,9 @@ using System.Text;
 
 namespace GraphAlgorithmVisualizer.Algorithms
 {
+    /// <summary>
+    /// Base class of all Graph algorithms. It holds 3 Dictionaries with entries for each Vertex in the Graph, and also a reference to the Graph object itself.
+    /// </summary>
     internal abstract class Algorithm
     {
         protected readonly Dictionary<Vertex, bool> visited;
