@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.MathObjects;
 
 namespace GraphAlgorithmVisualizer.Algorithms
@@ -7,6 +8,8 @@ namespace GraphAlgorithmVisualizer.Algorithms
     {
         public DjikstraAlgorithm(Graph graph) : base(graph)
         {
+            if (!graph.UsesDistances)
+                throw new GraphException("Attempted to associate a Graph without distances with an instance of DjikstraAlgorithm class.");
         }
 
         public override void Perform(Vertex start)
