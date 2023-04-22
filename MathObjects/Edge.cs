@@ -11,9 +11,10 @@ namespace GraphAlgorithmVisualizer.MathObjects
     /// </summary>
     internal class Edge : IVisualizable
     {
-        private readonly Arrow visualArrow;
-        public int X { get { return visualArrow.X; } set { visualArrow.SetPosition(value, visualArrow.Y); } }
-        public int Y { get { return visualArrow.Y; } set { visualArrow.SetPosition(visualArrow.X, value); } }
+        private readonly CurvableLine visualArrow;
+        public Point Position => visualArrow.Middle;
+        public int X => visualArrow.Middle.X;
+        public int Y => visualArrow.Middle.Y;
 
         /// <summary>
         /// <c>Vertex</c> from which the <c>Edge</c> begins. Only matters if the <c>Edge</c> is directional.
@@ -34,7 +35,9 @@ namespace GraphAlgorithmVisualizer.MathObjects
 
         public Edge(Vertex start, Vertex end, bool isDirectional)
         {
-            visualArrow = new Arrow(Start.Position, End.Position);
+            visualArrow = isDirectional ?
+                new Arrow(start.Position, end.Position) :
+                new CurvableLine(start.Position, end.Position);
             Start = start;
             End = end;
             IsDirectional = isDirectional;
@@ -70,12 +73,17 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public void MovePosition(int deltaX, int deltaY) => visualArrow.MovePosition(deltaX, deltaY);
         public void Draw(Graphics graphics)
         {
-            if (IsDirectional)
-            {
-                graphics.DrawLine(DrawingTools.DefaultOutline, Start.X, Start.Y, End.X, End.Y);
-                graphics.DrawString($"{Distance}", DrawingTools.DefaultFont, DrawingTools.DefaultFontColor, new Point(Math.Abs(End.X + Start.X) / 2, Math.Abs(End.Y + Start.Y) / 2));
-            }
-            else visualArrow.Draw(graphics);
+            visualArrow.SetStart(Start.Position.X, Start.Position.Y);
+            visualArrow.SetEnd(End.Position.X, End.Position.Y);
+            visualArrow.Draw(graphics);
+            graphics.DrawString(
+                $"{Distance}", 
+                DrawingTools.DefaultFont, 
+                DrawingTools.DefaultFontColor, 
+                new Point(
+                    Math.Abs(End.Position.X + Start.Position.X) / 2, 
+                    Math.Abs(End.Position.Y + Start.Position.Y) / 2)
+                ); 
         }
 
         public override string ToString()

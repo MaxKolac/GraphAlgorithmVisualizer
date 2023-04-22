@@ -2,17 +2,18 @@
 
 namespace GraphAlgorithmVisualizer.Visualization.Shapes
 {
-    internal abstract class Shape : IVisualizable
+    /// <summary>
+    /// Base abstract class of all drawable Shapes used for graph visualization
+    /// </summary>
+    internal abstract class Shape
     {
-        public int X { get; private set; }
-        public int Y { get; private set; }
-        int IVisualizable.X { get => X; set { Y = value; } }
-        int IVisualizable.Y { get => Y; set { X = value; } }
+        protected Point Position;
+        protected int X => Position.X;
+        protected int Y => Position.Y;
 
         protected Shape(int x, int y)
         {
-            X = x;
-            Y = y;
+            Position = new Point(x, y);
         }
 
         public abstract void Draw(Graphics graphics);

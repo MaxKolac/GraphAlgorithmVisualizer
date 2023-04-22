@@ -6,12 +6,8 @@ namespace GraphAlgorithmVisualizer.Visualization.Shapes
     /// <summary>
     /// A curvy line with an arrowhead at the end of it. Represents directional Edges. It starts from Start point and ends in End point, with the Middle point acting as a deformer to make the Arrow appear as a curve. 
     /// </summary>
-    internal class Arrow : Shape
+    internal class Arrow : CurvableLine
     {
-        public Point Start { get; private set; }
-        public Point Middle { get; private set; }
-        public Point End { get; private set; }
-
         /// <summary>Angle between arrowhead's arm and the Arrow's line measured in degrees.</summary>
         private readonly double armAngle;
         /// <summary>The length of arrowhead's arms.</summary>
@@ -19,15 +15,14 @@ namespace GraphAlgorithmVisualizer.Visualization.Shapes
         /// <summary>The distance between the arrowhead's starting point and the Arrow's End point. Needed so that the arrowhead won't be drawn under the Vertex's visual representation. It should equal Vertex's circle's radius.</summary>
         private const int lineEndOffset = 10;
 
-        public Arrow(Point start, Point end, double armAngle, double armLength) : base((end.X - start.X) / 2, (end.Y - start.Y) / 2)
+        public Arrow(Point start, Point end, double armAngle, double armLength) : base(start, end)
         {
-            Start = start;
-            End = end;
-            ResetMiddle();
             this.armAngle = armAngle;
             this.armLength = armLength;
         }
-        public Arrow(Point start, Point end) : this(start, end, 25, 20) { }
+        public Arrow(Point start, Point end) : this(start, end, 25, 20) 
+        {
+        }
 
         public override void Draw(Graphics graphics)
         {
@@ -35,6 +30,7 @@ namespace GraphAlgorithmVisualizer.Visualization.Shapes
                     Math.Abs(End.Y - Middle.Y) / 
                     Math.Sqrt(Math.Pow(End.X - Middle.X, 2) + Math.Pow(End.Y - Middle.Y, 2))
                 );
+            if (double.IsNaN(alphaRadians)) alphaRadians = 0;
             double betaRadians = Extensions.ToRadians(90d) - alphaRadians;
             double gammaRadians = Extensions.ToRadians(armAngle);
             Point arrowheadStartPoint;
@@ -90,11 +86,9 @@ namespace GraphAlgorithmVisualizer.Visualization.Shapes
             }
             else //if (End.X >= Middle.X && End.Y > Middle.Y) // 4th
             {
-                int x = (int)Math.Round(lineEndOffset * Math.Cos(alphaRadians));
-                int y = (int)Math.Round(lineEndOffset * Math.Sin(alphaRadians));
                 arrowheadStartPoint = new Point(
-                    End.X - x,
-                    End.Y - y
+                    End.X - (int)Math.Round(lineEndOffset * Math.Cos(alphaRadians)),
+                    End.Y - (int)Math.Round(lineEndOffset * Math.Sin(alphaRadians))
                     );
                 armEndOne = new Point(
                     arrowheadStartPoint.X - (int)Math.Round(armLength * Math.Cos(alphaRadians - gammaRadians)),
@@ -106,37 +100,9 @@ namespace GraphAlgorithmVisualizer.Visualization.Shapes
                     );
             }
 
+            base.Draw(graphics);
             graphics.DrawLine(DrawingTools.DefaultOutline, arrowheadStartPoint, armEndOne);
             graphics.DrawLine(DrawingTools.DefaultOutline, arrowheadStartPoint, armEndTwo);
-            graphics.DrawCurve(DrawingTools.DefaultOutline, new Point[] { Start, Middle, End });
         }
-        /// <summary>
-        /// Important! Keep in mind that you can't set the Arrow's position through this method. This method sets ONLY the middle point of the arrow. Use <c>SetStart()</c> and <c>SetEnd()</c> instead.
-        /// </summary>
-        /// <param name="x">The X coordinate to set the middle point to.</param>
-        /// <param name="y">The Y coordinate to set the middle point to.</param>
-        public override void SetPosition(int x, int y) => Middle = new Point(x, y);
-        /// <summary>
-        /// Important! Keep in mind that you can't move the Arrow's position through this method. This method moves ONLY the middle point of the arrow. Use <c>SetStart()</c> and <c>SetEnd()</c> instead.
-        /// </summary>
-        /// <param name="deltaX">The X coordinate change to apply to the current X value.</param>
-        /// <param name="deltaY">The Y coordinate change to apply to the current Y value.</param>
-        public override void MovePosition(int deltaX, int deltaY) => Middle = new Point(Middle.X + deltaX, Middle.Y + deltaY);
-        /// <summary>
-        /// Resets the Middle point's position to be exactly in the middle between Start and End positions.
-        /// </summary>
-        public void ResetMiddle() => Middle = new Point(Start.X + ((End.X - Start.X) / 2), Start.Y + ((End.Y - Start.Y) / 2));
-        /// <summary>
-        /// Moves the Start point to the given coordinates. Make sure to call Draw() method to update the Arrow's appearance!.
-        /// </summary>
-        /// <param name="x">The X coordinate of the new Start point.</param>
-        /// <param name="y">The Y coordinate of the new Start point.</param>
-        public void SetStart(int x, int y) => Start = new Point(x, y);
-        /// <summary>
-        /// Moves the End point to the given coordinates. Make sure to call Draw() method to update the Arrow's appearance!.
-        /// </summary>
-        /// <param name="x">The X coordinate of the new End point.</param>
-        /// <param name="y">The Y coordinate of the new End point.</param>
-        public void SetEnd(int x, int y) => End = new Point(x, y);
     }
 }
