@@ -69,7 +69,18 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// </returns>
         public bool IsEndingIn(Vertex v) => IsDirectional ? End.Equals(v) : Start.Equals(v) || End.Equals(v);
 
+        public void SetStart(Point p)
+        {
+            Start.SetPosition(p.X, p.Y);
+            visualArrow.SetStart(p.X, p.Y);
+        }
         public void SetPosition(int x, int y) => visualArrow.SetPosition(x, y);
+        public void ResetMiddle() => visualArrow.ResetMiddle();
+        public void SetEnd(Point p) 
+        {
+            End.SetPosition(p.X, p.Y);
+            visualArrow.SetEnd(p.X, p.Y); 
+        }
         public void MovePosition(int deltaX, int deltaY) => visualArrow.MovePosition(deltaX, deltaY);
         public void Draw(Graphics graphics)
         {

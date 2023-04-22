@@ -67,6 +67,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// Creates a new empty Graph.
         /// </summary>
         /// <param name="isDirectional">Whether or not the <c>Graph</c> will be directional or not.</param>
+        /// <param name="usesDistances">Whether or not the Graph will require all Edges to have a non-null distance value.</param>
         public Graph(bool isDirectional, bool usesDistances) : this(isDirectional, usesDistances, 0) 
         {
         }
@@ -74,6 +75,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// Creates a new Graph with a collection of vertices.
         /// </summary>
         /// <param name="isDirectional">Whether or not the <c>Graph</c> will be directional or not.</param>
+        /// <param name="usesDistances">Whether or not the Graph will require all Edges to have a non-null distance value.</param>
         /// <param name="verticesCount">With how many vertices should the <c>Graph</c> be created.</param>
         public Graph(bool isDirectional, bool usesDistances, int verticesCount)
         {
@@ -81,6 +83,9 @@ namespace GraphAlgorithmVisualizer.MathObjects
             UsesDistances = usesDistances;
             for (int i = 0; i < verticesCount; i++)
                 AddVertex(i);
+            Position = new Point(0, 0);
+            SetPosition(0, 0);
+            ArrangeVerticesInCircle(100);
         }
 
         /// <summary>
@@ -96,7 +101,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// </summary>
         /// <param name="v">The Vertex to add.</param>
         /// <exception cref="GraphException">Thrown if a Vertex with the Index of the addedVertex already exists.</exception>
-        public void AddVertex(Vertex v)
+        private void AddVertex(Vertex v)
         {
             foreach (Vertex existingVertex in Vertices)
                 if (v.Index == existingVertex.Index)
@@ -121,7 +126,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// Directly adds an copy of <c>Edge</c> object to Edges list.
         /// </summary>
         /// <param name="e">The <c>Edge</c> to be added.</param>
-        public void AddEdge(Edge e)
+        private void AddEdge(Edge e)
         {
             if (Edges.Contains(e))
                 Console.WriteLine("Warning! Added a duplicate Edge to the Edges list.");
@@ -137,6 +142,9 @@ namespace GraphAlgorithmVisualizer.MathObjects
                 Edges.Add(new Edge(e.Start, e.End, IsDirectional));
                 return;
             }
+            e.SetStart(GetVertex(e.Start.Index).Position);
+            e.SetEnd(GetVertex(e.End.Index).Position);
+            e.ResetMiddle();
             Edges.Add(e);
         }
 
@@ -256,20 +264,28 @@ namespace GraphAlgorithmVisualizer.MathObjects
             }
         }
 
+        /// <summary>
+        /// Iterates over all Edges and calls UpdatePointOfEdge() method on each of them;
+        /// </summary>
+        private void UpdatePointsOfAllEdges() 
+        {
+            foreach (Edge e in Edges)
+            {
+                e.SetStart(GetVertex(e.Start.Index).Position);
+                e.SetEnd(GetVertex(e.End.Index).Position);
+                e.ResetMiddle();
+            }
+        }
+
         public void SetPosition(int x, int y)
         {
-            int deltaX = Position.X - x;
-            int deltaY = Position.Y - y;
+            int deltaX = x - Position.X;
+            int deltaY = y - Position.Y;
             Position = new Point(x, y);
 
             foreach (Vertex v in Vertices)
-                v.SetPosition(v.X + deltaX, v.Y + deltaY);
-        }
-        public void MovePosition(int deltaX, int deltaY)
-        {
-            Position = new Point(Position.X + deltaX, Position.Y + deltaY);
-            foreach (Vertex v in Vertices)
                 v.MovePosition(deltaX, deltaY);
+            UpdatePointsOfAllEdges();
         }
         public void MovePosition(int deltaX, int deltaY) => SetPosition(Position.X + deltaX, Position.Y + deltaY);
         public void Draw(Graphics graphics)
@@ -292,6 +308,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
                 double totalAngle = alpha * i;
                 GetVertex(i).SetPosition(X + (int)Math.Round(radius * Math.Cos(totalAngle)), Y + (int)Math.Round(radius * Math.Sin(totalAngle)));
             }
+            UpdatePointsOfAllEdges();
         }
 
         public override string ToString()
