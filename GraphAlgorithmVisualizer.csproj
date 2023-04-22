@@ -89,6 +89,7 @@
     <Compile Include="Visualization\ISelectable.cs" />
     <Compile Include="Visualization\IVisualizable.cs" />
     <Compile Include="Visualization\Shapes\CurvableLine.cs" />
+    <Compile Include="Visualization\Shapes\LabelSquare.cs" />
     <Compile Include="Visualization\Shapes\Shape.cs" />
     <Compile Include="Visualization\Shapes\Arrow.cs" />
     <EmbeddedResource Include="MainForm.resx">

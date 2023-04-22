@@ -87,14 +87,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             visualArrow.SetStart(Start.Position.X, Start.Position.Y);
             visualArrow.SetEnd(End.Position.X, End.Position.Y);
             visualArrow.Draw(graphics);
-            graphics.DrawString(
-                $"{Distance}", 
-                DrawingTools.DefaultFont, 
-                DrawingTools.DefaultFontColor, 
-                new Point(
-                    Math.Abs(End.Position.X + Start.Position.X) / 2, 
-                    Math.Abs(End.Position.Y + Start.Position.Y) / 2)
-                ); 
+            new LabelSquare(visualArrow.Middle.X, visualArrow.Middle.Y, Distance.ToString()).Draw(graphics);
         }
 
         public override string ToString()
