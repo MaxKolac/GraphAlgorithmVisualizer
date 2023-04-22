@@ -1,6 +1,7 @@
 ﻿using GraphAlgorithmVisualizer.MathObjects;
 using GraphAlgorithmVisualizer.Visualization.Shapes;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace GraphAlgorithmVisualizer.Tests
@@ -91,6 +92,24 @@ namespace GraphAlgorithmVisualizer.Tests
                 arrows2[i].ResetMiddle();
                 arrows2[i].Draw(graphics);
             }
+
+        }
+
+        public static void CurvableLineTest(Graphics graphics, int pictureBoxWidth, int pictureBoxHeight)
+        {
+            List<CurvableLine> lines = new List<CurvableLine>();
+            Point startingPoint = new Point((pictureBoxWidth / 2) - 150, (pictureBoxHeight / 2) - 100);
+            Point endingPoint = new Point((pictureBoxWidth / 2) - 150, (pictureBoxHeight / 2) + 100);
+            for (int i = 0; i < 10; i++)
+            {
+                Random rnd = new Random();
+                lines.Add(rnd.Next(0, 10) < 5 ? new CurvableLine(startingPoint, endingPoint) : new Arrow(startingPoint, endingPoint));
+                lines[i].MovePosition(i * 10, 0);
+                lines[i].Draw(graphics);
+                startingPoint = new Point(startingPoint.X + 50, startingPoint.Y);
+                endingPoint = new Point(endingPoint.X + 50, endingPoint.Y);
+            }
+        }
 
         public static Graph ExampleGraph()
         {
