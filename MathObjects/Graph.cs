@@ -16,8 +16,8 @@ namespace GraphAlgorithmVisualizer.MathObjects
     internal class Graph : IVisualizable
     {
         public Point Position { get; private set; }
-        public int X { get { return Position.X; } set { Position = new Point(value, Position.Y); } }
-        public int Y { get { return Position.Y; } set { Position = new Point(Position.X, value); } }
+        public int X => Position.X;
+        public int Y => Position.Y;
 
         /// <summary>
         /// A List of all <c>Vertices</c> inside the graph.
@@ -271,6 +271,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             foreach (Vertex v in Vertices)
                 v.MovePosition(deltaX, deltaY);
         }
+        public void MovePosition(int deltaX, int deltaY) => SetPosition(Position.X + deltaX, Position.Y + deltaY);
         public void Draw(Graphics graphics)
         {
             foreach (Edge e in Edges)
@@ -278,6 +279,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             foreach (Vertex v in Vertices)
                 v.Draw(graphics);
         }
+
         /// <summary>
         /// Arranges vertices visually in a scheme of a circle, with each Vertex being placed on the edge of that circle, placed apart from each other the same distance.
         /// </summary>

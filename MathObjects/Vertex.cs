@@ -9,8 +9,8 @@ namespace GraphAlgorithmVisualizer.MathObjects
     internal class Vertex : IVisualizable
     {
         public Point Position { get; private set; }
-        public int X { get { return Position.X; } set { Position = new Point(Position.X, value); } }
-        public int Y { get { return Position.Y; } set { Position = new Point(value, Position.Y); } }
+        public int X => Position.X;
+        public int Y => Position.Y;
 
         /// <summary>
         /// A unique integer that identifies this Vertex. Assigned by the Graph which created this Vertex.
@@ -30,6 +30,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         {
             Index = index;
             IsDirectional = graphIsDirectional;
+            Position = new Point(0, 0);
         }
 
         public void SetPosition(int x, int y) => Position = new Point(x, y);
@@ -37,9 +38,9 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public void Draw(Graphics graphics)
         {
             int size = 20;
-            graphics.FillEllipse(DrawingTools.DefaultBackColor, X - (size / 2), Y - (size / 2), size, size);
-            graphics.DrawEllipse(DrawingTools.DefaultOutline, X - (size / 2), Y - (size / 2), size, size);
-            graphics.DrawString($"{Index}", DrawingTools.DefaultFont, DrawingTools.DefaultFontColor, X - (size / 2) + 3, Y - (size / 2));
+            graphics.FillEllipse(DrawingTools.DefaultBackColor, Position.X - (size / 2), Position.Y - (size / 2), size, size);
+            graphics.DrawEllipse(DrawingTools.DefaultOutline, Position.X - (size / 2), Position.Y - (size / 2), size, size);
+            graphics.DrawString($"{Index}", DrawingTools.DefaultFont, DrawingTools.DefaultFontColor, Position.X - (size / 2) + 3, Position.Y - (size / 2));
         }
 
         public override string ToString()

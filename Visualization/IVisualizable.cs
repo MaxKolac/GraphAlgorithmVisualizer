@@ -7,8 +7,9 @@ namespace GraphAlgorithmVisualizer.Visualization
     /// </summary>
     internal interface IVisualizable
     {
-        int X { get; set; }
-        int Y { get; set; }
+        Point Position { get; }
+        int X { get; }
+        int Y { get; }
 
         /// <summary>
         /// Changes the object's coordinates to exact (x,y).
