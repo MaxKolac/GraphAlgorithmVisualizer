@@ -111,20 +111,37 @@ namespace GraphAlgorithmVisualizer.Tests
             }
         }
 
-        public static Graph ExampleGraph()
+        public static Graph ExampleDistancedGraph(bool isDirectional)
         {
-            Graph graph = new Graph(true, true, 7);
+            Graph graph = new Graph(isDirectional, true, 7);
             graph.AddEdge(graph.V(0), graph.V(1), 4);
-            graph.AddEdge(graph.V(1), graph.V(2), 2);
+            graph.AddEdge(graph.V(1), graph.V(2), 15);
             graph.AddEdge(graph.V(2), graph.V(3), 1);
             graph.AddEdge(graph.V(3), graph.V(4), 4);
             graph.AddEdge(graph.V(4), graph.V(5), 5);
-            graph.AddEdge(graph.V(5), graph.V(6), 3);
+            graph.AddEdge(graph.V(5), graph.V(6), 12);
             graph.AddEdge(graph.V(6), graph.V(0), 2);
 
-            graph.AddEdge(graph.V(2), graph.V(4), 1);
-            graph.AddEdge(graph.V(1), graph.V(5), 1);
+            graph.AddEdge(graph.V(2), graph.V(4), 7);
+            graph.AddEdge(graph.V(1), graph.V(5), 21);
             graph.AddEdge(graph.V(3), graph.V(6), 1);
+            return graph;
+        }
+
+        public static Graph ExampleUndistancedGraph(bool isDirectional)
+        {
+            Graph graph = new Graph(isDirectional, false, 7);
+            graph.AddEdge(graph.V(0), graph.V(1));
+            graph.AddEdge(graph.V(1), graph.V(2));
+            graph.AddEdge(graph.V(2), graph.V(3));
+            graph.AddEdge(graph.V(3), graph.V(4));
+            graph.AddEdge(graph.V(4), graph.V(5));
+            graph.AddEdge(graph.V(5), graph.V(6));
+            graph.AddEdge(graph.V(6), graph.V(0));
+
+            graph.AddEdge(graph.V(2), graph.V(4));
+            graph.AddEdge(graph.V(1), graph.V(5));
+            graph.AddEdge(graph.V(3), graph.V(6));
             return graph;
         }
     }
