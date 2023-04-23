@@ -6,7 +6,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
     /// <summary>
     /// Single point of a Graph with a unique identifing Index. It may be connected to another vertex through an <c>Edge</c>. Visually represented by a simple circle with its Index inside it.
     /// </summary>
-    internal class Vertex : IVisualizable
+    internal class Vertex : ISelectable
     {
         public Point Position { get; private set; }
         public int X => Position.X;
@@ -42,6 +42,9 @@ namespace GraphAlgorithmVisualizer.MathObjects
             graphics.DrawEllipse(DrawingTools.DefaultOutline, Position.X - (size / 2), Position.Y - (size / 2), size, size);
             graphics.DrawString($"{Index}", DrawingTools.DefaultFont, DrawingTools.DefaultFontColor, Position.X - (size / 2) + 3, Position.Y - (size / 2));
         }
+        public void DrawDetectedState(Graphics graphics) => DrawState(DrawingTools.DefaultDetectedOutline, graphics, 25);
+        public void DrawSelectedState(Graphics graphics) => DrawState(DrawingTools.DefaultSelectedOutline, graphics, 25);
+        private void DrawState(Pen pen, Graphics graphics, int size) => graphics.DrawEllipse(pen, X - (size / 2), Y - (size / 2), size, size);
 
         public override string ToString()
         {
