@@ -9,7 +9,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
     /// <summary>
     /// A connection between two vertices. It can be visually represented either as a simple line or an arrow, pointing towards the End Vertex, if it is directional.
     /// </summary>
-    internal class Edge : IVisualizable
+    internal class Edge : ISelectable
     {
         private readonly CurvableLine visualArrow;
         public Point Position => visualArrow.Middle;
@@ -89,6 +89,9 @@ namespace GraphAlgorithmVisualizer.MathObjects
             visualArrow.Draw(graphics);
             new LabelSquare(visualArrow.Middle.X, visualArrow.Middle.Y, Distance.ToString()).Draw(graphics);
         }
+        public void DrawDetectedState(Graphics graphics) => DrawState(DrawingTools.DefaultDetectedOutline, graphics, 25);
+        public void DrawSelectedState(Graphics graphics) => DrawState(DrawingTools.DefaultSelectedOutline, graphics, 25);
+        private void DrawState(Pen pen, Graphics graphics, int size) => graphics.DrawEllipse(pen, X - (size / 2), Y - (size / 2), size, size);
 
         public override string ToString()
         {
