@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -43,62 +44,63 @@ namespace GraphAlgorithmVisualizer
         {
             ClearCanvas();
             Point cursorPosition = PB_Canvas.PointToClient(Cursor.Position);
-            if (addingNewEdgeMode == AddingNewEdgeState.NotActive)
+            switch (addingNewEdgeMode)
             {
-                if (MouseButtons.Left == e.Button)
-                {
-                    selectedMathObject?.SetPosition(cursorPosition.X, cursorPosition.Y);
-                    selectedMathObject?.DrawSelectedState(graphics);
-                    lastSelectedMathObject = selectedMathObject;
-                    FillPropertiesGroupBox();
-                }
-                else
-                {
-                    selectedMathObject = DetectNearestSelectableObject();
-                    selectedMathObject?.DrawDetectedState(graphics);
-                }
-            }
-            else if (addingNewEdgeMode == AddingNewEdgeState.NoVerticesSelected)
-            {
-                if (MouseButtons.Left == e.Button && !(selectedStartVertex is null))
-                {
-                    selectedMathObject.DrawSelectedState(graphics);
-                    addingNewEdgeMode = AddingNewEdgeState.StartVertexSelected;
-                }
-                else
-                {
+                case AddingNewEdgeState.NotActive:
+                    if (MouseButtons.Left == e.Button)
+                    {
+                        selectedMathObject?.SetPosition(cursorPosition.X, cursorPosition.Y);
+                        selectedMathObject?.DrawSelectedState(graphics);
+                    }
+                    else
+                    {
+                        selectedMathObject = DetectNearestSelectableObject();
+                        selectedMathObject?.DrawDetectedState(graphics);
+                    }
+                    break;
+                case AddingNewEdgeState.NoVerticesSelected:
                     selectedMathObject = DetectNearestSelectableObject();
                     selectedStartVertex = selectedMathObject as Vertex;
                     selectedStartVertex?.DrawDetectedState(graphics);
-                }
+                    break;
+                case AddingNewEdgeState.StartVertexSelected:
+                    selectedStartVertex.DrawSelectedState(graphics);
+                    new Arrow(selectedStartVertex.Position, cursorPosition).Draw(graphics);
+                    selectedMathObject = DetectNearestSelectableObject();
+                    selectedEndVertex = selectedMathObject as Vertex;
+                    selectedEndVertex?.DrawDetectedState(graphics);
+                    break;
             }
-            else if (addingNewEdgeMode == AddingNewEdgeState.StartVertexSelected)
+            DrawGraph();
+        }
+        private void CanvasMouseDown(object sender, MouseEventArgs e)
+        {
+            switch (addingNewEdgeMode)
             {
-                //As of right now, Loops, despite being mathematically valid, aren't supported
-                if (MouseButtons.Left == e.Button && !(selectedEndVertex is null) && (!selectedStartVertex.Equals(selectedEndVertex)))
-                {
-                    if (graph.UsesDistances)
-                        graph.AddEdge(selectedStartVertex, selectedEndVertex, 1);
-                    else
+                case (AddingNewEdgeState.NotActive):
+                    lastSelectedMathObject = selectedMathObject;
+                    FillPropertiesGroupBox();
+                    break;
+                case (AddingNewEdgeState.NoVerticesSelected):
+                    if (selectedStartVertex is null) return;
+                    selectedMathObject.DrawSelectedState(graphics);
+                    addingNewEdgeMode = AddingNewEdgeState.StartVertexSelected;
+                    break;
+                case (AddingNewEdgeState.StartVertexSelected):
+                    //As of right now, Loops, despite being mathematically valid, aren't supported
+                    if (selectedEndVertex is null || selectedStartVertex.Equals(selectedEndVertex)) return;
+                    if (graph.UsesDistances) 
+                        graph.AddEdge(selectedStartVertex, selectedEndVertex, 1); 
+                    else 
                         graph.AddEdge(selectedStartVertex, selectedEndVertex);
-
                     lastSelectedMathObject = graph.GetEdge(selectedStartVertex.Index, selectedEndVertex.Index);
                     GB_MathObjectProperties.Enabled = true;
                     FillPropertiesGroupBox();
                     addingNewEdgeMode = AddingNewEdgeState.NotActive;
                     selectedStartVertex = null;
                     selectedEndVertex = null;
-                }
-                else
-                {
-                    selectedStartVertex.DrawSelectedState(graphics);
-                    new Arrow(selectedStartVertex.Position, cursorPosition).Draw(graphics);
-                    selectedMathObject = DetectNearestSelectableObject();
-                    selectedEndVertex = selectedMathObject as Vertex;
-                    selectedEndVertex?.DrawDetectedState(graphics);
-                }
+                    break;
             }
-            DrawGraph();
         }
 
             //Various Utility Methods
@@ -155,9 +157,12 @@ namespace GraphAlgorithmVisualizer
         {
             if (lastSelectedMathObject is null) return;
             GB_MathObjectProperties.Enabled = true;
-            foreach (Control control in GB_MathObjectProperties.Controls)
+            Control[] controlsArray = new Control[GB_MathObjectProperties.Controls.Count];
+            GB_MathObjectProperties.Controls.CopyTo(controlsArray, 0);
+            for (int i = controlsArray.Length - 1; i >= 0; i--)
             {
-                if (control == BTN_RemoveMathObj) continue;
+                Control control = controlsArray[i];
+                if (control.Name == "BTN_RemoveMathObj") continue;
                 GB_MathObjectProperties.Controls.Remove(control);
             }
             lastSelectedMathObjectProperties.Clear();
@@ -268,5 +273,6 @@ namespace GraphAlgorithmVisualizer
             lastSelectedMathObject = null;
             FullyRedrawGraph();
         }
+
     }
 }

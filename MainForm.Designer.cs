@@ -48,7 +48,7 @@
             this.PB_Canvas.Size = new System.Drawing.Size(606, 422);
             this.PB_Canvas.TabIndex = 0;
             this.PB_Canvas.TabStop = false;
-            this.PB_Canvas.MouseClick += new System.Windows.Forms.MouseEventHandler(this.CanvasMouseMove);
+            this.PB_Canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CanvasMouseDown);
             this.PB_Canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CanvasMouseMove);
             // 
             // GB_MathObjectProperties
