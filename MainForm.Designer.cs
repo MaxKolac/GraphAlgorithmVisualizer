@@ -30,12 +30,14 @@
         {
             this.PB_Canvas = new System.Windows.Forms.PictureBox();
             this.GB_MathObjectProperties = new System.Windows.Forms.GroupBox();
+            this.BTN_RemoveMathObj = new System.Windows.Forms.Button();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.TSMI_CreateNewGraph = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_AddVertex = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_AddEdge = new System.Windows.Forms.ToolStripMenuItem();
             this.GB_Algorithms = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Canvas)).BeginInit();
+            this.GB_MathObjectProperties.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,12 +53,23 @@
             // 
             // GB_MathObjectProperties
             // 
+            this.GB_MathObjectProperties.Controls.Add(this.BTN_RemoveMathObj);
             this.GB_MathObjectProperties.Location = new System.Drawing.Point(624, 27);
             this.GB_MathObjectProperties.Name = "GB_MathObjectProperties";
-            this.GB_MathObjectProperties.Size = new System.Drawing.Size(248, 116);
+            this.GB_MathObjectProperties.Size = new System.Drawing.Size(248, 149);
             this.GB_MathObjectProperties.TabIndex = 1;
             this.GB_MathObjectProperties.TabStop = false;
             this.GB_MathObjectProperties.Text = "Właściwości ostatnio wybranego obiektu";
+            // 
+            // BTN_RemoveMathObj
+            // 
+            this.BTN_RemoveMathObj.Location = new System.Drawing.Point(167, 120);
+            this.BTN_RemoveMathObj.Name = "BTN_RemoveMathObj";
+            this.BTN_RemoveMathObj.Size = new System.Drawing.Size(75, 23);
+            this.BTN_RemoveMathObj.TabIndex = 0;
+            this.BTN_RemoveMathObj.Text = "Usuń obiekt";
+            this.BTN_RemoveMathObj.UseVisualStyleBackColor = true;
+            this.BTN_RemoveMathObj.Click += new System.EventHandler(this.RemoveMathObjButtonClicked);
             // 
             // menuStrip
             // 
@@ -93,9 +106,9 @@
             // 
             // GB_Algorithms
             // 
-            this.GB_Algorithms.Location = new System.Drawing.Point(624, 149);
+            this.GB_Algorithms.Location = new System.Drawing.Point(624, 182);
             this.GB_Algorithms.Name = "GB_Algorithms";
-            this.GB_Algorithms.Size = new System.Drawing.Size(248, 300);
+            this.GB_Algorithms.Size = new System.Drawing.Size(248, 267);
             this.GB_Algorithms.TabIndex = 2;
             this.GB_Algorithms.TabStop = false;
             this.GB_Algorithms.Text = "Algorytmy";
@@ -116,6 +129,7 @@
             this.Text = "Projekt Nr. 2 - Kreator grafów z implementacją algorytmu Djikstry - Algorytmy i Z" +
     "łożoność - Maksymilian Kołaciński nr. alb.: 57527";
             ((System.ComponentModel.ISupportInitialize)(this.PB_Canvas)).EndInit();
+            this.GB_MathObjectProperties.ResumeLayout(false);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -132,5 +146,6 @@
         private System.Windows.Forms.ToolStripMenuItem TSMI_AddVertex;
         private System.Windows.Forms.ToolStripMenuItem TSMI_AddEdge;
         private System.Windows.Forms.GroupBox GB_Algorithms;
+        private System.Windows.Forms.Button BTN_RemoveMathObj;
     }
 }

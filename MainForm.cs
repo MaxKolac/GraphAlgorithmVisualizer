@@ -154,7 +154,12 @@ namespace GraphAlgorithmVisualizer
         private void FillPropertiesGroupBox()
         {
             if (lastSelectedMathObject is null) return;
-            GB_MathObjectProperties.Controls.Clear();
+            GB_MathObjectProperties.Enabled = true;
+            foreach (Control control in GB_MathObjectProperties.Controls)
+            {
+                if (control == BTN_RemoveMathObj) continue;
+                GB_MathObjectProperties.Controls.Remove(control);
+            }
             lastSelectedMathObjectProperties.Clear();
             
             Label identityLabel = lastSelectedMathObject.GetIdentityLabel();
@@ -247,6 +252,17 @@ namespace GraphAlgorithmVisualizer
                     );
                 showAddEdgeDialog = result != DialogResult.Cancel;
             }
+        }
+        private void RemoveMathObjButtonClicked(object sender, EventArgs e)
+        {
+            if (lastSelectedMathObject is null) return;
+            GB_MathObjectProperties.Enabled = false;
+            if (lastSelectedMathObject is Vertex vertex)
+                graph.RemoveVertex(vertex);
+            else if (lastSelectedMathObject is Edge edge)
+                graph.RemoveEdge(edge);
+            lastSelectedMathObject = null;
+            FullyRedrawGraph();
         }
     }
 }
