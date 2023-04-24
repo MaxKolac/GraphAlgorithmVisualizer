@@ -227,12 +227,11 @@ namespace GraphAlgorithmVisualizer.MathObjects
             }
             if (matchedVertex is null)
                 throw new GraphException("Could not find a Vertex with the specified Index to remove.");
+            Vertices.Remove(matchedVertex);
 
-            foreach (Edge e in Edges)
-            {
-                if (e.Start.Equals(v) || e.End.Equals(v))
-                    Edges.Remove(e);
-            }
+            for (int i = EdgesCount - 1; i >= 0; i--)
+                if (Edges[i].Start.Equals(v) || Edges[i].End.Equals(v))
+                    Edges.RemoveAt(i);
         }
 
         /// <summary>
@@ -254,11 +253,9 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// <param name="edge">The Edge object to remove.</param>
         public void RemoveEdge(Edge edge)
         {
-            foreach (Edge e in Edges)
-            {
-                if (e.Equals(edge))
-                    Edges.Remove(edge);
-            }
+            for (int i = EdgesCount - 1; i >= 0; i--)
+                if (Edges[i].Equals(edge)) 
+                    Edges.RemoveAt(i);
         }
 
         /// <summary>
