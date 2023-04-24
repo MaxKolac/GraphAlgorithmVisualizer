@@ -18,7 +18,7 @@ namespace GraphAlgorithmVisualizer
 
         private ISelectable selectedMathObject = null;
         private ISelectable lastSelectedMathObject = null;
-        private readonly Dictionary<Control, int> lastSelectedMathObjectProperties = new Dictionary<Control, int>();
+        private readonly Dictionary<string, int> lastSelectedMathObjectProperties = new Dictionary<string, int>();
 
         private bool showAddEdgeDialog = true;
         private AddingNewEdgeState addingNewEdgeMode = AddingNewEdgeState.NotActive;
@@ -172,6 +172,8 @@ namespace GraphAlgorithmVisualizer
             {
                 Label kvpLabel = kvp.Value.Label;
                 Control kvpControl = kvp.Value.Control;
+                if (kvpControl.Name is null)
+                    throw new GraphException("Last selected MathObject's properties returned a Control without a Name property.");
 
                 if (!(kvpLabel is null)) kvpLabel.Location = new Point(positionX, positionY);
                 kvpControl.Location = new Point(positionX + (kvpLabel is null ? 0 : kvpLabel.Width + 30), positionY);
@@ -179,17 +181,17 @@ namespace GraphAlgorithmVisualizer
 
                 if (kvpControl is TextBox textbox)
                     textbox.TextChanged += (sender, e) => 
-                    { lastSelectedMathObject.SetProperty(lastSelectedMathObjectProperties[textbox], textbox); FullyRedrawGraph(); };
+                    { lastSelectedMathObject.SetProperty(lastSelectedMathObjectProperties[textbox.Name], textbox); FullyRedrawGraph(); };
                 else if (kvpControl is CheckBox checkbox)
                     checkbox.CheckStateChanged += (sender, e) => 
-                    { lastSelectedMathObject.SetProperty(lastSelectedMathObjectProperties[checkbox], checkbox); FullyRedrawGraph(); };
+                    { lastSelectedMathObject.SetProperty(lastSelectedMathObjectProperties[checkbox.Name], checkbox); FullyRedrawGraph(); };
                 else if (kvpControl is NumericUpDown nud)
                     nud.ValueChanged += (sender, e) => 
-                    { lastSelectedMathObject.SetProperty(lastSelectedMathObjectProperties[nud], nud); FullyRedrawGraph(); };
+                    { lastSelectedMathObject.SetProperty(lastSelectedMathObjectProperties[nud.Name], nud); FullyRedrawGraph(); };
                 else
                     throw new GraphException("Last selected MathObject's properties contained an unsupported Control type. Cannot add a new EventListener to it.");
                 
-                lastSelectedMathObjectProperties.Add(kvpControl, kvp.Key);
+                lastSelectedMathObjectProperties.Add(kvpControl.Name, kvp.Key);
                 if (!(kvpLabel is null)) 
                     GB_MathObjectProperties.Controls.Add(kvpLabel);
                 GB_MathObjectProperties.Controls.Add(kvpControl);

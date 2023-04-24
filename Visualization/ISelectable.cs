@@ -22,7 +22,7 @@ namespace GraphAlgorithmVisualizer.Visualization
         void DrawSelectedState(Graphics graphics);
         /// <summary>
         /// Builds and returns a Dictionary with each entry containing a combination of Forms.Control and Forms.Label as a ControlLabelSet that will be put in the GB_Properties for the user to view/modify and an Integer which is meant to uniquely identify the Control when any applied modifications to its value are sent back to the ISelectable object through SetProperty() method.
-        /// <para>Labels are optional, Controls are required.</para>
+        /// <para>Labels are optional, Controls are required. Each Control is also required to have a unique Name, otherwise Hell will break loose.</para>
         /// </summary>
         Dictionary<int, ControlLabelSet> GetProperties();
         /// <summary>

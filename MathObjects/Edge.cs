@@ -129,6 +129,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             Control positionX = new TextBox()
             {
                 AutoSize = true,
+                Name = "TB_PosX",
                 Text = X.ToString(),
                 TextAlign = HorizontalAlignment.Center,
                 ReadOnly = true
@@ -142,6 +143,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             Control positionY = new TextBox()
             {
                 AutoSize = true,
+                Name = "TB_PosY",
                 Text = Y.ToString(),
                 TextAlign = HorizontalAlignment.Center,
                 ReadOnly = true
@@ -151,28 +153,37 @@ namespace GraphAlgorithmVisualizer.MathObjects
             {
                 AutoCheck = false,
                 AutoSize = true,
+                Name = "CB_IsDirectional",
                 Text = "Krawędź jest skierowana",
                 TextAlign = ContentAlignment.MiddleLeft,
                 Checked = IsDirectional
             };
 
+            Label distanceLabel = null;
+            Control distance = null;
+            if (!(Distance is null))
+            {
+                distanceLabel = new Label()
+                {
+                    AutoSize = true,
+                    Text = "Dystans"
+                };
+                distance = new NumericUpDown()
+                {
+                    AutoSize = true,
+                    Minimum = 1,
+                    Maximum = 99,
+                    Name = "NUD_Distance",
+                    Value = (decimal)Distance,
+                    TextAlign = HorizontalAlignment.Center,
+                    Width = positionY.Width
+                };
+            }
+
             properties.Add(0, new ControlLabelSet(positionXLabel, positionX));
             properties.Add(1, new ControlLabelSet(positionYLabel, positionY));
-            properties.Add(2, new ControlLabelSet(null, isDirectional));
-
-            if (Distance is null) return properties;
-
-            Label distanceLabel = new Label()
-            {
-                Text = "Dystans"
-            };
-            Control distance = new NumericUpDown()
-            {
-                Minimum = 1,
-                Maximum = 99,
-                Value = (decimal)Distance
-            };
-            properties.Add(3, new ControlLabelSet(distanceLabel, distance));
+            if (!(Distance is null)) properties.Add(2, new ControlLabelSet(distanceLabel, distance));
+            properties.Add(3, new ControlLabelSet(null, isDirectional));
             return properties;
         }
         public void SetProperty(int key, Control control)
@@ -190,14 +201,14 @@ namespace GraphAlgorithmVisualizer.MathObjects
                     //SetPosition(Position.X, parsedY);
                     break;
                 case 2:
-                    //ReadOnly Control and IsDirectional is readonly
-                    //if (!(control is CheckBox checkbox) || !bool.TryParse(checkbox.Checked.ToString(), out bool parsedValue)) return;
-                    //IsDirectional = parsedValue;
-                    break;
-                case 3:
                     if (Distance is null) return;
                     if (!(control is NumericUpDown nud) || !decimal.TryParse(nud.Value.ToString(), out decimal parsedValue)) return;
                     SetDistance((int)parsedValue);
+                    break;
+                case 3:
+                    //ReadOnly Control and IsDirectional is readonly
+                    //if (!(control is CheckBox checkbox) || !bool.TryParse(checkbox.Checked.ToString(), out bool parsedValue)) return;
+                    //IsDirectional = parsedValue;
                     break;
                 default:
                     throw new GraphException($"Invalid property key passed to SetProperty method - key: {key}");

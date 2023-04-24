@@ -65,6 +65,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             Control positionX = new TextBox()
             {
                 AutoSize = true,
+                Name = "TB_PosX",
                 Text = X.ToString(),
                 TextAlign = HorizontalAlignment.Center,
                 ReadOnly = true
@@ -78,6 +79,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             Control positionY = new TextBox()
             {
                 AutoSize = true,
+                Name = "TB_PosY",
                 Text = Y.ToString(),
                 TextAlign = HorizontalAlignment.Center,
                 ReadOnly = true
