@@ -29,11 +29,12 @@
         private void InitializeComponent()
         {
             this.PB_Canvas = new System.Windows.Forms.PictureBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.GB_MathObjectProperties = new System.Windows.Forms.GroupBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.stwórzNowyGrafToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dodajWierzchołekToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dodajKrawędźToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_CreateNewGraph = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_AddVertex = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_AddEdge = new System.Windows.Forms.ToolStripMenuItem();
+            this.GB_Algorithms = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Canvas)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -45,62 +46,75 @@
             this.PB_Canvas.Size = new System.Drawing.Size(606, 422);
             this.PB_Canvas.TabIndex = 0;
             this.PB_Canvas.TabStop = false;
+            this.PB_Canvas.MouseClick += new System.Windows.Forms.MouseEventHandler(this.CanvasMouseMove);
             this.PB_Canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CanvasMouseMove);
             // 
-            // groupBox1
+            // GB_MathObjectProperties
             // 
-            this.groupBox1.Location = new System.Drawing.Point(624, 27);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(248, 422);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.GB_MathObjectProperties.Location = new System.Drawing.Point(624, 27);
+            this.GB_MathObjectProperties.Name = "GB_MathObjectProperties";
+            this.GB_MathObjectProperties.Size = new System.Drawing.Size(248, 116);
+            this.GB_MathObjectProperties.TabIndex = 1;
+            this.GB_MathObjectProperties.TabStop = false;
+            this.GB_MathObjectProperties.Text = "Właściwości ostatnio wybranego obiektu";
             // 
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stwórzNowyGrafToolStripMenuItem,
-            this.dodajWierzchołekToolStripMenuItem,
-            this.dodajKrawędźToolStripMenuItem});
+            this.TSMI_CreateNewGraph,
+            this.TSMI_AddVertex,
+            this.TSMI_AddEdge});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(884, 24);
             this.menuStrip.TabIndex = 2;
             this.menuStrip.Text = "menuStrip";
             // 
-            // stwórzNowyGrafToolStripMenuItem
+            // TSMI_CreateNewGraph
             // 
             this.TSMI_CreateNewGraph.Name = "TSMI_CreateNewGraph";
             this.TSMI_CreateNewGraph.Size = new System.Drawing.Size(119, 20);
             this.TSMI_CreateNewGraph.Text = "Stwórz nowy graf...";
             this.TSMI_CreateNewGraph.Click += new System.EventHandler(this.OpenGraphCreatorDialog);
             // 
+            // TSMI_AddVertex
             // 
-            // dodajWierzchołekToolStripMenuItem
+            this.TSMI_AddVertex.Name = "TSMI_AddVertex";
+            this.TSMI_AddVertex.Size = new System.Drawing.Size(115, 20);
+            this.TSMI_AddVertex.Text = "Dodaj wierzchołek";
+            this.TSMI_AddVertex.Click += new System.EventHandler(this.AddVertexButtonClicked);
             // 
-            this.dodajWierzchołekToolStripMenuItem.Name = "dodajWierzchołekToolStripMenuItem";
-            this.dodajWierzchołekToolStripMenuItem.Size = new System.Drawing.Size(115, 20);
-            this.dodajWierzchołekToolStripMenuItem.Text = "Dodaj wierzchołek";
+            // TSMI_AddEdge
             // 
-            // dodajKrawędźToolStripMenuItem
+            this.TSMI_AddEdge.Name = "TSMI_AddEdge";
+            this.TSMI_AddEdge.Size = new System.Drawing.Size(96, 20);
+            this.TSMI_AddEdge.Text = "Dodaj krawędź";
+            this.TSMI_AddEdge.Click += new System.EventHandler(this.AddEdgeButtonClicked);
             // 
-            this.dodajKrawędźToolStripMenuItem.Name = "dodajKrawędźToolStripMenuItem";
-            this.dodajKrawędźToolStripMenuItem.Size = new System.Drawing.Size(96, 20);
-            this.dodajKrawędźToolStripMenuItem.Text = "Dodaj krawędź";
+            // GB_Algorithms
+            // 
+            this.GB_Algorithms.Location = new System.Drawing.Point(624, 149);
+            this.GB_Algorithms.Name = "GB_Algorithms";
+            this.GB_Algorithms.Size = new System.Drawing.Size(248, 300);
+            this.GB_Algorithms.TabIndex = 2;
+            this.GB_Algorithms.TabStop = false;
+            this.GB_Algorithms.Text = "Algorytmy";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 461);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.GB_Algorithms);
+            this.Controls.Add(this.GB_MathObjectProperties);
             this.Controls.Add(this.PB_Canvas);
             this.Controls.Add(this.menuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "MainForm";
+            this.Text = "Projekt Nr. 2 - Kreator grafów z implementacją algorytmu Djikstry - Algorytmy i Z" +
+    "łożoność - Maksymilian Kołaciński nr. alb.: 57527";
             ((System.ComponentModel.ISupportInitialize)(this.PB_Canvas)).EndInit();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
@@ -112,10 +126,11 @@
         #endregion
 
         private System.Windows.Forms.PictureBox PB_Canvas;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox GB_MathObjectProperties;
         private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem stwórzNowyGrafToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem dodajWierzchołekToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem dodajKrawędźToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_CreateNewGraph;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_AddVertex;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_AddEdge;
+        private System.Windows.Forms.GroupBox GB_Algorithms;
     }
 }

@@ -1,5 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.Visualization;
 using GraphAlgorithmVisualizer.Visualization.Shapes;
@@ -31,8 +32,14 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// <summary>
         /// Optional property used by some graph algorithms. Represents the abstract metric used to determine the Edge's length in the Graph.
         /// </summary>
-        public readonly int? Distance;
+        public int? Distance { get; private set; }
 
+        /// <summary>
+        /// Creates a new Edge with the Distance property being set to null.
+        /// </summary>
+        /// <param name="start">The Start Vertex object, from which the Edge begins.</param>
+        /// <param name="end">The End Vertex object, into which the Edge flows.</param>
+        /// <param name="isDirectional">Whether or not the Edge is inside of a Directional Graph. If true, then travel from End to Start vertices is not allowed.</param>
         public Edge(Vertex start, Vertex end, bool isDirectional)
         {
             visualArrow = isDirectional ?
@@ -43,6 +50,13 @@ namespace GraphAlgorithmVisualizer.MathObjects
             IsDirectional = isDirectional;
             Distance = null;
         }
+        /// <summary>
+        /// Creates a new Edge with the Distance property.
+        /// </summary>
+        /// <param name="start">The Start Vertex object, from which the Edge begins.</param>
+        /// <param name="end">The End Vertex object, into which the Edge flows.</param>
+        /// <param name="isDirectional">Whether or not the Edge is inside of a Directional Graph. If true, then travel from End to Start vertices is not allowed.</param>
+        /// <param name="distance">The abstract metric which represents the distance between Start and End vertices. Must be greater than 0.</param>
         public Edge(Vertex start, Vertex end, bool isDirectional, int distance) : this(start, end, isDirectional)
         {
             if (distance <= 0)
@@ -68,6 +82,17 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// If the <c>Edge</c> isn't directional, <c>true</c> is returned if the provided <c>Vertex</c> is either Start or End.
         /// </returns>
         public bool IsEndingIn(Vertex v) => IsDirectional ? End.Equals(v) : Start.Equals(v) || End.Equals(v);
+        /// <summary>
+        /// Sets a new value to Distance. If Distance was already a null, method does nothing.
+        /// </summary>
+        /// <param name="distance">The Distance value to set. Must be greater than 0, or an exception will be thrown.</param>
+        public void SetDistance(int distance)
+        {
+            if (Distance is null) return;
+            if (distance <= 0)
+                throw new GraphException("Attempted to create an Edge with non-positive Distance.");
+            Distance = distance;
+        }
 
         public void SetStart(Point p)
         {
