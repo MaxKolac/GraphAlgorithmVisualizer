@@ -40,10 +40,15 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public void MovePosition(int deltaX, int deltaY) => Position = new Point(Position.X + deltaX, Position.Y + deltaY);
         public void Draw(Graphics graphics)
         {
-            int size = 20;
+            const int size = 20;
             graphics.FillEllipse(DrawingTools.DefaultBackColor, Position.X - (size / 2), Position.Y - (size / 2), size, size);
             graphics.DrawEllipse(DrawingTools.DefaultOutline, Position.X - (size / 2), Position.Y - (size / 2), size, size);
-            graphics.DrawString($"{Index}", DrawingTools.DefaultFont, DrawingTools.DefaultFontColor, Position.X - (size / 2) + 3, Position.Y - (size / 2));
+            graphics.DrawString($"{Index}", 
+                DrawingTools.DefaultFont, 
+                DrawingTools.DefaultFontColor, 
+                Index.ToString().Length == 1 ? Position.X - (size / 2) + 3 : Position.X - (size / 2) - 3, 
+                Position.Y - (size / 2) 
+                );
         }
         public void DrawDetectedState(Graphics graphics) => DrawState(DrawingTools.DefaultDetectedOutline, graphics, 25);
         public void DrawSelectedState(Graphics graphics) => DrawState(DrawingTools.DefaultSelectedOutline, graphics, 25);
