@@ -136,15 +136,15 @@ namespace GraphAlgorithmVisualizer.MathObjects
                 throw new GraphException("Attempted to add a mismatching Edge to a Graph. Objects did not have the same value of IsDirectional.");
             if (UsesDistances && e.Distance is null)
                 throw new GraphException("Attempted to add an Edge without a Distance value to a Graph which requires it to be non-null.");
-            else if (!UsesDistances && !(e.Distance is null))
+            e.SetStart(GetVertex(e.Start.Index).Position);
+            e.SetEnd(GetVertex(e.End.Index).Position);
+            e.ResetMiddle();
+            if (!UsesDistances && !(e.Distance is null))
             {
                 Console.WriteLine("Warning! Added an Edge with a Distance to a Graph which doesn't utilize Distances! Overwriting it to be null!");
                 Edges.Add(new Edge(e.Start, e.End, IsDirectional));
                 return;
             }
-            e.SetStart(GetVertex(e.Start.Index).Position);
-            e.SetEnd(GetVertex(e.End.Index).Position);
-            e.ResetMiddle();
             Edges.Add(e);
         }
 
@@ -165,9 +165,6 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// A short alias of the GetVertex() method.
         /// </summary>
         public Vertex V(int index) => GetVertex(index);
-        /// <summary>
-        /// A short alias of the GetEdge() method.
-        /// </summary>
         /// <summary>
         /// Removes the lastly added Vertex and all Edges connected to it.
         /// </summary>
@@ -214,7 +211,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
             RemoveVertex(GetVertex(index));
         }
         /// <summary>
-        /// Searches and removes the first Vertex object that matches the Vertex provided as an arguemtn.
+        /// Searches and removes the first Vertex object that matches the Vertex provided as an argument.
         /// </summary>
         /// <exception cref="GraphException">Thrown if no matching Vertex to remove was found.</exception>
         public void RemoveVertex(Vertex v)
@@ -297,7 +294,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         }
 
         /// <summary>
-        /// Arranges vertices visually in a scheme of a circle, with each Vertex being placed on the edge of that circle, placed apart from each other the same distance.
+        /// Arranges vertices visually in a scheme of a circle, with each Vertex being placed same distance away from each other along the circumference.
         /// </summary>
         /// <param name="radius">The radius of the circle.</param>
         public void ArrangeVerticesInCircle(double radius)
