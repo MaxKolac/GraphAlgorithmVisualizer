@@ -70,9 +70,11 @@
             // 
             // stwórzNowyGrafToolStripMenuItem
             // 
-            this.stwórzNowyGrafToolStripMenuItem.Name = "stwórzNowyGrafToolStripMenuItem";
-            this.stwórzNowyGrafToolStripMenuItem.Size = new System.Drawing.Size(119, 20);
-            this.stwórzNowyGrafToolStripMenuItem.Text = "Stwórz nowy graf...";
+            this.TSMI_CreateNewGraph.Name = "TSMI_CreateNewGraph";
+            this.TSMI_CreateNewGraph.Size = new System.Drawing.Size(119, 20);
+            this.TSMI_CreateNewGraph.Text = "Stwórz nowy graf...";
+            this.TSMI_CreateNewGraph.Click += new System.EventHandler(this.OpenGraphCreatorDialog);
+            // 
             // 
             // dodajWierzchołekToolStripMenuItem
             // 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using GraphAlgorithmVisualizer.Exceptions;
+using GraphAlgorithmVisualizer.Forms;
 using GraphAlgorithmVisualizer.MathObjects;
 using GraphAlgorithmVisualizer.Tests;
 using GraphAlgorithmVisualizer.Visualization;
@@ -92,5 +94,16 @@ namespace GraphAlgorithmVisualizer
         /// Fills the Canvas entirely with the PB_Canvas' background color.
         /// </summary>
         private void ClearCanvas() => graphics.FillRectangle(new SolidBrush(PB_Canvas.BackColor), 0, 0, PB_Canvas.Width, PB_Canvas.Height);
+        private void OpenGraphCreatorDialog(object sender, EventArgs e)
+        {
+            GraphCreatorDialog dialog = new GraphCreatorDialog();
+            if (dialog.ShowDialog(out int verticesCount, out bool isDirectional, out bool usesDistances) == DialogResult.OK)
+            {
+                ClearCanvas();
+                graph = new Graph(isDirectional, usesDistances, verticesCount);
+                graph.SetPosition(PB_Canvas.Width / 2, PB_Canvas.Height / 2);
+                DrawGraph();
+            }
+        }
     }
 }
