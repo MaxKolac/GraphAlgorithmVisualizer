@@ -57,12 +57,14 @@ namespace GraphAlgorithmVisualizer.MathObjects
         {
             Dictionary<int, ControlLabelSet> properties = new Dictionary<int, ControlLabelSet>();
 
-            Label positionXLabel = new Label() 
-            { 
+            Label positionXLabel = new Label()
+            {
+                AutoSize = true,
                 Text = "Współrzędna X" 
             };
             Control positionX = new TextBox()
             {
+                AutoSize = true,
                 Text = X.ToString(),
                 TextAlign = HorizontalAlignment.Center,
                 ReadOnly = true
@@ -70,10 +72,12 @@ namespace GraphAlgorithmVisualizer.MathObjects
 
             Label positionYLabel = new Label()
             {
+                AutoSize = true,
                 Text = "Współrzędna Y"
             };
             Control positionY = new TextBox()
             {
+                AutoSize = true,
                 Text = Y.ToString(),
                 TextAlign = HorizontalAlignment.Center,
                 ReadOnly = true
