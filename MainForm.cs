@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using GraphAlgorithmVisualizer.Algorithms;
 using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.Forms;
 using GraphAlgorithmVisualizer.MathObjects;
@@ -33,6 +34,7 @@ namespace GraphAlgorithmVisualizer
             InitializeComponent();
             PB_Canvas.Image = new Bitmap(PB_Canvas.Width, PB_Canvas.Height);
             graphics = Graphics.FromImage(PB_Canvas.Image);
+            CB_Algorithm.SelectedIndex = 0;
 
             ClearCanvas();
             graph = VisualizationTests.ExampleDistancedGraph(true);
@@ -273,6 +275,51 @@ namespace GraphAlgorithmVisualizer
             lastSelectedMathObject = null;
             FullyRedrawGraph();
         }
+        private void AnalyzeButtonClicked(object sender, EventArgs e)
+        {
+            if (graph is null || graph.VerticesCount == 0 || graph.EdgesCount == 0)
+            {
+                MessageBox.Show("Aby algorytm mógł działać, potrzebuje niepustego grafu.");
+                return;
+            }
+            if (!(lastSelectedMathObject is Vertex startVertex))
+            {
+                MessageBox.Show("Aby algorytm mógł działać, jeden z wierzchołków musi być wybrany jako początkowy." +
+                    "\nZa wierzchołek początkowy uznawany jest ostatni kliknięty wierzchołek.");
+                return;
+            }
+            Algorithm algorithm;
+            DGV_AlgorithmResult.Rows.Clear();
 
+            switch (CB_Algorithm.SelectedIndex)
+            {
+                case 0: //DepthFirstSearch
+                    algorithm = new DepthFirstSearch(graph);
+                    break;
+                case 1: //BreadthFirstSearch
+                    algorithm = new BreadthFirstSearch(graph);
+                    break;
+                case 2: //Djikstra Algorithm
+                    if (!graph.UsesDistances)
+                    {
+                        MessageBox.Show("Algorytm Djikstra może być przeprowadzony tylko na grafach implementujących dystanse.");
+                        return;
+                    }
+                    algorithm = new DjikstraAlgorithm(graph);
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            algorithm.Perform(startVertex);
+            for (int i = 0; i < graph.VerticesCount; i++)
+            {
+                Vertex v = graph.VerticesArray[i];
+                DGV_AlgorithmResult.Rows.Add();
+                DGV_AlgorithmResult.Rows[i].Cells[0].Value = v;
+                DGV_AlgorithmResult.Rows[i].Cells[1].Value = algorithm.PreviousVertexOf(v);
+                DGV_AlgorithmResult.Rows[i].Cells[2].Value = algorithm.DistanceOf(v);
+            }
+        }
     }
 }

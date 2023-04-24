@@ -36,16 +36,24 @@
             this.TSMI_AddVertex = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_AddEdge = new System.Windows.Forms.ToolStripMenuItem();
             this.GB_Algorithms = new System.Windows.Forms.GroupBox();
+            this.BTN_Analyze = new System.Windows.Forms.Button();
+            this.CB_Algorithm = new System.Windows.Forms.ComboBox();
+            this.DGV_AlgorithmResult = new System.Windows.Forms.DataGridView();
+            this.Vertex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PreviousVertex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Canvas)).BeginInit();
             this.GB_MathObjectProperties.SuspendLayout();
             this.menuStrip.SuspendLayout();
+            this.GB_Algorithms.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DGV_AlgorithmResult)).BeginInit();
             this.SuspendLayout();
             // 
             // PB_Canvas
             // 
             this.PB_Canvas.Location = new System.Drawing.Point(12, 27);
             this.PB_Canvas.Name = "PB_Canvas";
-            this.PB_Canvas.Size = new System.Drawing.Size(606, 422);
+            this.PB_Canvas.Size = new System.Drawing.Size(606, 522);
             this.PB_Canvas.TabIndex = 0;
             this.PB_Canvas.TabStop = false;
             this.PB_Canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CanvasMouseDown);
@@ -106,18 +114,86 @@
             // 
             // GB_Algorithms
             // 
+            this.GB_Algorithms.Controls.Add(this.BTN_Analyze);
+            this.GB_Algorithms.Controls.Add(this.CB_Algorithm);
             this.GB_Algorithms.Location = new System.Drawing.Point(624, 182);
             this.GB_Algorithms.Name = "GB_Algorithms";
-            this.GB_Algorithms.Size = new System.Drawing.Size(248, 267);
+            this.GB_Algorithms.Size = new System.Drawing.Size(248, 46);
             this.GB_Algorithms.TabIndex = 2;
             this.GB_Algorithms.TabStop = false;
-            this.GB_Algorithms.Text = "Algorytmy";
+            this.GB_Algorithms.Text = "Analiza grafu przy użyciu algorytmu";
+            // 
+            // BTN_Analyze
+            // 
+            this.BTN_Analyze.Location = new System.Drawing.Point(189, 17);
+            this.BTN_Analyze.Name = "BTN_Analyze";
+            this.BTN_Analyze.Size = new System.Drawing.Size(53, 23);
+            this.BTN_Analyze.TabIndex = 1;
+            this.BTN_Analyze.Text = "Analizuj";
+            this.BTN_Analyze.UseVisualStyleBackColor = true;
+            this.BTN_Analyze.Click += new System.EventHandler(this.AnalyzeButtonClicked);
+            // 
+            // CB_Algorithm
+            // 
+            this.CB_Algorithm.FormattingEnabled = true;
+            this.CB_Algorithm.Items.AddRange(new object[] {
+            "Algorytm wyszukiwania \"wszesz\"",
+            "Algorytm wyszukiwania \"wgłąb\"",
+            "Algorytm Djikstra"});
+            this.CB_Algorithm.Location = new System.Drawing.Point(6, 19);
+            this.CB_Algorithm.Name = "CB_Algorithm";
+            this.CB_Algorithm.Size = new System.Drawing.Size(177, 21);
+            this.CB_Algorithm.TabIndex = 0;
+            // 
+            // DGV_AlgorithmResult
+            // 
+            this.DGV_AlgorithmResult.AllowUserToAddRows = false;
+            this.DGV_AlgorithmResult.AllowUserToDeleteRows = false;
+            this.DGV_AlgorithmResult.AllowUserToResizeColumns = false;
+            this.DGV_AlgorithmResult.AllowUserToResizeRows = false;
+            this.DGV_AlgorithmResult.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.DGV_AlgorithmResult.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Vertex,
+            this.PreviousVertex,
+            this.Distance});
+            this.DGV_AlgorithmResult.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.DGV_AlgorithmResult.Location = new System.Drawing.Point(624, 234);
+            this.DGV_AlgorithmResult.Name = "DGV_AlgorithmResult";
+            this.DGV_AlgorithmResult.ReadOnly = true;
+            this.DGV_AlgorithmResult.RowHeadersVisible = false;
+            this.DGV_AlgorithmResult.Size = new System.Drawing.Size(248, 315);
+            this.DGV_AlgorithmResult.TabIndex = 3;
+            // 
+            // Vertex
+            // 
+            this.Vertex.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Vertex.FillWeight = 35F;
+            this.Vertex.HeaderText = "Wierzchołek";
+            this.Vertex.Name = "Vertex";
+            this.Vertex.ReadOnly = true;
+            // 
+            // PreviousVertex
+            // 
+            this.PreviousVertex.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.PreviousVertex.FillWeight = 40F;
+            this.PreviousVertex.HeaderText = "Poprzedni wierz.";
+            this.PreviousVertex.Name = "PreviousVertex";
+            this.PreviousVertex.ReadOnly = true;
+            // 
+            // Distance
+            // 
+            this.Distance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Distance.FillWeight = 25F;
+            this.Distance.HeaderText = "Dystans";
+            this.Distance.Name = "Distance";
+            this.Distance.ReadOnly = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 461);
+            this.ClientSize = new System.Drawing.Size(884, 561);
+            this.Controls.Add(this.DGV_AlgorithmResult);
             this.Controls.Add(this.GB_Algorithms);
             this.Controls.Add(this.GB_MathObjectProperties);
             this.Controls.Add(this.PB_Canvas);
@@ -132,6 +208,8 @@
             this.GB_MathObjectProperties.ResumeLayout(false);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
+            this.GB_Algorithms.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.DGV_AlgorithmResult)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -147,5 +225,11 @@
         private System.Windows.Forms.ToolStripMenuItem TSMI_AddEdge;
         private System.Windows.Forms.GroupBox GB_Algorithms;
         private System.Windows.Forms.Button BTN_RemoveMathObj;
+        private System.Windows.Forms.Button BTN_Analyze;
+        private System.Windows.Forms.ComboBox CB_Algorithm;
+        private System.Windows.Forms.DataGridView DGV_AlgorithmResult;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Vertex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PreviousVertex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
     }
 }
