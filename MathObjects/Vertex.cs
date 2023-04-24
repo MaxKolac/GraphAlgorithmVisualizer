@@ -101,6 +101,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
                     throw new GraphException($"Invalid property key passed to SetProperty method - key: {key}");
             }
         }
+        public Label GetIdentityLabel() => new Label() { Text = $"Wierzchołek {Index}", Font = new Font(Control.DefaultFont, FontStyle.Bold) };
 
         public override string ToString()
         {

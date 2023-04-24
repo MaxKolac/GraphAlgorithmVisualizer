@@ -156,6 +156,11 @@ namespace GraphAlgorithmVisualizer
             if (lastSelectedMathObject is null) return;
             GB_MathObjectProperties.Controls.Clear();
             lastSelectedMathObjectProperties.Clear();
+            
+            Label identityLabel = lastSelectedMathObject.GetIdentityLabel();
+            identityLabel.Location = new Point(5, 20);
+            GB_MathObjectProperties.Controls.Add(identityLabel);
+
             foreach (KeyValuePair<int, ControlLabelSet> kvp in lastSelectedMathObject.GetProperties())
             {
                 //if (kvp.Value.Control.Name is null)
