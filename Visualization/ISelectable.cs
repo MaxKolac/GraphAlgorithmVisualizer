@@ -1,9 +1,11 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace GraphAlgorithmVisualizer.Visualization
 {
     /// <summary>
-    /// Interface implemented by visualizable MathObjects that appear on the main Canvas and can be interacted with, moved around and such.
+    /// Interface implemented by visualizable MathObjects that appear on the main Canvas and can be interacted with, can have its properties viewed and changed, can be moved around and such.
     /// Subinterface of IVisualizable.
     /// </summary>
     internal interface ISelectable : IVisualizable
@@ -18,5 +20,15 @@ namespace GraphAlgorithmVisualizer.Visualization
         /// </summary>
         /// <param name="graphics">The Graphics object to draw the Selected form on.</param>
         void DrawSelectedState(Graphics graphics);
+        /// <summary>
+        /// Builds and returns a Dictionary with each entry containing a combination of Forms.Control and Forms.Label as a ControlLabelSet that will be put in the GB_Properties for the user to view/modify and an Integer which is meant to uniquely identify the Control when any applied modifications to its value are sent back to the ISelectable object through SetProperty() method.
+        /// </summary>
+        Dictionary<int, ControlLabelSet> GetProperties();
+        /// <summary>
+        /// Sets the ISelectable's inside property to the value wrapped in the Forms.Control.
+        /// </summary>
+        /// <param name="key">The identifying Integer which uniquely identifies which ISelectable's inside property should be changed.</param>
+        /// <param name="control">A Windows.Forms.Control with the applied changes to its value.</param>
+        void SetProperty(int key, Control control);
     }
 }

@@ -91,6 +91,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\VisualizationTests.cs" />
+    <Compile Include="Visualization\ControlLabelSet.cs" />
     <Compile Include="Visualization\DrawingTools.cs" />
     <Compile Include="Visualization\ISelectable.cs" />
     <Compile Include="Visualization\IVisualizable.cs" />

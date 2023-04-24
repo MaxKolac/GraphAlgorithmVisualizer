@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.Visualization;
 
 namespace GraphAlgorithmVisualizer.MathObjects
@@ -45,6 +48,54 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public void DrawDetectedState(Graphics graphics) => DrawState(DrawingTools.DefaultDetectedOutline, graphics, 25);
         public void DrawSelectedState(Graphics graphics) => DrawState(DrawingTools.DefaultSelectedOutline, graphics, 25);
         private void DrawState(Pen pen, Graphics graphics, int size) => graphics.DrawEllipse(pen, X - (size / 2), Y - (size / 2), size, size);
+        public Dictionary<int, ControlLabelSet> GetProperties()
+        {
+            Dictionary<int, ControlLabelSet> properties = new Dictionary<int, ControlLabelSet>();
+
+            Label positionXLabel = new Label() 
+            { 
+                Text = "Współrzędna X" 
+            };
+            Control positionX = new TextBox()
+            {
+                Text = X.ToString(),
+                TextAlign = HorizontalAlignment.Center,
+                ReadOnly = true
+            };
+
+            Label positionYLabel = new Label()
+            {
+                Text = "Współrzędna Y"
+            };
+            Control positionY = new TextBox()
+            {
+                Text = Y.ToString(),
+                TextAlign = HorizontalAlignment.Center,
+                ReadOnly = true
+            };
+
+            properties.Add(0, new ControlLabelSet(positionXLabel, positionX));
+            properties.Add(1, new ControlLabelSet(positionYLabel, positionY));
+            return properties;
+        }
+        public void SetProperty(int key, Control control)
+        {
+            switch (key)
+            {
+                case 0:
+                    //ReadOnly Control
+                    //if (!(control is TextBox positionX) || !int.TryParse(positionX.Text, out int parsedX)) return;
+                    //SetPosition(parsedX, Position.Y);
+                    break;
+                case 1:
+                    //ReadOnly Control
+                    //if (!(control is TextBox positionY) || !int.TryParse(positionY.Text, out int parsedY)) return;
+                    //SetPosition(Position.X, parsedY);
+                    break;
+                default:
+                    throw new GraphException($"Invalid property key passed to SetProperty method - key: {key}");
+            }
+        }
 
         public override string ToString()
         {

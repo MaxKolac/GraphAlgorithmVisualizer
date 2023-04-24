@@ -92,6 +92,87 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public void DrawDetectedState(Graphics graphics) => DrawState(DrawingTools.DefaultDetectedOutline, graphics, 25);
         public void DrawSelectedState(Graphics graphics) => DrawState(DrawingTools.DefaultSelectedOutline, graphics, 25);
         private void DrawState(Pen pen, Graphics graphics, int size) => graphics.DrawEllipse(pen, X - (size / 2), Y - (size / 2), size, size);
+        public Dictionary<int, ControlLabelSet> GetProperties()
+        {
+            Dictionary<int, ControlLabelSet> properties = new Dictionary<int, ControlLabelSet>();
+
+            Label positionXLabel = new Label()
+            {
+                Text = "Współrzędna X"
+            };
+            Control positionX = new TextBox()
+            {
+                Text = X.ToString(),
+                TextAlign = HorizontalAlignment.Center,
+                ReadOnly = true
+            };
+
+            Label positionYLabel = new Label()
+            {
+                Text = "Współrzędna Y"
+            };
+            Control positionY = new TextBox()
+            {
+                Text = Y.ToString(),
+                TextAlign = HorizontalAlignment.Center,
+                ReadOnly = true
+            };
+
+            Control isDirectional = new CheckBox()
+            {
+                AutoCheck = false,
+                Text = "Krawędź jest skierowana",
+                TextAlign = ContentAlignment.MiddleLeft,
+                Checked = IsDirectional
+            };
+
+            properties.Add(0, new ControlLabelSet(positionXLabel, positionX));
+            properties.Add(1, new ControlLabelSet(positionYLabel, positionY));
+            properties.Add(2, new ControlLabelSet(null, isDirectional));
+
+            if (Distance is null) return properties;
+
+            Label distanceLabel = new Label()
+            {
+                Text = "Dystans"
+            };
+            Control distance = new NumericUpDown()
+            {
+                Minimum = 1,
+                Maximum = 99,
+                Value = (decimal)Distance
+            };
+            properties.Add(3, new ControlLabelSet(distanceLabel, distance));
+            return properties;
+        }
+        public void SetProperty(int key, Control control)
+        {
+            switch (key)
+            {
+                case 0:
+                    //ReadOnly Control
+                    //if (!(control is TextBox positionX) || !int.TryParse(positionX.Text, out int parsedX)) return;
+                    //SetPosition(parsedX, Position.Y);
+                    break;
+                case 1:
+                    //ReadOnly Control
+                    //if (!(control is TextBox positionY) || !int.TryParse(positionY.Text, out int parsedY)) return;
+                    //SetPosition(Position.X, parsedY);
+                    break;
+                case 2:
+                    //ReadOnly Control and IsDirectional is readonly
+                    //if (!(control is CheckBox checkbox) || !bool.TryParse(checkbox.Checked.ToString(), out bool parsedValue)) return;
+                    //IsDirectional = parsedValue;
+                    break;
+                case 3:
+                    if (Distance is null) return;
+                    if (!(control is NumericUpDown nud) || !decimal.TryParse(nud.Value.ToString(), out decimal parsedValue)) return;
+                    SetDistance((int)parsedValue);
+                    break;
+                default:
+                    throw new GraphException($"Invalid property key passed to SetProperty method - key: {key}");
+            }
+        }
 
         public override string ToString()
         {
