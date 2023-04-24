@@ -166,14 +166,16 @@ namespace GraphAlgorithmVisualizer
             identityLabel.Location = new Point(5, 20);
             GB_MathObjectProperties.Controls.Add(identityLabel);
 
+            int positionX = identityLabel.Location.X;
+            int positionY = identityLabel.Location.Y + identityLabel.Height;
             foreach (KeyValuePair<int, ControlLabelSet> kvp in lastSelectedMathObject.GetProperties())
             {
-                //if (kvp.Value.Control.Name is null)
-                //    throw new GraphException("Last selected MathObject's properties contained a Control without a value for property Control.Name.");
                 Label kvpLabel = kvp.Value.Label;
                 Control kvpControl = kvp.Value.Control;
 
-                //TODO: proper Control and Label positioning, everything is placed on top of each other
+                if (!(kvpLabel is null)) kvpLabel.Location = new Point(positionX, positionY);
+                kvpControl.Location = new Point(positionX + (kvpLabel is null ? 0 : kvpLabel.Width + 30), positionY);
+                positionY += kvpControl.Height + 3;
 
                 if (kvpControl is TextBox textbox)
                     textbox.TextChanged += (sender, e) => 
