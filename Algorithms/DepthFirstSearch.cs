@@ -24,11 +24,9 @@ namespace GraphAlgorithmVisualizer.Algorithms
             GoDownBranch(start);
             while (visited.Values.Contains(false))
             {
-                foreach (KeyValuePair<Vertex, bool> kvp in visited)
-                {
-                    if (kvp.Value == false)
-                        GoDownBranch(kvp.Key);
-                }
+                foreach (Vertex v in graph.VerticesArray)
+                    if (!visited[v])
+                        GoDownBranch(v);
             }
         }
         /// <summary>
