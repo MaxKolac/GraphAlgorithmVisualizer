@@ -1,5 +1,4 @@
-using GraphAlgorithmVisualizer.MathObjects;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.Forms;
@@ -10,7 +9,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
     /// <summary>
     /// Base class of all Graph algorithms. It holds 3 Dictionaries with entries for each Vertex in the Graph, and also a reference to the Graph object itself.
     /// </summary>
-    internal abstract class Algorithm
+    internal abstract class Algorithm : IDataGridViewable<Vertex, int>
     {
         protected readonly Dictionary<Vertex, bool> visited;
         protected readonly Dictionary<Vertex, Vertex> previousVertex;
@@ -88,5 +87,10 @@ namespace GraphAlgorithmVisualizer.Algorithms
                 builder.AppendLine($"\t{pair.Key}\t|\t{pair.Value}");
             return builder.ToString();
         }
+
+        public virtual string GetFirstColumnLabel() => "Poprzedni wierz.";
+        public virtual Vertex GetFirstColumnDataForVertex(Vertex v) => previousVertex[v];
+        public virtual string GetSecondColumnLabel() => "Dystans";
+        public virtual int GetSecondColumnDataForVertex(Vertex v) => distance[v];
     }
 }
