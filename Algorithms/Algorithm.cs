@@ -1,8 +1,9 @@
-﻿using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.MathObjects;
 using System.Collections.Generic;
 using System.Text;
+using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.Forms;
+using GraphAlgorithmVisualizer.MathObjects;
 
 namespace GraphAlgorithmVisualizer.Algorithms
 {
@@ -15,6 +16,11 @@ namespace GraphAlgorithmVisualizer.Algorithms
         protected readonly Dictionary<Vertex, Vertex> previousVertex;
         protected readonly Dictionary<Vertex, int> distance;
         protected readonly Graph graph;
+
+        /// <summary>
+        /// If a Distance has a value greater or equal to MaxDistance, then the Distance should be considered as "infinite".
+        /// </summary>
+        public const int MaxDistance = 9999;
 
         public bool WasVisited(Vertex v) => visited[v];
         public Vertex PreviousVertexOf(Vertex v) => previousVertex[v];
@@ -32,8 +38,8 @@ namespace GraphAlgorithmVisualizer.Algorithms
         /// <summary>
         /// Clears all Algorithm inherited Dictionaries of its previous KeyValuePairs and adds empty KeyValuePairs for each of Graph's Vertex with default values.
         /// </summary>
-        /// <param name="setStartingDistanceAsIntMax">If <c>true</c>, new entries in distance dictionary will begin with the value of <c>Int.MaxValue</c>. If false, they start with the value of 0.</param>
-        protected void ClearDictionaries(bool setStartingDistanceAsIntMax)
+        /// <param name="setInitialDistanceToInfinity">If <c>true</c>, new entries in distance dictionary will begin with the value of MaxDistance, a.k.a. "infinity". If false, they start with the value of 0.</param>
+        protected void ClearDictionaries(bool setInitialDistanceToInfinity)
         {
             visited.Clear();
             previousVertex.Clear();
@@ -41,7 +47,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
             foreach (Vertex vertex in graph.VerticesArray)
             {
                 previousVertex.Add(vertex, null);
-                distance.Add(vertex, setStartingDistanceAsIntMax ? int.MaxValue : 0);
+                distance.Add(vertex, setInitialDistanceToInfinity ? MaxDistance : 0);
                 visited.Add(vertex, false);
             }
         }

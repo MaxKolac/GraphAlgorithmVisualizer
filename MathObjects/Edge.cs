@@ -59,7 +59,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// <param name="distance">The abstract metric which represents the distance between Start and End vertices. Must be greater than 0.</param>
         public Edge(Vertex start, Vertex end, bool isDirectional, int distance) : this(start, end, isDirectional)
         {
-            if (distance <= 0)
+            if (distance <= 0 || Algorithms.Algorithm.MaxDistance <= distance)
                 throw new GraphException("Attempted to create an Edge with non-positive Distance.");
             Distance = distance;
         }
@@ -89,11 +89,12 @@ namespace GraphAlgorithmVisualizer.MathObjects
         public void SetDistance(int distance)
         {
             if (Distance is null) return;
-            if (distance <= 0)
+            if (distance <= 0 || Algorithms.Algorithm.MaxDistance <= distance)
                 throw new GraphException("Attempted to create an Edge with non-positive Distance.");
             Distance = distance;
         }
 
+        // Interface Implementations
         public void SetStart(Point p)
         {
             Start.SetPosition(p.X, p.Y);
