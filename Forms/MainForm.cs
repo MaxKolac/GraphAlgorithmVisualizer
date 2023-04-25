@@ -22,6 +22,10 @@ namespace GraphAlgorithmVisualizer
         private ISelectable lastSelectedMathObject = null;
         private readonly Dictionary<string, int> lastSelectedMathObjectProperties = new Dictionary<string, int>();
 
+        private Point cursorPosition = new Point();
+        private int? cursorOffsetX = null;
+        private int? cursorOffsetY = null;
+
         private bool showAddEdgeDialog = true;
         private AddingNewEdgeState addingNewEdgeMode = AddingNewEdgeState.NotActive;
         private Vertex selectedStartVertex = null;
@@ -45,13 +49,13 @@ namespace GraphAlgorithmVisualizer
         private void CanvasMouseMove(object sender, MouseEventArgs e)
         {
             ClearCanvas();
-            Point cursorPosition = PB_Canvas.PointToClient(Cursor.Position);
+            cursorPosition = PB_Canvas.PointToClient(Cursor.Position);
             switch (addingNewEdgeMode)
             {
                 case AddingNewEdgeState.NotActive:
                     if (MouseButtons.Left == e.Button)
                     {
-                        selectedMathObject?.SetPosition(cursorPosition.X, cursorPosition.Y);
+                        selectedMathObject?.SetPosition(cursorPosition.X - (cursorOffsetX ?? 0), cursorPosition.Y - (cursorOffsetY ?? 0));
                         selectedMathObject?.DrawSelectedState(graphics);
                     }
                     else
@@ -80,6 +84,8 @@ namespace GraphAlgorithmVisualizer
             switch (addingNewEdgeMode)
             {
                 case (AddingNewEdgeState.NotActive):
+                    cursorOffsetX = selectedMathObject is null ? 0 : cursorPosition.X - selectedMathObject.X;
+                    cursorOffsetY = selectedMathObject is null ? 0 : cursorPosition.Y - selectedMathObject.Y;
                     lastSelectedMathObject = selectedMathObject;
                     FillPropertiesGroupBox();
                     break;
@@ -243,8 +249,9 @@ namespace GraphAlgorithmVisualizer
         }
         private void AddVertexButtonClicked(object sender, EventArgs e)
         {
-            graph.AddVertex(FindFirstUnusedVertexIndex());
-            graph.GetVertex(graph.VerticesCount - 1).SetPosition(PB_Canvas.Width / 2, PB_Canvas.Height / 2);
+            int newIndex = FindFirstUnusedVertexIndex();
+            graph.AddVertex(newIndex);
+            graph.GetVertex(newIndex).SetPosition(PB_Canvas.Width / 2, PB_Canvas.Height / 2);
             ClearCanvas();
             DrawGraph();
         }
@@ -312,13 +319,15 @@ namespace GraphAlgorithmVisualizer
             }
 
             algorithm.Perform(startVertex);
+            DGV_AlgorithmResult.Columns[1].HeaderText = algorithm.GetFirstColumnLabel();
+            DGV_AlgorithmResult.Columns[2].HeaderText = algorithm.GetSecondColumnLabel();
             for (int i = 0; i < graph.VerticesCount; i++)
             {
                 Vertex v = graph.VerticesArray[i];
                 DGV_AlgorithmResult.Rows.Add();
                 DGV_AlgorithmResult.Rows[i].Cells[0].Value = v;
-                DGV_AlgorithmResult.Rows[i].Cells[1].Value = algorithm.PreviousVertexOf(v);
-                DGV_AlgorithmResult.Rows[i].Cells[2].Value = algorithm.DistanceOf(v);
+                DGV_AlgorithmResult.Rows[i].Cells[1].Value = algorithm.GetFirstColumnDataForVertex(v);
+                DGV_AlgorithmResult.Rows[i].Cells[2].Value = algorithm.GetSecondColumnDataForVertex(v);
             }
         }
     }

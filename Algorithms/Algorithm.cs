@@ -2,6 +2,7 @@
 using GraphAlgorithmVisualizer.MathObjects;
 using System.Collections.Generic;
 using System.Text;
+using GraphAlgorithmVisualizer.Forms;
 
 namespace GraphAlgorithmVisualizer.Algorithms
 {
