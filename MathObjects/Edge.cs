@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using GraphAlgorithmVisualizer.Exceptions;
@@ -10,7 +11,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
     /// <summary>
     /// A connection between two vertices. It can be visually represented either as a simple line or an arrow, pointing towards the End Vertex, if it is directional.
     /// </summary>
-    internal class Edge : ISelectable
+    internal class Edge : ISelectable, IComparable
     {
         private readonly CurvableLine visualArrow;
         public Point Position => visualArrow.Middle;
@@ -216,6 +217,18 @@ namespace GraphAlgorithmVisualizer.MathObjects
             }
         }
         public Label GetIdentityLabel() => new Label() { Text = $"Krawędź ({Start.Index}, {End.Index})", Font = new Font(Control.DefaultFont, FontStyle.Bold) };
+        public int CompareTo(object obj)
+        {
+            if (!(obj is Edge edge)) throw new InvalidCastException();
+            if (Distance is null) return 0;
+
+            if (Distance > edge.Distance)
+                return -1;
+            else if (Distance == edge.Distance)
+                return 0;
+            else // (Distance < edge.Distance)
+                return 1;
+        }
 
         public override string ToString()
         {
