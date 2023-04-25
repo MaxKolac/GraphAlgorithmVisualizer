@@ -19,24 +19,37 @@ namespace GraphAlgorithmVisualizer.Algorithms
             distance[start] = 0;
 
             DjikstraQueue<Vertex> djikstraQueue = new DjikstraQueue<Vertex>();
+            djikstraQueue.Enqueue(start);
             foreach (Vertex v in graph.VerticesArray)
-                djikstraQueue.Enqueue(v);
+                if (!v.Equals(start))
+                    djikstraQueue.Enqueue(v);
 
             do
             {
+                //Dequeue the next vertex from Queue.
                 Vertex currentVertex = djikstraQueue.Dequeue();
                 visited[currentVertex] = true;
+
+                //Build a list of all Edges starting from that Vertex
+                List<Edge> outgoingEdges = new List<Edge>();
                 foreach (Edge edge in graph.EdgesArray)
                 {
                     if (!edge.IsStartingFrom(currentVertex))
                         continue;
-                    Vertex matchedEdgesVertex = edge.Start.Equals(currentVertex) ? edge.Start : edge.End;
-                    Vertex otherEdgesVertex = edge.Start.Equals(currentVertex) ? edge.End : edge.Start;
-                    if (distance[otherEdgesVertex] > distance[matchedEdgesVertex] + edge.Distance)
+                    outgoingEdges.Add(edge);
+                }
+
+                //Sort in descending order
+                outgoingEdges.Sort();
+
+                //Iterate over the matched, outgoing edges
+                for (int i = 0; i < outgoingEdges.Count; i++)
+                {
+                    if (distance[outgoingEdges[i].End] > distance[outgoingEdges[i].Start] + (outgoingEdges[i].Distance ?? 0))
                     {
-                        distance[otherEdgesVertex] = distance[matchedEdgesVertex] + (edge.Distance ?? 0);
-                        previousVertex[otherEdgesVertex] = matchedEdgesVertex;
-                        djikstraQueue.PushDown(otherEdgesVertex);
+                        distance[outgoingEdges[i].End] = (int)(distance[outgoingEdges[i].Start] + outgoingEdges[i].Distance);
+                        previousVertex[outgoingEdges[i].End] = outgoingEdges[i].Start;
+                        djikstraQueue.PushInFront(outgoingEdges[i].End);
                     }
                 }
             } while (!djikstraQueue.IsEmpty);
@@ -79,6 +92,29 @@ namespace GraphAlgorithmVisualizer.Algorithms
             queue.Enqueue(spareQueue.Dequeue());
 
             for (int i = 0; i < queueCount - 1; i++)
+                queue.Enqueue(queue.Dequeue());
+        }
+        /// <summary>
+        /// Pushes the selected item down the Queue, in front of all other elements, so that it will become the next element to be dequeued.
+        /// </summary>
+        /// <param name="item">The item to put in first position, in front of all other elements.</param>
+        public void PushInFront(T item)
+        {
+            if (!queue.Contains(item)) return;
+            if (queue.Peek().Equals(item)) return;
+
+            Queue<T> spareQueue = new Queue<T>();
+            while (!queue.Peek().Equals(item))
+                spareQueue.Enqueue(queue.Dequeue());
+
+            queue.Enqueue(queue.Dequeue());
+            int requeuesNeeded = queue.Count - 1;
+
+            int spareQueueCount = spareQueue.Count;
+            for (int i = 0; i < spareQueueCount; i++)
+                queue.Enqueue(spareQueue.Dequeue());
+
+            for (int i = 0; i < requeuesNeeded; i++)
                 queue.Enqueue(queue.Dequeue());
         }
     }
