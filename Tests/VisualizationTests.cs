@@ -1,4 +1,5 @@
 ﻿using GraphAlgorithmVisualizer.MathObjects;
+using GraphAlgorithmVisualizer.Utils;
 using GraphAlgorithmVisualizer.Visualization.Shapes;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,7 @@ namespace GraphAlgorithmVisualizer.Tests
             }
 
             Arrow[] arrows2 = new Arrow[9];
-            double alpha = Extensions.ToRadians(360d / arrows2.Length);
+            double alpha = Mathx.ToRadians(360d / arrows2.Length);
             double radius = 150;
             Point middlePoint = new Point(pictureBoxWidth / 2, pictureBoxHeight / 2);
             for (int i = 0; i < arrows2.Length; i++)

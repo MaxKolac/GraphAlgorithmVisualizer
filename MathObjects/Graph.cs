@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using GraphAlgorithmVisualizer.Exceptions;
+using GraphAlgorithmVisualizer.Utils;
 using GraphAlgorithmVisualizer.Visualization;
 
 namespace GraphAlgorithmVisualizer.MathObjects
@@ -191,6 +192,16 @@ namespace GraphAlgorithmVisualizer.MathObjects
             throw new GraphException("Could not find an Edge which would start and end in the provided vertices.");
 
         }
+        /// <summary>
+        /// Returns a list of all MathObjects in the Graph that implement ISelectable interface.
+        /// </summary>
+        public List<ISelectable> GetISelectableMathObjects()
+        {
+            List<ISelectable> list = new List<ISelectable>();
+            list.AddRange(Vertices);
+            list.AddRange(Edges);
+            return list;
+        }
 
         /// <summary>
         /// Removes the last added Vertex and all Edges connected to it.
@@ -296,7 +307,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// <param name="radius">The radius of the circle.</param>
         public void ArrangeVerticesInCircle(double radius)
         {
-            double alpha = Extensions.ToRadians(360d / Vertices.Count);
+            double alpha = Mathx.ToRadians(360d / Vertices.Count);
             for (int i = 0; i < Vertices.Count; i++)
             {
                 double totalAngle = alpha * i;

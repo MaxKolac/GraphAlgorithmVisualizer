@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using GraphAlgorithmVisualizer.Utils;
 
 namespace GraphAlgorithmVisualizer.Visualization.Shapes
 {
@@ -31,8 +32,8 @@ namespace GraphAlgorithmVisualizer.Visualization.Shapes
                     Math.Sqrt(Math.Pow(End.X - Middle.X, 2) + Math.Pow(End.Y - Middle.Y, 2))
                 );
             if (double.IsNaN(alphaRadians)) alphaRadians = 0;
-            double betaRadians = Extensions.ToRadians(90d) - alphaRadians;
-            double gammaRadians = Extensions.ToRadians(armAngle);
+            double betaRadians = Mathx.ToRadians(90d) - alphaRadians;
+            double gammaRadians = Mathx.ToRadians(armAngle);
             Point arrowheadStartPoint;
             Point armEndOne;
             Point armEndTwo;

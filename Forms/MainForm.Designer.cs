@@ -58,6 +58,7 @@
             this.PB_Canvas.TabStop = false;
             this.PB_Canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CanvasMouseDown);
             this.PB_Canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CanvasMouseMove);
+            this.PB_Canvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.CanvasMouseUp);
             // 
             // GB_MathObjectProperties
             // 

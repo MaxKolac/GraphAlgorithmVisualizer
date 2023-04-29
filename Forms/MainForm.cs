@@ -17,6 +17,13 @@ namespace GraphAlgorithmVisualizer
     {
         private readonly Graphics graphics;
         private Graph graph;
+        private FormState formState = FormState.None;
+
+        private enum FormState { 
+            None, 
+            AddingNewEdge_NoVerticesSelected, AddingNewEdge_OneVertexSelected, 
+            MultipleSelection_Selecting, MultipleSelection_ObjectsSelected
+        }
 
         private ISelectable selectedMathObject = null;
         private ISelectable lastSelectedMathObject = null;
@@ -27,11 +34,12 @@ namespace GraphAlgorithmVisualizer
         private int? cursorOffsetY = null;
 
         private bool showAddEdgeDialog = true;
-        private AddingNewEdgeState addingNewEdgeMode = AddingNewEdgeState.NotActive;
         private Vertex selectedStartVertex = null;
         private Vertex selectedEndVertex = null;
 
-        private enum AddingNewEdgeState { NotActive, NoVerticesSelected, StartVertexSelected }
+        private Point multipleSelection_firstPoint;
+        private readonly SelectionRectangle selectionRectangle = new SelectionRectangle(Point.Empty, Point.Empty);
+        private readonly List<ISelectable> selectedObjects = new List<ISelectable>();
 
         public MainForm()
         {
@@ -46,55 +54,32 @@ namespace GraphAlgorithmVisualizer
             DrawGraph();
         }
 
-        private void CanvasMouseMove(object sender, MouseEventArgs e)
-        {
-            ClearCanvas();
-            cursorPosition = PB_Canvas.PointToClient(Cursor.Position);
-            switch (addingNewEdgeMode)
-            {
-                case AddingNewEdgeState.NotActive:
-                    if (MouseButtons.Left == e.Button)
-                    {
-                        selectedMathObject?.SetPosition(cursorPosition.X - (cursorOffsetX ?? 0), cursorPosition.Y - (cursorOffsetY ?? 0));
-                        selectedMathObject?.DrawSelectedState(graphics);
-                    }
-                    else
-                    {
-                        selectedMathObject = DetectNearestSelectableObject();
-                        selectedMathObject?.DrawDetectedState(graphics);
-                    }
-                    break;
-                case AddingNewEdgeState.NoVerticesSelected:
-                    selectedMathObject = DetectNearestSelectableObject();
-                    selectedStartVertex = selectedMathObject as Vertex;
-                    selectedStartVertex?.DrawDetectedState(graphics);
-                    break;
-                case AddingNewEdgeState.StartVertexSelected:
-                    selectedStartVertex.DrawSelectedState(graphics);
-                    new Arrow(selectedStartVertex.Position, cursorPosition).Draw(graphics);
-                    selectedMathObject = DetectNearestSelectableObject();
-                    selectedEndVertex = selectedMathObject as Vertex;
-                    selectedEndVertex?.DrawDetectedState(graphics);
-                    break;
-            }
-            DrawGraph();
-        }
         private void CanvasMouseDown(object sender, MouseEventArgs e)
         {
-            switch (addingNewEdgeMode)
+            cursorPosition = PB_Canvas.PointToClient(Cursor.Position);
+            switch (formState)
             {
-                case (AddingNewEdgeState.NotActive):
-                    cursorOffsetX = selectedMathObject is null ? 0 : cursorPosition.X - selectedMathObject.X;
-                    cursorOffsetY = selectedMathObject is null ? 0 : cursorPosition.Y - selectedMathObject.Y;
+                case FormState.None:
                     lastSelectedMathObject = selectedMathObject;
                     FillPropertiesGroupBox();
+                    if (selectedMathObject is null)
+                    {
+                        selectionRectangle.SetPosition(cursorPosition.X, cursorPosition.Y);
+                        selectionRectangle.SetSecondPosition(cursorPosition);
+                        selectionRectangle.Draw(graphics);
+                        formState = FormState.MultipleSelection_Selecting;
+                        break;
+                    }
+                    cursorOffsetX = cursorPosition.X - selectedMathObject.X;
+                    cursorOffsetY = cursorPosition.Y - selectedMathObject.Y;
                     break;
-                case (AddingNewEdgeState.NoVerticesSelected):
+                case FormState.AddingNewEdge_NoVerticesSelected:
+                    selectedMathObject = DetectNearestSelectableObject();
                     if (selectedStartVertex is null) return;
                     selectedMathObject.DrawSelectedState(graphics);
-                    addingNewEdgeMode = AddingNewEdgeState.StartVertexSelected;
+                    formState = FormState.AddingNewEdge_OneVertexSelected;
                     break;
-                case (AddingNewEdgeState.StartVertexSelected):
+                case FormState.AddingNewEdge_OneVertexSelected:
                     //As of right now, Loops, despite being mathematically valid, aren't supported
                     if (selectedEndVertex is null || selectedStartVertex.Equals(selectedEndVertex)) return;
                     if (graph.UsesDistances) 
@@ -104,11 +89,99 @@ namespace GraphAlgorithmVisualizer
                     lastSelectedMathObject = graph.GetEdge(selectedStartVertex.Index, selectedEndVertex.Index);
                     GB_MathObjectProperties.Enabled = true;
                     FillPropertiesGroupBox();
-                    addingNewEdgeMode = AddingNewEdgeState.NotActive;
+                    formState = FormState.None;
                     selectedStartVertex = null;
                     selectedEndVertex = null;
                     break;
+                case FormState.MultipleSelection_Selecting:
+                    break;
+                case FormState.MultipleSelection_ObjectsSelected:
+                    selectedMathObject = DetectNearestSelectableObject();
+                    if (selectedStartVertex is null || !selectedObjects.Contains(selectedMathObject))
+                    {
+                        selectedObjects.Clear();
+                        formState = FormState.None;
+                        break;
+                    }
+                    foreach (ISelectable selectable in selectedObjects)
+                        selectable.DrawSelectedState(graphics);
+                    break;
             }
+        }
+        private void CanvasMouseMove(object sender, MouseEventArgs e)
+        {
+            ClearCanvas();
+            Point previourCursorPosition = cursorPosition;
+            cursorPosition = PB_Canvas.PointToClient(Cursor.Position);
+            switch (formState)
+            {
+                case FormState.None:
+                    if (MouseButtons.Left == e.Button)
+                    {
+                        selectedMathObject?.SetPosition(cursorPosition.X - (cursorOffsetX ?? 0), cursorPosition.Y - (cursorOffsetY ?? 0));
+                        selectedMathObject?.DrawSelectedState(graphics);
+                        break;
+                    }
+                    selectedMathObject = DetectNearestSelectableObject();
+                    selectedMathObject?.DrawDetectedState(graphics);
+                    break;
+                case FormState.AddingNewEdge_NoVerticesSelected:
+                    selectedMathObject = DetectNearestSelectableObject();
+                    selectedStartVertex = selectedMathObject as Vertex;
+                    selectedStartVertex?.DrawDetectedState(graphics);
+                    break;
+                case FormState.AddingNewEdge_OneVertexSelected:
+                    selectedStartVertex.DrawSelectedState(graphics);
+                    new Arrow(selectedStartVertex.Position, cursorPosition).Draw(graphics);
+                    selectedMathObject = DetectNearestSelectableObject();
+                    selectedEndVertex = selectedMathObject as Vertex;
+                    selectedEndVertex?.DrawDetectedState(graphics);
+                    break;
+                case FormState.MultipleSelection_Selecting:
+                    selectedObjects.Clear();
+                    selectionRectangle.SetSecondPosition(cursorPosition);
+                    selectionRectangle.Draw(graphics);
+                    foreach (ISelectable selectable in graph.GetISelectableMathObjects())
+                    {
+                        if (selectionRectangle.IsWithinSelectionBounds(selectable.Position))
+                        {
+                            selectedObjects.Add(selectable);
+                            selectable.DrawDetectedState(graphics);
+                        }
+                    }
+                    break;
+                case FormState.MultipleSelection_ObjectsSelected:
+                    foreach (ISelectable selectable in selectedObjects)
+                    {
+                        selectable.MovePosition(cursorPosition.X - previourCursorPosition.X, cursorPosition.Y - previourCursorPosition.Y);
+                        selectable.DrawSelectedState(graphics);
+                    }
+                    break;
+            }
+            DrawGraph();
+        }
+        private void CanvasMouseUp(object sender, MouseEventArgs e)
+        {
+            ClearCanvas();
+            switch (formState)
+            {
+                case FormState.None:
+                case FormState.AddingNewEdge_NoVerticesSelected:
+                case FormState.AddingNewEdge_OneVertexSelected:
+                    break;
+                case FormState.MultipleSelection_Selecting:
+                    foreach (ISelectable selectable in selectedObjects)
+                        selectable.DrawDetectedState(graphics);
+                    formState = selectedObjects.Count > 0 ? 
+                        FormState.MultipleSelection_ObjectsSelected :
+                        FormState.None;
+                    break;
+                case FormState.MultipleSelection_ObjectsSelected:
+                    foreach (ISelectable selectable in selectedObjects)   
+                        selectable.DrawDetectedState(graphics);
+                    break;
+            }
+            DrawGraph();
         }
 
             //Various Utility Methods
@@ -163,7 +236,6 @@ namespace GraphAlgorithmVisualizer
         /// </summary>
         private void FillPropertiesGroupBox()
         {
-            if (lastSelectedMathObject is null) return;
             GB_MathObjectProperties.Enabled = true;
             Control[] controlsArray = new Control[GB_MathObjectProperties.Controls.Count];
             GB_MathObjectProperties.Controls.CopyTo(controlsArray, 0);
@@ -175,6 +247,22 @@ namespace GraphAlgorithmVisualizer
             }
             lastSelectedMathObjectProperties.Clear();
             
+            if (formState == FormState.MultipleSelection_Selecting || formState == FormState.MultipleSelection_ObjectsSelected)
+            {
+                GB_MathObjectProperties.Controls.Add(
+                    new Label()
+                    {
+                        Text = "Zaznaczono wiele obiektów.",
+                        Font = DrawingTools.DefaultFont,
+                        Location = new Point(5, 20)
+                    }
+                );
+                BTN_RemoveMathObj.Enabled = false;
+                return;
+            }
+            BTN_RemoveMathObj.Enabled = true;
+
+            if (lastSelectedMathObject is null) return;
             Label identityLabel = lastSelectedMathObject.GetIdentityLabel();
             identityLabel.Location = new Point(5, 20);
             GB_MathObjectProperties.Controls.Add(identityLabel);
@@ -258,7 +346,7 @@ namespace GraphAlgorithmVisualizer
         private void AddEdgeButtonClicked(object sender, EventArgs e)
         {
             GB_MathObjectProperties.Enabled = false;
-            addingNewEdgeMode = AddingNewEdgeState.NoVerticesSelected;
+            formState = FormState.AddingNewEdge_NoVerticesSelected;
             if (showAddEdgeDialog)
             {
                 DialogResult result = MessageBox.Show(

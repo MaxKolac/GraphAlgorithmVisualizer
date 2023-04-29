@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace GraphAlgorithmVisualizer.Visualization
 {
@@ -10,5 +11,6 @@ namespace GraphAlgorithmVisualizer.Visualization
         public static SolidBrush DefaultBackColor => new SolidBrush(Color.LightGray);
         public static SolidBrush DefaultFontColor => new SolidBrush(Color.Black);
         public static Font DefaultFont => new Font(FontFamily.GenericSansSerif, 12, FontStyle.Bold);
+        public static Pen SelectionRectPen => new Pen(Color.Black, 3) { DashStyle = DashStyle.Dash };
     }
 }
