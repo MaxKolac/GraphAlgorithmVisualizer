@@ -17,9 +17,13 @@ namespace GraphAlgorithmVisualizer.Algorithms
         protected readonly Graph graph;
 
         /// <summary>
-        /// If a Distance has a value greater or equal to MaxDistance, then the Distance should be considered as "infinite".
+        /// If a Distance has a value greater or equal to Infinity, then the Distance is considered as "infinite".
         /// </summary>
-        public const int MaxDistance = 9999;
+        public const int Infinity = 999_999;
+        /// <summary>
+        /// If a Distance has a value lesser or equal to NegativeInfinity, then the Distance is considered as "negative infinite".
+        /// </summary>
+        public const int NegativeInfinity = -999_999;
 
         public bool WasVisited(Vertex v) => visited[v];
         public Vertex PreviousVertexOf(Vertex v) => previousVertex[v];
@@ -37,7 +41,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
         /// <summary>
         /// Clears all Algorithm inherited Dictionaries of its previous KeyValuePairs and adds empty KeyValuePairs for each of Graph's Vertex with default values.
         /// </summary>
-        /// <param name="setInitialDistanceToInfinity">If <c>true</c>, new entries in distance dictionary will begin with the value of MaxDistance, a.k.a. "infinity". If false, they start with the value of 0.</param>
+        /// <param name="setInitialDistanceToInfinity">If <c>true</c>, new entries in distance dictionary will begin with the value of Infinity, a.k.a. "infinity". If false, they start with the value of 0.</param>
         protected void ClearDictionaries(bool setInitialDistanceToInfinity)
         {
             visited.Clear();
@@ -46,7 +50,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
             foreach (Vertex vertex in graph.VerticesArray)
             {
                 previousVertex.Add(vertex, null);
-                distance.Add(vertex, setInitialDistanceToInfinity ? MaxDistance : 0);
+                distance.Add(vertex, setInitialDistanceToInfinity ? Infinity : 0);
                 visited.Add(vertex, false);
             }
         }
