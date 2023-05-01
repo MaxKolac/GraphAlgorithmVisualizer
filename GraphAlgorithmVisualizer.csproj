@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\Algorithm.cs" />
+    <Compile Include="Exceptions\AlgorithmException.cs" />
     <Compile Include="Forms\GraphCreatorDialog.cs">
       <SubType>Form</SubType>
     </Compile>

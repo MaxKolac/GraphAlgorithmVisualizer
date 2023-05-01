@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.MathObjects;
 
 namespace GraphAlgorithmVisualizer.Algorithms
@@ -7,6 +8,8 @@ namespace GraphAlgorithmVisualizer.Algorithms
     {
         public BreadthFirstSearch(Graph graph) : base(graph)
         {
+            if (graph.AcceptableDistances != DistanceRange.Natural)
+                throw new AlgorithmException("Algorytm wyszukiwania \"wszerz\" nie może być wykonywany na grafach, które mogą zawierać ujemne lub zerowe dystance na swoich krawędziach.");
         }
 
         public override void Perform(Vertex start)

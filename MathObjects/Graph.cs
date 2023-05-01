@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using GraphAlgorithmVisualizer.Algorithms;
 using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.Utils;
 using GraphAlgorithmVisualizer.Visualization;
@@ -138,7 +139,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         private void AddEdge(Edge e)
         {
             if (Edges.Contains(e))
-                Console.WriteLine("Warning! Added a duplicate Edge to the Edges list.");
+                throw new GraphException("Attempted to add a duplicate Edge to the Edges list.");
             if (!Vertices.Contains(e.Start) || !Vertices.Contains(e.End))
                 throw new GraphException("Attempted to add an Edge whose Start/End does not exist in the Vertices list.");
             if (e.IsDirectional != IsDirectional)

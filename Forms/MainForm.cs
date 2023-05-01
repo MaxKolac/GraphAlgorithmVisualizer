@@ -475,12 +475,14 @@ namespace GraphAlgorithmVisualizer
             if (!(lastSelectedMathObject is Vertex startVertex))
             {
                 MessageBox.Show("Aby algorytm mógł działać, jeden z wierzchołków musi być wybrany jako początkowy." +
-                    "\nZa wierzchołek początkowy uznawany jest ostatni kliknięty wierzchołek.");
+                    "\nZa wierzchołek początkowy uznawany jest ostatni, pojedyńczy, kliknięty wierzchołek.");
                 return;
             }
             Algorithm algorithm;
             DGV_AlgorithmResult.Rows.Clear();
 
+            try
+            {
             switch (CB_Algorithm.SelectedIndex)
             {
                 case 0: //DepthFirstSearch
@@ -490,18 +492,24 @@ namespace GraphAlgorithmVisualizer
                     algorithm = new BreadthFirstSearch(graph);
                     break;
                 case 2: //Djikstra Algorithm
-                    if (!graph.UsesDistances)
-                    {
-                        MessageBox.Show("Algorytm Djikstra może być przeprowadzony tylko na grafach implementujących dystanse.");
-                        return;
-                    }
                     algorithm = new DjikstraAlgorithm(graph);
                     break;
                 default:
                     throw new NotImplementedException();
             }
+                algorithm.Perform(startVertex);
+            } 
+            catch (AlgorithmException exception)
+            {
+                MessageBox.Show(exception.Message);
+                return;
+            }
+            catch (NotImplementedException)
+            {
+                MessageBox.Show("Ten algorytm nie został jeszcze w pełni zaimplementowany.");
+                return;
+            }
 
-            algorithm.Perform(startVertex);
             DGV_AlgorithmResult.Columns[1].HeaderText = algorithm.GetFirstColumnLabel();
             DGV_AlgorithmResult.Columns[2].HeaderText = algorithm.GetSecondColumnLabel();
             for (int i = 0; i < graph.VerticesCount; i++)

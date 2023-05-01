@@ -1,16 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.MathObjects;
 
 namespace GraphAlgorithmVisualizer.Algorithms
 {
     internal class DepthFirstSearch : Algorithm
     { 
-        private Dictionary<Vertex, List<Vertex>> outgoingEdges;
+        private readonly Dictionary<Vertex, List<Vertex>> outgoingEdges;
 
         public DepthFirstSearch(Graph graph) : base(graph)
         {
+            if (graph.AcceptableDistances != DistanceRange.Natural)
+                throw new AlgorithmException("Algorytm wyszukiwania \"wgłąb\" nie może być wykonywany na grafach, które mogą zawierać ujemne lub zerowe dystance na swoich krawędziach.");
             outgoingEdges = new Dictionary<Vertex, List<Vertex>>();
         }
 

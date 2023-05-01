@@ -10,7 +10,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
         public DjikstraAlgorithm(Graph graph) : base(graph)
         {
             if (!graph.UsesDistances)
-                throw new GraphException("Attempted to associate a Graph without distances with an instance of DjikstraAlgorithm class.");
+                throw new AlgorithmException("Algorytm Djikstra może być przeprowadzony tylko na grafach implementujących dystanse.");
             if (graph.AcceptableDistances != DistanceRange.Natural)
                 throw new AlgorithmException("Algorytm Djikstra nie może być wykonywany na grafach, które mogą zawierać ujemne lub zerowe dystance na swoich krawędziach.");
         }
