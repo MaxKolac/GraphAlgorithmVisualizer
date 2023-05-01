@@ -392,6 +392,18 @@ namespace GraphAlgorithmVisualizer
                 DrawGraph();
             }
         }
+        private void OpenRandomGraphCreatorDialog(object sender, EventArgs e)
+        {
+            RandomGraphCreatorDialog dialog = new RandomGraphCreatorDialog();
+            if (dialog.ShowDialog(out Graph randomizedGraph) == DialogResult.OK)
+            {
+                formState = FormState.None;
+                ClearCanvas();
+                graph = randomizedGraph;
+                graph.SetPosition(PB_Canvas.Width / 2, PB_Canvas.Height / 2);
+                DrawGraph();
+            }
+        }
         private void AddVertexButtonClicked(object sender, EventArgs e)
         {
             int newIndex = FindFirstUnusedVertexIndex();
