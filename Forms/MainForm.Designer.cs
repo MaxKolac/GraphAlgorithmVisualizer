@@ -149,7 +149,8 @@
             this.CB_Algorithm.Items.AddRange(new object[] {
             "Algorytm wyszukiwania \"wszesz\"",
             "Algorytm wyszukiwania \"wgłąb\"",
-            "Algorytm Djikstra"});
+            "Algorytm Djikstra",
+            "Algorytm Bellmana-Forda"});
             this.CB_Algorithm.Location = new System.Drawing.Point(6, 19);
             this.CB_Algorithm.Name = "CB_Algorithm";
             this.CB_Algorithm.Size = new System.Drawing.Size(177, 21);

@@ -483,20 +483,23 @@ namespace GraphAlgorithmVisualizer
 
             try
             {
-            switch (CB_Algorithm.SelectedIndex)
-            {
-                case 0: //DepthFirstSearch
-                    algorithm = new DepthFirstSearch(graph);
-                    break;
-                case 1: //BreadthFirstSearch
-                    algorithm = new BreadthFirstSearch(graph);
-                    break;
-                case 2: //Djikstra Algorithm
-                    algorithm = new DjikstraAlgorithm(graph);
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
+                switch (CB_Algorithm.SelectedIndex)
+                {
+                    case 0: //DepthFirstSearch
+                        algorithm = new DepthFirstSearch(graph);
+                        break;
+                    case 1: //BreadthFirstSearch
+                        algorithm = new BreadthFirstSearch(graph);
+                        break;
+                    case 2: //Djikstra Algorithm
+                        algorithm = new DjikstraAlgorithm(graph);
+                        break;
+                    case 3: //Bellman-Ford Algorithm
+                        algorithm = new BellmanFordAlgorithm(graph);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
                 algorithm.Perform(startVertex);
             } 
             catch (AlgorithmException exception)
