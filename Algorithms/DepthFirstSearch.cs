@@ -47,6 +47,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
                 if (!visited[otherEdgesVertex])
                 {
                     previousVertex[otherEdgesVertex] = currentVertex;
+                    distance[otherEdgesVertex] = distance[currentVertex] + 1;
                     outgoingEdges[matchedEdgesVertex].Add(otherEdgesVertex);
                 }
             }
