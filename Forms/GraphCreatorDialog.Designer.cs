@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.GB_Options = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.CB_AcceptableDistances = new System.Windows.Forms.ComboBox();
             this.CB_IsDirectional = new System.Windows.Forms.CheckBox();
             this.CB_UsesDistances = new System.Windows.Forms.CheckBox();
             this.NUD_Vertices = new System.Windows.Forms.NumericUpDown();
@@ -41,6 +43,8 @@
             // 
             // GB_Options
             // 
+            this.GB_Options.Controls.Add(this.label2);
+            this.GB_Options.Controls.Add(this.CB_AcceptableDistances);
             this.GB_Options.Controls.Add(this.CB_IsDirectional);
             this.GB_Options.Controls.Add(this.CB_UsesDistances);
             this.GB_Options.Controls.Add(this.NUD_Vertices);
@@ -52,10 +56,36 @@
             this.GB_Options.TabStop = false;
             this.GB_Options.Text = "Opcje";
             // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(32, 99);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(250, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Zakres dozwolonych wartości Dystansów krawędzi:";
+            // 
+            // CB_AcceptableDistances
+            // 
+            this.CB_AcceptableDistances.Enabled = false;
+            this.CB_AcceptableDistances.FormattingEnabled = true;
+            this.CB_AcceptableDistances.Items.AddRange(new object[] {
+            "Ujemne, dodatnie oraz zero",
+            "Ujemne i dodatnie bez zera",
+            "Dodatnie oraz zero",
+            "Tylko dodatnie"});
+            this.CB_AcceptableDistances.Location = new System.Drawing.Point(67, 117);
+            this.CB_AcceptableDistances.Name = "CB_AcceptableDistances";
+            this.CB_AcceptableDistances.Size = new System.Drawing.Size(179, 21);
+            this.CB_AcceptableDistances.TabIndex = 4;
+            // 
             // CB_IsDirectional
             // 
             this.CB_IsDirectional.AutoSize = true;
-            this.CB_IsDirectional.Location = new System.Drawing.Point(116, 76);
+            this.CB_IsDirectional.Location = new System.Drawing.Point(108, 58);
             this.CB_IsDirectional.Name = "CB_IsDirectional";
             this.CB_IsDirectional.Size = new System.Drawing.Size(102, 17);
             this.CB_IsDirectional.TabIndex = 3;
@@ -65,16 +95,17 @@
             // CB_UsesDistances
             // 
             this.CB_UsesDistances.AutoSize = true;
-            this.CB_UsesDistances.Location = new System.Drawing.Point(51, 99);
+            this.CB_UsesDistances.Location = new System.Drawing.Point(54, 78);
             this.CB_UsesDistances.Name = "CB_UsesDistances";
             this.CB_UsesDistances.Size = new System.Drawing.Size(219, 17);
             this.CB_UsesDistances.TabIndex = 2;
             this.CB_UsesDistances.Text = "Graf wymaga dystansów na krawędziach";
             this.CB_UsesDistances.UseVisualStyleBackColor = true;
+            this.CB_UsesDistances.CheckedChanged += new System.EventHandler(this.UsesDistancesCheckChanged);
             // 
             // NUD_Vertices
             // 
-            this.NUD_Vertices.Location = new System.Drawing.Point(105, 50);
+            this.NUD_Vertices.Location = new System.Drawing.Point(102, 32);
             this.NUD_Vertices.Maximum = new decimal(new int[] {
             10,
             0,
@@ -101,7 +132,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(66, 31);
+            this.label1.Location = new System.Drawing.Point(64, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(182, 13);
             this.label1.TabIndex = 0;
@@ -162,5 +193,7 @@
         private System.Windows.Forms.NumericUpDown NUD_Vertices;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button BTN_Cancel;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox CB_AcceptableDistances;
     }
 }

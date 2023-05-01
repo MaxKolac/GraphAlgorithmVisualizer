@@ -11,7 +11,7 @@ namespace GraphAlgorithmVisualizer.Tests
     {
         public static void GraphDrawingTest(Graphics graphics, int pictureBoxWidth, int pictureBoxHeight)
         {
-            Graph graph = new Graph(true, true, 9);
+            Graph graph = new Graph(true, true, DistanceRange.Natural, 9);
             /*graph.AddEdge(graph[0], graph[1], 4);
             graph.AddEdge(graph[0], graph[2], 2);
 
@@ -53,7 +53,7 @@ namespace GraphAlgorithmVisualizer.Tests
 
         public static void GraphPositioningTest(Graphics graphics, int pictureBoxWidth, int pictureBoxHeight)
         {
-            Graph graph = new Graph(true, true, 8);
+            Graph graph = new Graph(true, true, DistanceRange.Natural, 8);
             for (int i = 1; i < graph.VerticesCount; i++)
             {
                 graph.AddEdge(graph[0], graph[i], i * 3);
@@ -114,7 +114,7 @@ namespace GraphAlgorithmVisualizer.Tests
 
         public static Graph ExampleDistancedGraph(bool isDirectional)
         {
-            Graph graph = new Graph(isDirectional, true, 7);
+            Graph graph = new Graph(isDirectional, true, DistanceRange.Natural, 7);
             graph.AddEdge(graph.V(0), graph.V(1), 4);
             graph.AddEdge(graph.V(1), graph.V(2), 15);
             graph.AddEdge(graph.V(2), graph.V(3), 1);
@@ -131,7 +131,7 @@ namespace GraphAlgorithmVisualizer.Tests
 
         public static Graph ExampleUndistancedGraph(bool isDirectional)
         {
-            Graph graph = new Graph(isDirectional, false, 7);
+            Graph graph = new Graph(isDirectional, false, DistanceRange.Natural, 7);
             graph.AddEdge(graph.V(0), graph.V(1));
             graph.AddEdge(graph.V(1), graph.V(2));
             graph.AddEdge(graph.V(2), graph.V(3));

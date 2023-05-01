@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using GraphAlgorithmVisualizer.Exceptions;
+using GraphAlgorithmVisualizer.Utils;
 using GraphAlgorithmVisualizer.Visualization;
 using GraphAlgorithmVisualizer.Visualization.Shapes;
 
@@ -57,12 +58,10 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// <param name="start">The Start Vertex object, from which the Edge begins.</param>
         /// <param name="end">The End Vertex object, into which the Edge flows.</param>
         /// <param name="isDirectional">Whether or not the Edge is inside of a Directional Graph. If true, then travel from End to Start vertices is not allowed.</param>
-        /// <param name="distance">The abstract metric which represents the distance between Start and End vertices. Must be greater than 0.</param>
+        /// <param name="distance">The abstract metric which represents the distance between Start and End vertices.</param>
         public Edge(Vertex start, Vertex end, bool isDirectional, int distance) : this(start, end, isDirectional)
         {
-            if (distance <= 0 || Algorithms.Algorithm.MaxDistance <= distance)
-                throw new GraphException("Attempted to create an Edge with non-positive Distance.");
-            Distance = distance;
+            Distance = Mathx.Clamp(distance, Algorithms.Algorithm.NegativeInfinity + 1, Algorithms.Algorithm.Infinity - 1);
         }
 
         /// <summary>
@@ -86,13 +85,11 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// <summary>
         /// Sets a new value to Distance. If Distance was already a null, method does nothing.
         /// </summary>
-        /// <param name="distance">The Distance value to set. Must be greater than 0, or an exception will be thrown.</param>
+        /// <param name="distance">The Distance value to set.</param>
         public void SetDistance(int distance)
         {
             if (Distance is null) return;
-            if (distance <= 0 || Algorithms.Algorithm.MaxDistance <= distance)
-                throw new GraphException("Attempted to create an Edge with non-positive Distance.");
-            Distance = distance;
+            Distance = Mathx.Clamp(distance, Algorithms.Algorithm.NegativeInfinity + 1, Algorithms.Algorithm.Infinity - 1);
         }
 
         // Interface Implementations
@@ -173,7 +170,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
                 distance = new NumericUpDown()
                 {
                     AutoSize = true,
-                    Minimum = 1,
+                    Minimum = -99,
                     Maximum = 99,
                     Name = "NUD_Distance",
                     Value = (decimal)Distance,

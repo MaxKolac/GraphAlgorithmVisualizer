@@ -134,10 +134,10 @@
             this.NUD_DistanceMax.Enabled = false;
             this.NUD_DistanceMax.Location = new System.Drawing.Point(194, 167);
             this.NUD_DistanceMax.Minimum = new decimal(new int[] {
-            1,
+            100,
             0,
             0,
-            0});
+            -2147483648});
             this.NUD_DistanceMax.Name = "NUD_DistanceMax";
             this.NUD_DistanceMax.Size = new System.Drawing.Size(54, 20);
             this.NUD_DistanceMax.TabIndex = 11;
@@ -153,10 +153,10 @@
             this.NUD_DistanceMin.Enabled = false;
             this.NUD_DistanceMin.Location = new System.Drawing.Point(134, 167);
             this.NUD_DistanceMin.Minimum = new decimal(new int[] {
-            1,
+            100,
             0,
             0,
-            0});
+            -2147483648});
             this.NUD_DistanceMin.Name = "NUD_DistanceMin";
             this.NUD_DistanceMin.Size = new System.Drawing.Size(54, 20);
             this.NUD_DistanceMin.TabIndex = 10;

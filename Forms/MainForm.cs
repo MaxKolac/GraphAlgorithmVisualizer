@@ -344,8 +344,33 @@ namespace GraphAlgorithmVisualizer
                     checkbox.CheckStateChanged += (sender, e) => 
                     { lastSelectedMathObject.SetProperty(lastSelectedMathObjectProperties[checkbox.Name], checkbox); FullyRedrawGraph(); };
                 else if (kvpControl is NumericUpDown nud)
+                {
                     nud.ValueChanged += (sender, e) => 
-                    { lastSelectedMathObject.SetProperty(lastSelectedMathObjectProperties[nud.Name], nud); FullyRedrawGraph(); };
+                    {
+                        //https://stackoverflow.com/questions/25938227/c-sharp-numericupdown-onvaluechanged-how-it-was-changed
+                        NumericUpDown obj = (NumericUpDown)sender;
+                        int currentValue = (int)obj.Value;
+                        int lastValue = obj.Tag is null ? (int)obj.Value : int.Parse(obj.Tag.ToString());
+                        obj.Tag = currentValue;
+
+                        if (graph.AcceptableDistances == DistanceRange.FullExceptZero && currentValue == 0)
+                        {
+                            if (lastValue == 1)
+                                obj.Value = -1;
+                            else if (lastValue == -1) 
+                                obj.Value = 1;
+                        }
+                        lastSelectedMathObject.SetProperty(lastSelectedMathObjectProperties[nud.Name], nud); 
+                        FullyRedrawGraph(); 
+                    };
+                    switch (graph.AcceptableDistances)
+                    {
+                        case DistanceRange.Full:
+                        case DistanceRange.FullExceptZero: nud.Minimum = -99; break;
+                        case DistanceRange.Whole: nud.Minimum = 0; break;
+                        case DistanceRange.Natural: nud.Minimum = 1; break;
+                    }
+                }
                 else
                     throw new GraphException("Last selected MathObject's properties contained an unsupported Control type. Cannot add a new EventListener to it.");
                 
@@ -384,11 +409,11 @@ namespace GraphAlgorithmVisualizer
         private void OpenGraphCreatorDialog(object sender, EventArgs e)
         {
             GraphCreatorDialog dialog = new GraphCreatorDialog();
-            if (dialog.ShowDialog(out int verticesCount, out bool isDirectional, out bool usesDistances) == DialogResult.OK)
+            if (dialog.ShowDialog(out int verticesCount, out DistanceRange acceptableDistances, out bool isDirectional, out bool usesDistances) == DialogResult.OK)
             {
                 formState = FormState.None;
                 ClearCanvas();
-                graph = new Graph(isDirectional, usesDistances, verticesCount);
+                graph = new Graph(isDirectional, usesDistances, acceptableDistances, verticesCount);
                 graph.SetPosition(PB_Canvas.Width / 2, PB_Canvas.Height / 2);
                 DrawGraph();
             }

@@ -28,6 +28,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// A List of all <c>Edges inside the graph.</c>
         /// </summary>
         private readonly List<Edge> Edges = new List<Edge>();
+
         /// <summary>
         /// Whether or not the <c>Graph</c> is considered to be directional or not.
         /// A directional Graph means that it only accepts directional Edges. Directional Edges act as a "one-way" roads - algorithm travel is only allowed from its Start to End. Undirectional Graph, and therefore undirectional Edges, allow the algorithms to travel both ways.
@@ -37,6 +38,10 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// Whether or not the Edges are required to implement a non-zero, non-null Distance value.
         /// </summary>
         public readonly bool UsesDistances;
+        /// <summary>
+        /// In what range must the Distance values of all Edges be included.
+        /// </summary>
+        public readonly DistanceRange AcceptableDistances;
 
         /// <summary>
         /// Indexer which acts as a shortcut to GetVertex() method.
@@ -67,21 +72,24 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// <summary>
         /// Creates a new empty Graph.
         /// </summary>
-        /// <param name="isDirectional">Whether or not the <c>Graph</c> will be directional or not.</param>
+        /// <param name="isDirectional">Whether or not the Graph will be directional or not.</param>
         /// <param name="usesDistances">Whether or not the Graph will require all Edges to have a non-null distance value.</param>
-        public Graph(bool isDirectional, bool usesDistances) : this(isDirectional, usesDistances, 0) 
+        /// <param name="acceptableDistances">What range of Distance values should the Graph accept as valid.</param>
+        public Graph(bool isDirectional, bool usesDistances, DistanceRange acceptableDistances) : this(isDirectional, usesDistances, acceptableDistances, 0) 
         {
         }
         /// <summary>
-        /// Creates a new Graph with a collection of vertices.
+        /// Creates a new Graph with an initial collection of vertices.
         /// </summary>
-        /// <param name="isDirectional">Whether or not the <c>Graph</c> will be directional or not.</param>
+        /// <param name="isDirectional">Whether or not the Graph will be directional or not.</param>
         /// <param name="usesDistances">Whether or not the Graph will require all Edges to have a non-null distance value.</param>
-        /// <param name="verticesCount">With how many vertices should the <c>Graph</c> be created.</param>
-        public Graph(bool isDirectional, bool usesDistances, int verticesCount)
+        /// <param name="acceptableDistances">What range of Distance values should the Graph accept as valid.</param>
+        /// <param name="verticesCount">With how many vertices should the Graph be created initially.</param>
+        public Graph(bool isDirectional, bool usesDistances, DistanceRange acceptableDistances, int verticesCount)
         {
             IsDirectional = isDirectional;
             UsesDistances = usesDistances;
+            AcceptableDistances = acceptableDistances;
             for (int i = 0; i < verticesCount; i++)
                 AddVertex(i);
             Position = new Point(0, 0);
@@ -145,6 +153,22 @@ namespace GraphAlgorithmVisualizer.MathObjects
                 Console.WriteLine("Warning! Added an Edge with a Distance to a Graph which doesn't utilize Distances! Overwriting it to be null!");
                 Edges.Add(new Edge(e.Start, e.End, IsDirectional));
                 return;
+            }
+            GraphException outsideRangeExc = new GraphException($"Attempted to add an Edge with the Distance value outside of acceptable {AcceptableDistances} range.");
+            switch (AcceptableDistances)
+            {
+                case DistanceRange.Full:
+                    if (e.Distance <= Algorithm.NegativeInfinity || Algorithm.Infinity <= e.Distance)
+                        throw outsideRangeExc;
+                    break;
+                case DistanceRange.Whole:
+                    if (e.Distance < 0 || Algorithm.Infinity <= e.Distance)
+                        throw outsideRangeExc;
+                    break;
+                case DistanceRange.Natural:
+                    if (e.Distance <= 0 || Algorithm.Infinity <= e.Distance)
+                        throw outsideRangeExc;
+                    break;
             }
             Edges.Add(e);
         }
@@ -345,5 +369,25 @@ namespace GraphAlgorithmVisualizer.MathObjects
             builder.AppendLine("}");
             return builder.ToString();
         }
+    }
+
+    internal enum DistanceRange
+    {
+        /// <summary>
+        /// Represents the full range of all integers between Algorithm.NegativeInfinity and Algorithm.Infinity, both ends exclusive.
+        /// </summary>
+        Full,
+        /// <summary>
+        /// Represents the full range of all integers between Algorithm.NegativeInfinity and Algorithm.Infinity, both ends exclusive, with the exception for zero.
+        /// </summary>
+        FullExceptZero,
+        /// <summary>
+        /// Represents all integers starting from (and including) zero and ending in exclusive Algorithm.Infinity.
+        /// </summary>
+        Whole,
+        /// <summary>
+        /// Represents all integers starting from inclusive one and ending in exclusive Algorithm.Infinity.
+        /// </summary>
+        Natural
     }
 }

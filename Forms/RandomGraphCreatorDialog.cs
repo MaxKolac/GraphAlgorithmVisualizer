@@ -25,7 +25,16 @@ namespace GraphAlgorithmVisualizer.Forms
                 (int)Math.Max(NUD_EdgesMin.Value, NUD_EdgesMax.Value) + 1
                 );
 
-            Graph graph = new Graph(CB_IsDirectional.Checked, CB_UsesDistances.Checked, verticesCount);
+            DistanceRange acceptableRange;
+            int lowerBound = (int)Math.Min(NUD_DistanceMin.Value, NUD_DistanceMax.Value);
+            if (lowerBound < 0)
+                acceptableRange = DistanceRange.Full;
+            else if (lowerBound == 0)
+                acceptableRange = DistanceRange.Whole;
+            else
+                acceptableRange = DistanceRange.Natural;
+
+            Graph graph = new Graph(CB_IsDirectional.Checked, CB_UsesDistances.Checked, acceptableRange, verticesCount);
             for (int i = 0; i < edgesCount; i++)
             {
                 int firstIndex = rnd.Next(0, graph.VerticesCount);
