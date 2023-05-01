@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GraphAlgorithmVisualizer.Exceptions;
 using GraphAlgorithmVisualizer.MathObjects;
 
@@ -11,7 +12,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
             if (!graph.UsesDistances)
                 throw new GraphException("Attempted to associate a Graph without distances with an instance of DjikstraAlgorithm class.");
         }
-
+/*
         public override void Perform(Vertex start)
         {
             SetStartVertex(start);
@@ -53,6 +54,71 @@ namespace GraphAlgorithmVisualizer.Algorithms
                     }
                 }
             } while (!djikstraQueue.IsEmpty);
+        }*/
+        public override void Perform(Vertex start)
+        {
+            int iterationsCount = 0;
+            int operationsCount = 0;
+            int comparationsCount = 0;
+            SetStartVertex(start); operationsCount++;
+            ClearDictionaries(true); operationsCount++;
+            distance[start] = 0; operationsCount++;
+
+            DjikstraQueue<Vertex> djikstraQueue = new DjikstraQueue<Vertex>(); operationsCount++;
+            djikstraQueue.Enqueue(start); operationsCount++;
+            foreach (Vertex v in graph.VerticesArray)
+            {
+                iterationsCount++;
+                if (!v.Equals(start))
+                {
+                    comparationsCount++;
+                    djikstraQueue.Enqueue(v); operationsCount++;
+                }
+            }
+
+            do
+            {
+                //Dequeue the next vertex from Queue.
+                Vertex currentVertex = djikstraQueue.Dequeue(); operationsCount++;
+                visited[currentVertex] = true; operationsCount++;
+
+                //Build a list of all Edges starting from that Vertex
+                List<Edge> outgoingEdges = new List<Edge>(); operationsCount++;
+                foreach (Edge edge in graph.EdgesArray)
+                {
+                    iterationsCount++;
+                    if (!edge.IsStartingFrom(currentVertex))
+                    {
+                        comparationsCount++;
+                        continue;
+                    }
+                    outgoingEdges.Add(edge); operationsCount++;
+                }
+
+                //Sort in descending order
+                //https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1.sort?redirectedfrom=MSDN&view=net-7.0#System_Collections_Generic_List_1_Sort
+                //According to MSDN documentation, average time complexity is O(n * log n), because used algorithm is QuickSort.
+                outgoingEdges.Sort();
+                operationsCount += (int)Math.Round(outgoingEdges.Count * Math.Log(outgoingEdges.Count, 2));
+
+                //Iterate over the matched, outgoing edges
+                for (int i = 0; i < outgoingEdges.Count; i++)
+                {
+                    iterationsCount++;
+                    if (distance[outgoingEdges[i].End] > distance[outgoingEdges[i].Start] + (outgoingEdges[i].Distance ?? 0))
+                    {
+                        comparationsCount++;
+                        distance[outgoingEdges[i].End] = (int)(distance[outgoingEdges[i].Start] + outgoingEdges[i].Distance); operationsCount++;
+                        previousVertex[outgoingEdges[i].End] = outgoingEdges[i].Start; operationsCount++;
+                        djikstraQueue.PushInFront(outgoingEdges[i].End); operationsCount++;
+                    }
+                }
+                iterationsCount++;
+                comparationsCount++;
+            } while (!djikstraQueue.IsEmpty);
+
+            //Console.WriteLine($"iterations: {iterationsCount}\ncomparisons: {comparationsCount}\noperations: {operationsCount}");
+            Console.WriteLine($"|E|:{graph.EdgesCount}\t|\t|V|:{graph.VerticesCount}\t|\tOper.:{iterationsCount + operationsCount + comparationsCount}");
         }
     }
 
