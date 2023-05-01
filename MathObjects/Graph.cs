@@ -115,7 +115,7 @@ namespace GraphAlgorithmVisualizer.MathObjects
         /// </summary>
         /// <param name="v1">Start Vertex of the Edge.</param>
         /// <param name="v2">End Vertex of the Edge.</param>
-        public void AddEdge(Vertex v1, Vertex v2) => AddEdge(UsesDistances ? new Edge(v1, v2, IsDirectional, 0) : new Edge(v1, v2, IsDirectional));
+        public void AddEdge(Vertex v1, Vertex v2) => AddEdge(UsesDistances ? new Edge(v1, v2, IsDirectional, 1) : new Edge(v1, v2, IsDirectional));
         /// <summary>
         /// Creates a new <c>Edge</c> between two vertices and adds it to the Edges list. This method assigns the new Edge the specified distance. If distances aren't utilized by the Graph, distance is ignored.
         /// </summary>
@@ -160,6 +160,20 @@ namespace GraphAlgorithmVisualizer.MathObjects
             return e.Distance is null ?
                 Edges.Contains(e) || Edges.Contains(new Edge(e.End, e.Start, IsDirectional)) :
                 Edges.Contains(e) || Edges.Contains(new Edge(e.End, e.Start, IsDirectional, (int)e.Distance));
+        }
+        /// <summary>
+        /// Returns true, if the Graph contains an Edge that starts from a Vertex with ID of startVertexIndex and ends in a Vertex with ID of endVertexIndex, regardless of its distance.
+        /// </summary>
+        /// <param name="startVertexIndex">The ID of the Vertex from which the Edge starts.</param>
+        /// <param name="endVertexIndex">The ID of the Vertex in which the Edge ends.</param>
+        public bool EdgeExists(int startVertexIndex, int endVertexIndex)
+        {
+            foreach (Edge edge in Edges)
+            {
+                if (edge.IsStartingFrom(GetVertex(startVertexIndex)) && edge.IsEndingIn(GetVertex(endVertexIndex)))
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>
