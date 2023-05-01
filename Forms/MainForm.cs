@@ -386,6 +386,7 @@ namespace GraphAlgorithmVisualizer
             GraphCreatorDialog dialog = new GraphCreatorDialog();
             if (dialog.ShowDialog(out int verticesCount, out bool isDirectional, out bool usesDistances) == DialogResult.OK)
             {
+                formState = FormState.None;
                 ClearCanvas();
                 graph = new Graph(isDirectional, usesDistances, verticesCount);
                 graph.SetPosition(PB_Canvas.Width / 2, PB_Canvas.Height / 2);

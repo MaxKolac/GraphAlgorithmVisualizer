@@ -33,6 +33,7 @@
             this.BTN_RemoveMathObj = new System.Windows.Forms.Button();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.TSMI_CreateNewGraph = new System.Windows.Forms.ToolStripMenuItem();
+            this.TSMI_RandomGraphCreatorDialog = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_AddVertex = new System.Windows.Forms.ToolStripMenuItem();
             this.TSMI_AddEdge = new System.Windows.Forms.ToolStripMenuItem();
             this.GB_Algorithms = new System.Windows.Forms.GroupBox();
@@ -84,6 +85,7 @@
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TSMI_CreateNewGraph,
+            this.TSMI_RandomGraphCreatorDialog,
             this.TSMI_AddVertex,
             this.TSMI_AddEdge});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
@@ -98,6 +100,13 @@
             this.TSMI_CreateNewGraph.Size = new System.Drawing.Size(119, 20);
             this.TSMI_CreateNewGraph.Text = "Stwórz nowy graf...";
             this.TSMI_CreateNewGraph.Click += new System.EventHandler(this.OpenGraphCreatorDialog);
+            // 
+            // TSMI_RandomGraphCreatorDialog
+            // 
+            this.TSMI_RandomGraphCreatorDialog.Name = "TSMI_RandomGraphCreatorDialog";
+            this.TSMI_RandomGraphCreatorDialog.Size = new System.Drawing.Size(133, 20);
+            this.TSMI_RandomGraphCreatorDialog.Text = "Generuj losowy graf...";
+            this.TSMI_RandomGraphCreatorDialog.Click += new System.EventHandler(this.OpenRandomGraphCreatorDialog);
             // 
             // TSMI_AddVertex
             // 
@@ -232,5 +241,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Vertex;
         private System.Windows.Forms.DataGridViewTextBoxColumn PreviousVertex;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_RandomGraphCreatorDialog;
     }
 }

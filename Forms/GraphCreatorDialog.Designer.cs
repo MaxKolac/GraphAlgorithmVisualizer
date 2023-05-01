@@ -144,7 +144,7 @@
             this.MinimizeBox = false;
             this.Name = "GraphCreatorDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "GraphCreatorDialog";
+            this.Text = "Kreator nowego grafu";
             this.TopMost = true;
             this.GB_Options.ResumeLayout(false);
             this.GB_Options.PerformLayout();
