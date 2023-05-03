@@ -33,18 +33,18 @@ namespace GraphAlgorithmVisualizer.Algorithms
         public override void PerformAndCount(Vertex start)
         {
             base.Perform(start);
-            outgoingEdges.Clear(); operationsCount++;
+            outgoingEdges.Clear(); assignmentsCount++;
             foreach (Vertex v in graph.VerticesArray)
             {
                 iterationsCount++;
-                outgoingEdges.Add(v, new List<Vertex>()); operationsCount++;
+                outgoingEdges.Add(v, new List<Vertex>()); assignmentsCount++;
             }
 
             GoDownBranchAndCount(start);
             while (visited.Values.Contains(false))
             {
-                iterationsCount++;
                 comparisonsCount++;
+                iterationsCount++;
                 foreach (Vertex v in graph.VerticesArray)
                 {
                     iterationsCount++;
@@ -88,7 +88,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
         /// <param name="currentVertex">The starting Vertex from which the method starts from.</param>
         private void GoDownBranchAndCount(Vertex currentVertex)
         {
-            visited[currentVertex] = true; operationsCount++;
+            visited[currentVertex] = true; assignmentsCount++;
             foreach (Edge edge in graph.EdgesArray)
             {
                 iterationsCount++;
@@ -97,14 +97,14 @@ namespace GraphAlgorithmVisualizer.Algorithms
                 {
                     continue;
                 }
-                Vertex matchedEdgesVertex = edge.Start.Equals(currentVertex) ? edge.Start : edge.End; operationsCount++;
-                Vertex otherEdgesVertex = edge.Start.Equals(currentVertex) ? edge.End : edge.Start; operationsCount++;
+                Vertex matchedEdgesVertex = edge.Start.Equals(currentVertex) ? edge.Start : edge.End; assignmentsCount++; comparisonsCount++;
+                Vertex otherEdgesVertex = edge.Start.Equals(currentVertex) ? edge.End : edge.Start; assignmentsCount++; comparisonsCount++;
                 comparisonsCount++;
                 if (!visited[otherEdgesVertex])
                 {
-                    previousVertex[otherEdgesVertex] = currentVertex; operationsCount++;
-                    distance[otherEdgesVertex] = distance[currentVertex] + 1; operationsCount++;
-                    outgoingEdges[matchedEdgesVertex].Add(otherEdgesVertex); operationsCount++;
+                    previousVertex[otherEdgesVertex] = currentVertex; assignmentsCount++;
+                    distance[otherEdgesVertex] = distance[currentVertex] + 1; assignmentsCount++;
+                    outgoingEdges[matchedEdgesVertex].Add(otherEdgesVertex); assignmentsCount++;
                 }
             }
             foreach (Vertex nextVertex in outgoingEdges[currentVertex])

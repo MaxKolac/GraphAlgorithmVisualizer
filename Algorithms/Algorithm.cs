@@ -18,7 +18,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
 
         protected int comparisonsCount = 0;
         protected int iterationsCount = 0;
-        protected int operationsCount = 0;
+        protected int assignmentsCount = 0;
 
         /// <summary>
         /// If a Distance has a value greater or equal to Infinity, then the Distance is considered as "infinite".
@@ -87,15 +87,19 @@ namespace GraphAlgorithmVisualizer.Algorithms
         public virtual void PerformAndCount(Vertex start)
         {
             ResetPerformanceCounters();
-            SetStartVertex(start);
+            SetStartVertex(start); 
+            comparisonsCount++; 
+            assignmentsCount++;
             ClearDictionaries(false);
+            assignmentsCount += 3 * (graph.VerticesCount + 1);
+            comparisonsCount += graph.VerticesCount;
         }
         /// <summary>
         /// Sets all performance counters (iterations, operations, comparisons) back to zero.
         /// </summary>
         public void ResetPerformanceCounters()
         {
-            operationsCount = 0;
+            assignmentsCount = 0;
             iterationsCount = 0;
             comparisonsCount = 0;
         }
@@ -104,7 +108,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
         public virtual Vertex GetFirstColumnDataForVertex(Vertex v) => previousVertex[v];
         public virtual string GetSecondColumnLabel() => "Dystans";
         public virtual int GetSecondColumnDataForVertex(Vertex v) => distance[v];
-        public virtual string GetOperationsPerformed() => $"Wykonanych operacji: {operationsCount + iterationsCount + comparisonsCount}";
+        public virtual string GetOperationsPerformed() => $"Wykonane operacje: {assignmentsCount + comparisonsCount} + {iterationsCount} iteracji";
 
         public override string ToString()
         {

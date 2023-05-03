@@ -205,9 +205,9 @@
             this.LB_PerformedOpetations.AutoSize = true;
             this.LB_PerformedOpetations.Location = new System.Drawing.Point(627, 536);
             this.LB_PerformedOpetations.Name = "LB_PerformedOpetations";
-            this.LB_PerformedOpetations.Size = new System.Drawing.Size(122, 13);
+            this.LB_PerformedOpetations.Size = new System.Drawing.Size(113, 13);
             this.LB_PerformedOpetations.TabIndex = 4;
-            this.LB_PerformedOpetations.Text = "Wykonanych operacji: 0";
+            this.LB_PerformedOpetations.Text = "Wykonanych operacji:";
             // 
             // MainForm
             // 

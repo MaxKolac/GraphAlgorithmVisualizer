@@ -40,31 +40,32 @@ namespace GraphAlgorithmVisualizer.Algorithms
         public override void PerformAndCount(Vertex start)
         {
             base.Perform(start);
-            Queue<Vertex> queue = new Queue<Vertex>(); operationsCount++;
-            queue.Enqueue(start); operationsCount++;
+            Queue<Vertex> queue = new Queue<Vertex>(); assignmentsCount++;
+            queue.Enqueue(start); assignmentsCount++;
 
+            comparisonsCount++;
             while (queue.Count != 0)
             {
-                comparisonsCount++;
                 iterationsCount++;
-                Vertex dequeuedVertex = queue.Dequeue(); operationsCount++;
+                Vertex dequeuedVertex = queue.Dequeue(); assignmentsCount++;
                 foreach (Edge edge in graph.EdgesArray)
                 {
                     iterationsCount++;
                     comparisonsCount++;
                     if (!edge.IsStartingFrom(dequeuedVertex))                    
                         continue;
-                    Vertex matchedVertex = edge.Start.Equals(dequeuedVertex) ? edge.Start : edge.End; operationsCount++;
-                    Vertex otherVertex = edge.Start.Equals(dequeuedVertex) ? edge.End : edge.Start; operationsCount++;
+                    Vertex matchedVertex = edge.Start.Equals(dequeuedVertex) ? edge.Start : edge.End; assignmentsCount++; comparisonsCount++;
+                    Vertex otherVertex = edge.Start.Equals(dequeuedVertex) ? edge.End : edge.Start; assignmentsCount++; comparisonsCount++;
                     comparisonsCount++;
                     if (!queue.Contains(otherVertex) && !visited[otherVertex])
                     {
-                        queue.Enqueue(otherVertex); operationsCount++;
-                        distance[otherVertex] = distance[matchedVertex] + 1; operationsCount++;
-                        previousVertex[otherVertex] = matchedVertex; operationsCount++;
+                        queue.Enqueue(otherVertex); assignmentsCount++;
+                        distance[otherVertex] = distance[matchedVertex] + 1; assignmentsCount++;
+                        previousVertex[otherVertex] = matchedVertex; assignmentsCount++;
                     }
                 }
-                visited[dequeuedVertex] = true; operationsCount++;
+                visited[dequeuedVertex] = true; assignmentsCount++;
+                comparisonsCount++;
             }
         }
     }

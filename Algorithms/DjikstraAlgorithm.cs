@@ -60,44 +60,44 @@ namespace GraphAlgorithmVisualizer.Algorithms
         public override void PerformAndCount(Vertex start)
         {
             ResetPerformanceCounters();
-            SetStartVertex(start); operationsCount++;
-            ClearDictionaries(true); operationsCount++;
-            distance[start] = 0; operationsCount++;
+            SetStartVertex(start); assignmentsCount++;
+            ClearDictionaries(true); assignmentsCount++;
+            distance[start] = 0; assignmentsCount++;
 
-            DjikstraQueue<Vertex> djikstraQueue = new DjikstraQueue<Vertex>(); operationsCount++;
-            djikstraQueue.Enqueue(start); operationsCount++;
+            DjikstraQueue<Vertex> djikstraQueue = new DjikstraQueue<Vertex>(); assignmentsCount++;
+            djikstraQueue.Enqueue(start); assignmentsCount++;
             foreach (Vertex v in graph.VerticesArray)
             {
                 iterationsCount++;
                 comparisonsCount++;
                 if (!v.Equals(start))
                 {
-                    djikstraQueue.Enqueue(v); operationsCount++;
+                    djikstraQueue.Enqueue(v); assignmentsCount++;
                 }
             }
 
             do
             {
                 //Dequeue the next vertex from Queue.
-                Vertex currentVertex = djikstraQueue.Dequeue(); operationsCount++;
-                visited[currentVertex] = true; operationsCount++;
+                Vertex currentVertex = djikstraQueue.Dequeue(); assignmentsCount++;
+                visited[currentVertex] = true; assignmentsCount++;
 
                 //Build a list of all Edges starting from that Vertex
-                List<Edge> outgoingEdges = new List<Edge>(); operationsCount++;
+                List<Edge> outgoingEdges = new List<Edge>(); assignmentsCount++;
                 foreach (Edge edge in graph.EdgesArray)
                 {
                     iterationsCount++;
                     comparisonsCount++;
                     if (!edge.IsStartingFrom(currentVertex))
                         continue;
-                    outgoingEdges.Add(edge); operationsCount++;
+                    outgoingEdges.Add(edge); assignmentsCount++;
                 }
 
                 //Sort in descending order
                 //https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1.sort?redirectedfrom=MSDN&view=net-7.0#System_Collections_Generic_List_1_Sort
                 //According to MSDN documentation, average time complexity is O(n * log n), because the used algorithm is QuickSort.
                 outgoingEdges.Sort();
-                operationsCount += (int)Math.Round(outgoingEdges.Count * Math.Log(outgoingEdges.Count, 2));
+                assignmentsCount += (int)Math.Round(outgoingEdges.Count * Math.Log(outgoingEdges.Count, 2));
 
                 //Iterate over the matched, outgoing edges
                 for (int i = 0; i < outgoingEdges.Count; i++)
@@ -106,9 +106,16 @@ namespace GraphAlgorithmVisualizer.Algorithms
                     comparisonsCount++;
                     if (distance[outgoingEdges[i].End] > distance[outgoingEdges[i].Start] + (outgoingEdges[i].Distance ?? 0))
                     {
-                        distance[outgoingEdges[i].End] = (int)(distance[outgoingEdges[i].Start] + outgoingEdges[i].Distance); operationsCount++;
-                        previousVertex[outgoingEdges[i].End] = outgoingEdges[i].Start; operationsCount++;
-                        djikstraQueue.PushInFront(outgoingEdges[i].End, out int queueOperations); operationsCount += queueOperations;
+                        distance[outgoingEdges[i].End] = (int)(distance[outgoingEdges[i].Start] + outgoingEdges[i].Distance); assignmentsCount++;
+                        previousVertex[outgoingEdges[i].End] = outgoingEdges[i].Start; assignmentsCount++;
+                        djikstraQueue.PushInFront(
+                            outgoingEdges[i].End, 
+                            out int queueAssignments, 
+                            out int queueComparisons,
+                            out int queueIterations); 
+                        assignmentsCount += queueAssignments;
+                        comparisonsCount += queueComparisons;
+                        iterationsCount += queueIterations;
                     }
                 }
                 iterationsCount++;
@@ -116,7 +123,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
             } while (!djikstraQueue.IsEmpty);
 
             //Console.WriteLine($"iterations: {iterationsCount}\ncomparisons: {comparationsCount}\noperations: {operationsCount}");
-            Console.WriteLine($"|E|:{graph.EdgesCount}\t|\t|V|:{graph.VerticesCount}\t|\tOper.:{iterationsCount + operationsCount + comparisonsCount}");
+            Console.WriteLine($"|E|:{graph.EdgesCount}\t|\t|V|:{graph.VerticesCount}\t|\tOper.:{iterationsCount + assignmentsCount + comparisonsCount}");
         }
     }
 
@@ -226,37 +233,41 @@ namespace GraphAlgorithmVisualizer.Algorithms
         /// This overload additionally returns the amount of performed iterations, operations and comparisons.
         /// </summary>
         /// <param name="item">The item to put in first position, in front of all other elements.</param>
-        public void PushInFront(T item, out int performedOperations)
+        public void PushInFront(T item, out int assignments, out int comparisons, out int iterations)
         {
-            performedOperations = 1;
+            assignments = 1; 
+            iterations = 0; 
+            comparisons = 1;
             if (!queue.Contains(item)) return;
-            performedOperations++;
+            assignments++;
+            comparisons++;
             if (queue.Peek().Equals(item)) return;
 
-            Queue<T> spareQueue = new Queue<T>(); performedOperations++;
+            Queue<T> spareQueue = new Queue<T>(); assignments++;
+            comparisons++;
             while (!queue.Peek().Equals(item))
             {
-                performedOperations++;
+                iterations++;
                 spareQueue.Enqueue(queue.Dequeue());
-                performedOperations += 2;
+                assignments += 2;
             }
 
-            queue.Enqueue(queue.Dequeue()); performedOperations += 2;
-            int requeuesNeeded = queue.Count - 1; performedOperations++;
+            queue.Enqueue(queue.Dequeue()); assignments += 2;
+            int requeuesNeeded = queue.Count - 1; assignments++;
 
-            int spareQueueCount = spareQueue.Count; performedOperations++;
+            int spareQueueCount = spareQueue.Count; assignments++;
             for (int i = 0; i < spareQueueCount; i++)
             {
-                performedOperations++;
+                iterations++;
                 queue.Enqueue(spareQueue.Dequeue());
-                performedOperations += 2;
+                assignments += 2;
             }
 
             for (int i = 0; i < requeuesNeeded; i++)
             {
-                performedOperations++;
+                iterations++;
                 queue.Enqueue(queue.Dequeue());
-                performedOperations += 2;
+                assignments += 2;
             }
         }
     }
