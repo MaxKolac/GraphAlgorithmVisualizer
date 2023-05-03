@@ -16,5 +16,7 @@ namespace GraphAlgorithmVisualizer.Forms
         A GetFirstColumnDataForVertex(Vertex v);
         /// <returns>The value of KeyValuePair for the given Vertex key, to show in the second column.</returns>
         B GetSecondColumnDataForVertex(Vertex v);
+        /// <returns>The label which shows the sum of all performed operations.</returns>
+        string GetOperationsPerformed();
     }
 }

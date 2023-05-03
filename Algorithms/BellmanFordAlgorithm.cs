@@ -17,5 +17,10 @@ namespace GraphAlgorithmVisualizer.Algorithms
             base.Perform(start);
             throw new NotImplementedException();
         }
+        public override void PerformAndCount(Vertex start)
+        {
+            base.PerformAndCount(start);
+            throw new NotImplementedException();
+        }
     }
 }

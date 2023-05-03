@@ -43,6 +43,7 @@
             this.Vertex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PreviousVertex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LB_PerformedOpetations = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Canvas)).BeginInit();
             this.GB_MathObjectProperties.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -172,7 +173,7 @@
             this.DGV_AlgorithmResult.Name = "DGV_AlgorithmResult";
             this.DGV_AlgorithmResult.ReadOnly = true;
             this.DGV_AlgorithmResult.RowHeadersVisible = false;
-            this.DGV_AlgorithmResult.Size = new System.Drawing.Size(248, 315);
+            this.DGV_AlgorithmResult.Size = new System.Drawing.Size(248, 299);
             this.DGV_AlgorithmResult.TabIndex = 3;
             // 
             // Vertex
@@ -199,11 +200,21 @@
             this.Distance.Name = "Distance";
             this.Distance.ReadOnly = true;
             // 
+            // LB_PerformedOpetations
+            // 
+            this.LB_PerformedOpetations.AutoSize = true;
+            this.LB_PerformedOpetations.Location = new System.Drawing.Point(627, 536);
+            this.LB_PerformedOpetations.Name = "LB_PerformedOpetations";
+            this.LB_PerformedOpetations.Size = new System.Drawing.Size(122, 13);
+            this.LB_PerformedOpetations.TabIndex = 4;
+            this.LB_PerformedOpetations.Text = "Wykonanych operacji: 0";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 561);
+            this.Controls.Add(this.LB_PerformedOpetations);
             this.Controls.Add(this.DGV_AlgorithmResult);
             this.Controls.Add(this.GB_Algorithms);
             this.Controls.Add(this.GB_MathObjectProperties);
@@ -243,5 +254,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn PreviousVertex;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.ToolStripMenuItem TSMI_RandomGraphCreatorDialog;
+        private System.Windows.Forms.Label LB_PerformedOpetations;
     }
 }

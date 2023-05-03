@@ -500,7 +500,8 @@ namespace GraphAlgorithmVisualizer
                     default:
                         throw new NotImplementedException();
                 }
-                algorithm.Perform(startVertex);
+                //algorithm.Perform(startVertex);
+                algorithm.PerformAndCount(startVertex);
             } 
             catch (AlgorithmException exception)
             {
@@ -523,6 +524,7 @@ namespace GraphAlgorithmVisualizer
                 DGV_AlgorithmResult.Rows[i].Cells[1].Value = algorithm.GetFirstColumnDataForVertex(v);
                 DGV_AlgorithmResult.Rows[i].Cells[2].Value = algorithm.GetSecondColumnDataForVertex(v);
             }
+            LB_PerformedOpetations.Text = algorithm.GetOperationsPerformed();
         }
     }
 }

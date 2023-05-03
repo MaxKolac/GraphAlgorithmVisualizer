@@ -16,6 +16,10 @@ namespace GraphAlgorithmVisualizer.Algorithms
         protected readonly Dictionary<Vertex, int> distance;
         protected readonly Graph graph;
 
+        protected int comparisonsCount = 0;
+        protected int iterationsCount = 0;
+        protected int operationsCount = 0;
+
         /// <summary>
         /// If a Distance has a value greater or equal to Infinity, then the Distance is considered as "infinite".
         /// </summary>
@@ -66,14 +70,41 @@ namespace GraphAlgorithmVisualizer.Algorithms
             StartVertex = v;
         }
         /// <summary>
-        /// Analyzes the <c>Graph</c> and fills the <c>previousVertex</c> and <c>distance</c> dictionaries with algorithm results.
+        /// Analyzes the <c>Graph</c>, fills the <c>previousVertex</c> and <c>distance</c> dictionaries with algorithm results and resets the performance counters.
         /// </summary>
         /// <param name="start">The <c>Vertex</c> from the <c>Graph</c> which will be a starting point for the algorithm.</param>
         public virtual void Perform(Vertex start)
         {
+            ResetPerformanceCounters();
             SetStartVertex(start);
             ClearDictionaries(false);
         }
+        /// <summary>
+        /// Analyzes the <c>Graph</c>, fills the <c>previousVertex</c> and <c>distance</c> dictionaries with algorithm results and resets the performance counters.
+        /// This variant additionally counts all comparisons, loop iterations and performed operations.
+        /// </summary>
+        /// <param name="start">The <c>Vertex</c> from the <c>Graph</c> which will be a starting point for the algorithm.</param>
+        public virtual void PerformAndCount(Vertex start)
+        {
+            ResetPerformanceCounters();
+            SetStartVertex(start);
+            ClearDictionaries(false);
+        }
+        /// <summary>
+        /// Sets all performance counters (iterations, operations, comparisons) back to zero.
+        /// </summary>
+        public void ResetPerformanceCounters()
+        {
+            operationsCount = 0;
+            iterationsCount = 0;
+            comparisonsCount = 0;
+        }
+
+        public virtual string GetFirstColumnLabel() => "Poprzedni wierz.";
+        public virtual Vertex GetFirstColumnDataForVertex(Vertex v) => previousVertex[v];
+        public virtual string GetSecondColumnLabel() => "Dystans";
+        public virtual int GetSecondColumnDataForVertex(Vertex v) => distance[v];
+        public virtual string GetOperationsPerformed() => $"Wykonanych operacji: {operationsCount + iterationsCount + comparisonsCount}";
 
         public override string ToString()
         {
@@ -91,10 +122,5 @@ namespace GraphAlgorithmVisualizer.Algorithms
                 builder.AppendLine($"\t{pair.Key}\t|\t{pair.Value}");
             return builder.ToString();
         }
-
-        public virtual string GetFirstColumnLabel() => "Poprzedni wierz.";
-        public virtual Vertex GetFirstColumnDataForVertex(Vertex v) => previousVertex[v];
-        public virtual string GetSecondColumnLabel() => "Dystans";
-        public virtual int GetSecondColumnDataForVertex(Vertex v) => distance[v];
     }
 }
