@@ -57,7 +57,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
             Console.ReadKey();
         }
 
-        public static void DjikstraTest()
+        public static void DijkstraTest()
         {
             Graph graph = new Graph(true, true, DistanceRange.Natural, 5);
             graph.AddEdge(graph.V(0), graph.V(1), 4);
@@ -75,9 +75,9 @@ namespace GraphAlgorithmVisualizer.Algorithms
             Console.WriteLine(graph.ToString());
             Console.ReadKey();
 
-            DjikstraAlgorithm djikstra = new DjikstraAlgorithm(graph);
-            djikstra.Perform(graph.V(0));
-            Console.WriteLine(djikstra.ToString());
+            DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(graph);
+            dijkstra.Perform(graph.V(0));
+            Console.WriteLine(dijkstra.ToString());
             Console.ReadKey();
         }
     }

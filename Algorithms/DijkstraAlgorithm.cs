@@ -5,14 +5,14 @@ using GraphAlgorithmVisualizer.MathObjects;
 
 namespace GraphAlgorithmVisualizer.Algorithms
 {
-    internal class DjikstraAlgorithm : Algorithm
+    internal class DijkstraAlgorithm : Algorithm
     {
-        public DjikstraAlgorithm(Graph graph) : base(graph)
+        public DijkstraAlgorithm(Graph graph) : base(graph)
         {
             if (!graph.UsesDistances)
-                throw new AlgorithmException("Algorytm Djikstra może być przeprowadzony tylko na grafach implementujących dystanse.");
+                throw new AlgorithmException("Algorytm Dijkstry może być przeprowadzony tylko na grafach implementujących dystanse.");
             if (graph.AcceptableDistances != DistanceRange.Natural)
-                throw new AlgorithmException("Algorytm Djikstra nie może być wykonywany na grafach, które mogą zawierać ujemne lub zerowe dystance na swoich krawędziach.");
+                throw new AlgorithmException("Algorytm Dijkstry nie może być wykonywany na grafach, które mogą zawierać ujemne lub zerowe dystance na swoich krawędziach.");
         }
 
         public override void Perform(Vertex start)
@@ -21,16 +21,16 @@ namespace GraphAlgorithmVisualizer.Algorithms
             ClearDictionaries(true);
             distance[start] = 0;
 
-            DjikstraQueue<Vertex> djikstraQueue = new DjikstraQueue<Vertex>();
-            djikstraQueue.Enqueue(start);
+            DijkstraQueue<Vertex> dijkstraQueue = new DijkstraQueue<Vertex>();
+            dijkstraQueue.Enqueue(start);
             foreach (Vertex v in graph.VerticesArray)
                 if (!v.Equals(start))
-                    djikstraQueue.Enqueue(v);
+                    dijkstraQueue.Enqueue(v);
 
             do
             {
                 //Dequeue the next vertex from Queue.
-                Vertex currentVertex = djikstraQueue.Dequeue();
+                Vertex currentVertex = dijkstraQueue.Dequeue();
                 visited[currentVertex] = true;
 
                 //Build a list of all Edges starting from that Vertex
@@ -52,10 +52,10 @@ namespace GraphAlgorithmVisualizer.Algorithms
                     {
                         distance[outgoingEdges[i].End] = (int)(distance[outgoingEdges[i].Start] + outgoingEdges[i].Distance);
                         previousVertex[outgoingEdges[i].End] = outgoingEdges[i].Start;
-                        djikstraQueue.PushInFront(outgoingEdges[i].End);
+                        dijkstraQueue.PushInFront(outgoingEdges[i].End);
                     }
                 }
-            } while (!djikstraQueue.IsEmpty);
+            } while (!dijkstraQueue.IsEmpty);
         }
         public override void PerformAndCount(Vertex start)
         {
@@ -64,22 +64,22 @@ namespace GraphAlgorithmVisualizer.Algorithms
             ClearDictionaries(true); assignmentsCount++;
             distance[start] = 0; assignmentsCount++;
 
-            DjikstraQueue<Vertex> djikstraQueue = new DjikstraQueue<Vertex>(); assignmentsCount++;
-            djikstraQueue.Enqueue(start); assignmentsCount++;
+            DijkstraQueue<Vertex> dijkstraQueue = new DijkstraQueue<Vertex>(); assignmentsCount++;
+            dijkstraQueue.Enqueue(start); assignmentsCount++;
             foreach (Vertex v in graph.VerticesArray)
             {
                 iterationsCount++;
                 comparisonsCount++;
                 if (!v.Equals(start))
                 {
-                    djikstraQueue.Enqueue(v); assignmentsCount++;
+                    dijkstraQueue.Enqueue(v); assignmentsCount++;
                 }
             }
 
             do
             {
                 //Dequeue the next vertex from Queue.
-                Vertex currentVertex = djikstraQueue.Dequeue(); assignmentsCount++;
+                Vertex currentVertex = dijkstraQueue.Dequeue(); assignmentsCount++;
                 visited[currentVertex] = true; assignmentsCount++;
 
                 //Build a list of all Edges starting from that Vertex
@@ -108,7 +108,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
                     {
                         distance[outgoingEdges[i].End] = (int)(distance[outgoingEdges[i].Start] + outgoingEdges[i].Distance); assignmentsCount++;
                         previousVertex[outgoingEdges[i].End] = outgoingEdges[i].Start; assignmentsCount++;
-                        djikstraQueue.PushInFront(
+                        dijkstraQueue.PushInFront(
                             outgoingEdges[i].End, 
                             out int queueAssignments, 
                             out int queueComparisons,
@@ -120,20 +120,20 @@ namespace GraphAlgorithmVisualizer.Algorithms
                 }
                 iterationsCount++;
                 comparisonsCount++;
-            } while (!djikstraQueue.IsEmpty);
+            } while (!dijkstraQueue.IsEmpty);
 
             //Console.WriteLine($"iterations: {iterationsCount}\ncomparisons: {comparationsCount}\noperations: {operationsCount}");
             Console.WriteLine($"|E|:{graph.EdgesCount}\t|\t|V|:{graph.VerticesCount}\t|\tOper.:{iterationsCount + assignmentsCount + comparisonsCount}");
         }
     }
 
-    internal class DjikstraQueue<T>
+    internal class DijkstraQueue<T>
     {
         private readonly Queue<T> queue;
         public int Count => queue.Count;
         public bool IsEmpty => queue.Count == 0;
 
-        public DjikstraQueue()
+        public DijkstraQueue()
         {
             queue = new Queue<T>();
         }

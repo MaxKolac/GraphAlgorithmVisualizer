@@ -491,8 +491,8 @@ namespace GraphAlgorithmVisualizer
                     case 1: //BreadthFirstSearch
                         algorithm = new BreadthFirstSearch(graph);
                         break;
-                    case 2: //Djikstra Algorithm
-                        algorithm = new DjikstraAlgorithm(graph);
+                    case 2: //Dijkstra Algorithm
+                        algorithm = new DijkstraAlgorithm(graph);
                         break;
                     case 3: //Bellman-Ford Algorithm
                         algorithm = new BellmanFordAlgorithm(graph);

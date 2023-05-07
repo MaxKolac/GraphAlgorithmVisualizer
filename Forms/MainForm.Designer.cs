@@ -150,8 +150,7 @@
             this.CB_Algorithm.Items.AddRange(new object[] {
             "Algorytm wyszukiwania \"wszesz\"",
             "Algorytm wyszukiwania \"wgłąb\"",
-            "Algorytm Djikstra",
-            "Algorytm Bellmana-Forda"});
+            "Algorytm Dijkstry"});
             this.CB_Algorithm.Location = new System.Drawing.Point(6, 19);
             this.CB_Algorithm.Name = "CB_Algorithm";
             this.CB_Algorithm.Size = new System.Drawing.Size(177, 21);
@@ -224,7 +223,7 @@
             this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Projekt Nr. 2 - Kreator grafów z implementacją algorytmu Djikstry - Algorytmy i Z" +
+            this.Text = "Projekt Nr. 2 - Kreator grafów z implementacją algorytmu Dijkstry - Algorytmy i Z" +
     "łożoność - Maksymilian Kołaciński nr. alb.: 57527";
             ((System.ComponentModel.ISupportInitialize)(this.PB_Canvas)).EndInit();
             this.GB_MathObjectProperties.ResumeLayout(false);
