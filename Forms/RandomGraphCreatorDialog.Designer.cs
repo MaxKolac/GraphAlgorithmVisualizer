@@ -75,7 +75,7 @@
             // 
             this.NUD_EdgesMax.Location = new System.Drawing.Point(194, 80);
             this.NUD_EdgesMax.Maximum = new decimal(new int[] {
-            6,
+            90,
             0,
             0,
             0});
@@ -89,7 +89,7 @@
             this.NUD_EdgesMax.TabIndex = 14;
             this.NUD_EdgesMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.NUD_EdgesMax.Value = new decimal(new int[] {
-            6,
+            90,
             0,
             0,
             0});
@@ -98,7 +98,7 @@
             // 
             this.NUD_EdgesMin.Location = new System.Drawing.Point(134, 80);
             this.NUD_EdgesMin.Maximum = new decimal(new int[] {
-            6,
+            45,
             0,
             0,
             0});
@@ -112,7 +112,7 @@
             this.NUD_EdgesMin.TabIndex = 13;
             this.NUD_EdgesMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.NUD_EdgesMin.Value = new decimal(new int[] {
-            4,
+            45,
             0,
             0,
             0});
@@ -197,7 +197,7 @@
             this.NUD_VerticesMax.TabIndex = 8;
             this.NUD_VerticesMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.NUD_VerticesMax.Value = new decimal(new int[] {
-            8,
+            10,
             0,
             0,
             0});
@@ -221,7 +221,7 @@
             this.NUD_VerticesMin.TabIndex = 7;
             this.NUD_VerticesMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.NUD_VerticesMin.Value = new decimal(new int[] {
-            4,
+            10,
             0,
             0,
             0});
@@ -242,6 +242,8 @@
             // CB_IsDirectional
             // 
             this.CB_IsDirectional.AutoSize = true;
+            this.CB_IsDirectional.Checked = true;
+            this.CB_IsDirectional.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CB_IsDirectional.Location = new System.Drawing.Point(146, 106);
             this.CB_IsDirectional.Name = "CB_IsDirectional";
             this.CB_IsDirectional.Size = new System.Drawing.Size(102, 17);
@@ -252,6 +254,8 @@
             // CB_UsesDistances
             // 
             this.CB_UsesDistances.AutoSize = true;
+            this.CB_UsesDistances.Checked = true;
+            this.CB_UsesDistances.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CB_UsesDistances.Location = new System.Drawing.Point(82, 129);
             this.CB_UsesDistances.Name = "CB_UsesDistances";
             this.CB_UsesDistances.Size = new System.Drawing.Size(219, 17);

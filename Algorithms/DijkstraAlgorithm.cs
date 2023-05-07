@@ -128,7 +128,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
             } while (!dijkstraQueue.IsEmpty);
 
             //Console.WriteLine($"iterations: {iterationsCount}\ncomparisons: {comparationsCount}\noperations: {operationsCount}");
-            //Console.WriteLine($"|E|:{graph.EdgesCount}\t|\t|V|:{graph.VerticesCount}\t|\tOper.:{iterationsCount + assignmentsCount + comparisonsCount}");
+            Console.WriteLine($"|E|:{graph.EdgesCount}\t|\t|V|:{graph.VerticesCount}\t|\tOper.:{iterationsCount + assignmentsCount + comparisonsCount}");
         }
     }
 
