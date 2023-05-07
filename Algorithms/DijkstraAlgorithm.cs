@@ -48,11 +48,13 @@ namespace GraphAlgorithmVisualizer.Algorithms
                 //Iterate over the matched, outgoing edges
                 for (int i = 0; i < outgoingEdges.Count; i++)
                 {
-                    if (distance[outgoingEdges[i].End] > distance[outgoingEdges[i].Start] + (outgoingEdges[i].Distance ?? 0))
+                    Vertex matchedVertex = outgoingEdges[i].Start == currentVertex ? outgoingEdges[i].Start : outgoingEdges[i].End;
+                    Vertex otherVertex = outgoingEdges[i].Start == currentVertex ? outgoingEdges[i].End : outgoingEdges[i].Start;
+                    if (distance[otherVertex] > distance[matchedVertex] + (outgoingEdges[i].Distance ?? 0))
                     {
-                        distance[outgoingEdges[i].End] = (int)(distance[outgoingEdges[i].Start] + outgoingEdges[i].Distance);
-                        previousVertex[outgoingEdges[i].End] = outgoingEdges[i].Start;
-                        dijkstraQueue.PushInFront(outgoingEdges[i].End);
+                        distance[otherVertex] = (int)(distance[matchedVertex] + outgoingEdges[i].Distance); 
+                        previousVertex[otherVertex] = matchedVertex;
+                        dijkstraQueue.PushInFront(otherVertex);
                     }
                 }
             } while (!dijkstraQueue.IsEmpty);
@@ -96,20 +98,23 @@ namespace GraphAlgorithmVisualizer.Algorithms
                 //Sort in descending order
                 //https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1.sort?redirectedfrom=MSDN&view=net-7.0#System_Collections_Generic_List_1_Sort
                 //According to MSDN documentation, average time complexity is O(n * log n), because the used algorithm is QuickSort.
+                //FYI, logarithm's base must be greater than 0
                 outgoingEdges.Sort();
-                assignmentsCount += (int)Math.Round(outgoingEdges.Count * Math.Log(outgoingEdges.Count, 2));
+                assignmentsCount += outgoingEdges.Count > 0 ? (int)Math.Ceiling(outgoingEdges.Count * Math.Log(outgoingEdges.Count, 2)) : 0;
 
                 //Iterate over the matched, outgoing edges
                 for (int i = 0; i < outgoingEdges.Count; i++)
                 {
                     iterationsCount++;
+                    Vertex matchedVertex = outgoingEdges[i].Start == currentVertex ? outgoingEdges[i].Start : outgoingEdges[i].End; comparisonsCount++; assignmentsCount++;
+                    Vertex otherVertex = outgoingEdges[i].Start == currentVertex ? outgoingEdges[i].End : outgoingEdges[i].Start; comparisonsCount++; assignmentsCount++;
                     comparisonsCount++;
-                    if (distance[outgoingEdges[i].End] > distance[outgoingEdges[i].Start] + (outgoingEdges[i].Distance ?? 0))
+                    if (distance[otherVertex] > distance[matchedVertex] + (outgoingEdges[i].Distance ?? 0))
                     {
-                        distance[outgoingEdges[i].End] = (int)(distance[outgoingEdges[i].Start] + outgoingEdges[i].Distance); assignmentsCount++;
-                        previousVertex[outgoingEdges[i].End] = outgoingEdges[i].Start; assignmentsCount++;
+                        distance[otherVertex] = (int)(distance[matchedVertex] + outgoingEdges[i].Distance); assignmentsCount++;
+                        previousVertex[otherVertex] = matchedVertex; assignmentsCount++;
                         dijkstraQueue.PushInFront(
-                            outgoingEdges[i].End, 
+                            otherVertex, 
                             out int queueAssignments, 
                             out int queueComparisons,
                             out int queueIterations); 
@@ -123,7 +128,7 @@ namespace GraphAlgorithmVisualizer.Algorithms
             } while (!dijkstraQueue.IsEmpty);
 
             //Console.WriteLine($"iterations: {iterationsCount}\ncomparisons: {comparationsCount}\noperations: {operationsCount}");
-            Console.WriteLine($"|E|:{graph.EdgesCount}\t|\t|V|:{graph.VerticesCount}\t|\tOper.:{iterationsCount + assignmentsCount + comparisonsCount}");
+            //Console.WriteLine($"|E|:{graph.EdgesCount}\t|\t|V|:{graph.VerticesCount}\t|\tOper.:{iterationsCount + assignmentsCount + comparisonsCount}");
         }
     }
 
