@@ -62,37 +62,37 @@ namespace GraphAlgorithmVisualizer.Algorithms
         public override void PerformAndCount(Vertex start)
         {
             ResetPerformanceCounters();
-            SetStartVertex(start); assignmentsCount++;
-            ClearDictionaries(true); assignmentsCount++;
-            distance[start] = 0; assignmentsCount++;
+            SetStartVertex(start); AssignmentsCount++;
+            ClearDictionaries(true); AssignmentsCount++;
+            distance[start] = 0; AssignmentsCount++;
 
-            DijkstraQueue<Vertex> dijkstraQueue = new DijkstraQueue<Vertex>(); assignmentsCount++;
-            dijkstraQueue.Enqueue(start); assignmentsCount++;
+            DijkstraQueue<Vertex> dijkstraQueue = new DijkstraQueue<Vertex>(); AssignmentsCount++;
+            dijkstraQueue.Enqueue(start); AssignmentsCount++;
             foreach (Vertex v in graph.VerticesArray)
             {
-                iterationsCount++;
-                comparisonsCount++;
+                IterationsCount++;
+                ComparisonsCount++;
                 if (!v.Equals(start))
                 {
-                    dijkstraQueue.Enqueue(v); assignmentsCount++;
+                    dijkstraQueue.Enqueue(v); AssignmentsCount++;
                 }
             }
 
             do
             {
                 //Dequeue the next vertex from Queue.
-                Vertex currentVertex = dijkstraQueue.Dequeue(); assignmentsCount++;
-                visited[currentVertex] = true; assignmentsCount++;
+                Vertex currentVertex = dijkstraQueue.Dequeue(); AssignmentsCount++;
+                visited[currentVertex] = true; AssignmentsCount++;
 
                 //Build a list of all Edges starting from that Vertex
-                List<Edge> outgoingEdges = new List<Edge>(); assignmentsCount++;
+                List<Edge> outgoingEdges = new List<Edge>(); AssignmentsCount++;
                 foreach (Edge edge in graph.EdgesArray)
                 {
-                    iterationsCount++;
-                    comparisonsCount++;
+                    IterationsCount++;
+                    ComparisonsCount++;
                     if (!edge.IsStartingFrom(currentVertex))
                         continue;
-                    outgoingEdges.Add(edge); assignmentsCount++;
+                    outgoingEdges.Add(edge); AssignmentsCount++;
                 }
 
                 //Sort in descending order
@@ -100,35 +100,35 @@ namespace GraphAlgorithmVisualizer.Algorithms
                 //According to MSDN documentation, average time complexity is O(n * log n), because the used algorithm is QuickSort.
                 //FYI, logarithm's base must be greater than 0
                 outgoingEdges.Sort();
-                assignmentsCount += outgoingEdges.Count > 0 ? (int)Math.Ceiling(outgoingEdges.Count * Math.Log(outgoingEdges.Count, 2)) : 0;
+                AssignmentsCount += outgoingEdges.Count > 0 ? (int)Math.Ceiling(outgoingEdges.Count * Math.Log(outgoingEdges.Count, 2)) : 0;
 
                 //Iterate over the matched, outgoing edges
                 for (int i = 0; i < outgoingEdges.Count; i++)
                 {
-                    iterationsCount++;
-                    Vertex matchedVertex = outgoingEdges[i].Start == currentVertex ? outgoingEdges[i].Start : outgoingEdges[i].End; comparisonsCount++; assignmentsCount++;
-                    Vertex otherVertex = outgoingEdges[i].Start == currentVertex ? outgoingEdges[i].End : outgoingEdges[i].Start; comparisonsCount++; assignmentsCount++;
-                    comparisonsCount++;
+                    IterationsCount++;
+                    Vertex matchedVertex = outgoingEdges[i].Start == currentVertex ? outgoingEdges[i].Start : outgoingEdges[i].End; ComparisonsCount++; AssignmentsCount++;
+                    Vertex otherVertex = outgoingEdges[i].Start == currentVertex ? outgoingEdges[i].End : outgoingEdges[i].Start; ComparisonsCount++; AssignmentsCount++;
+                    ComparisonsCount++;
                     if (distance[otherVertex] > distance[matchedVertex] + (outgoingEdges[i].Distance ?? 0))
                     {
-                        distance[otherVertex] = (int)(distance[matchedVertex] + outgoingEdges[i].Distance); assignmentsCount++;
-                        previousVertex[otherVertex] = matchedVertex; assignmentsCount++;
+                        distance[otherVertex] = (int)(distance[matchedVertex] + outgoingEdges[i].Distance); AssignmentsCount++;
+                        previousVertex[otherVertex] = matchedVertex; AssignmentsCount++;
                         dijkstraQueue.PushInFront(
                             otherVertex, 
                             out int queueAssignments, 
                             out int queueComparisons,
                             out int queueIterations); 
-                        assignmentsCount += queueAssignments;
-                        comparisonsCount += queueComparisons;
-                        iterationsCount += queueIterations;
+                        AssignmentsCount += queueAssignments;
+                        ComparisonsCount += queueComparisons;
+                        IterationsCount += queueIterations;
                     }
                 }
-                iterationsCount++;
-                comparisonsCount++;
+                IterationsCount++;
+                ComparisonsCount++;
             } while (!dijkstraQueue.IsEmpty);
 
             //Console.WriteLine($"iterations: {iterationsCount}\ncomparisons: {comparationsCount}\noperations: {operationsCount}");
-            Console.WriteLine($"|E|:{graph.EdgesCount}\t|\t|V|:{graph.VerticesCount}\t|\tOper.:{iterationsCount + assignmentsCount + comparisonsCount}");
+            Console.WriteLine($"|E|:{graph.EdgesCount}\t|\t|V|:{graph.VerticesCount}\t|\tOper.:{IterationsCount + AssignmentsCount + ComparisonsCount}");
         }
     }
 

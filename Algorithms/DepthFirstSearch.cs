@@ -33,22 +33,22 @@ namespace GraphAlgorithmVisualizer.Algorithms
         public override void PerformAndCount(Vertex start)
         {
             base.Perform(start);
-            outgoingEdges.Clear(); assignmentsCount++;
+            outgoingEdges.Clear(); AssignmentsCount++;
             foreach (Vertex v in graph.VerticesArray)
             {
-                iterationsCount++;
-                outgoingEdges.Add(v, new List<Vertex>()); assignmentsCount++;
+                IterationsCount++;
+                outgoingEdges.Add(v, new List<Vertex>()); AssignmentsCount++;
             }
 
             GoDownBranchAndCount(start);
             while (visited.Values.Contains(false))
             {
-                comparisonsCount++;
-                iterationsCount++;
+                ComparisonsCount++;
+                IterationsCount++;
                 foreach (Vertex v in graph.VerticesArray)
                 {
-                    iterationsCount++;
-                    comparisonsCount++;
+                    IterationsCount++;
+                    ComparisonsCount++;
                     if (!visited[v])
                         GoDownBranch(v);
                 }
@@ -88,28 +88,28 @@ namespace GraphAlgorithmVisualizer.Algorithms
         /// <param name="currentVertex">The starting Vertex from which the method starts from.</param>
         private void GoDownBranchAndCount(Vertex currentVertex)
         {
-            visited[currentVertex] = true; assignmentsCount++;
+            visited[currentVertex] = true; AssignmentsCount++;
             foreach (Edge edge in graph.EdgesArray)
             {
-                iterationsCount++;
-                comparisonsCount++;
+                IterationsCount++;
+                ComparisonsCount++;
                 if (!edge.IsStartingFrom(currentVertex))
                 {
                     continue;
                 }
-                Vertex matchedEdgesVertex = edge.Start.Equals(currentVertex) ? edge.Start : edge.End; assignmentsCount++; comparisonsCount++;
-                Vertex otherEdgesVertex = edge.Start.Equals(currentVertex) ? edge.End : edge.Start; assignmentsCount++; comparisonsCount++;
-                comparisonsCount++;
+                Vertex matchedEdgesVertex = edge.Start.Equals(currentVertex) ? edge.Start : edge.End; AssignmentsCount++; ComparisonsCount++;
+                Vertex otherEdgesVertex = edge.Start.Equals(currentVertex) ? edge.End : edge.Start; AssignmentsCount++; ComparisonsCount++;
+                ComparisonsCount++;
                 if (!visited[otherEdgesVertex])
                 {
-                    previousVertex[otherEdgesVertex] = currentVertex; assignmentsCount++;
-                    distance[otherEdgesVertex] = distance[currentVertex] + 1; assignmentsCount++;
-                    outgoingEdges[matchedEdgesVertex].Add(otherEdgesVertex); assignmentsCount++;
+                    previousVertex[otherEdgesVertex] = currentVertex; AssignmentsCount++;
+                    distance[otherEdgesVertex] = distance[currentVertex] + 1; AssignmentsCount++;
+                    outgoingEdges[matchedEdgesVertex].Add(otherEdgesVertex); AssignmentsCount++;
                 }
             }
             foreach (Vertex nextVertex in outgoingEdges[currentVertex])
             {
-                iterationsCount++;
+                IterationsCount++;
                 GoDownBranchAndCount(nextVertex);
             }
         }

@@ -16,9 +16,9 @@ namespace GraphAlgorithmVisualizer.Algorithms
         protected readonly Dictionary<Vertex, int> distance;
         protected readonly Graph graph;
 
-        protected int comparisonsCount = 0;
-        protected int iterationsCount = 0;
-        protected int assignmentsCount = 0;
+        public int ComparisonsCount { protected set; get; } = 0;
+        public int IterationsCount { protected set; get; } = 0;
+        public int AssignmentsCount { protected set; get; } = 0;
 
         /// <summary>
         /// If a Distance has a value greater or equal to Infinity, then the Distance is considered as "infinite".
@@ -88,27 +88,28 @@ namespace GraphAlgorithmVisualizer.Algorithms
         {
             ResetPerformanceCounters();
             SetStartVertex(start); 
-            comparisonsCount++; 
-            assignmentsCount++;
+            ComparisonsCount++; 
+            AssignmentsCount++;
             ClearDictionaries(false);
-            assignmentsCount += 3 * (graph.VerticesCount + 1);
-            comparisonsCount += graph.VerticesCount;
+            AssignmentsCount += 3 * (graph.VerticesCount + 1);
+            ComparisonsCount += graph.VerticesCount;
         }
         /// <summary>
         /// Sets all performance counters (iterations, operations, comparisons) back to zero.
         /// </summary>
         public void ResetPerformanceCounters()
         {
-            assignmentsCount = 0;
-            iterationsCount = 0;
-            comparisonsCount = 0;
+            AssignmentsCount = 0;
+            IterationsCount = 0;
+            ComparisonsCount = 0;
         }
 
         public virtual string GetFirstColumnLabel() => "Poprzedni wierz.";
         public virtual Vertex GetFirstColumnDataForVertex(Vertex v) => previousVertex[v];
         public virtual string GetSecondColumnLabel() => "Dystans";
         public virtual int GetSecondColumnDataForVertex(Vertex v) => distance[v];
-        public virtual string GetOperationsPerformed() => $"Wykonane operacje: {assignmentsCount + comparisonsCount} + {iterationsCount} iteracji";
+        /// <returns>A formatted string containing a sum of assignments and a separate count of iterations.</returns>
+        public virtual string GetOperationsPerformed() => $"Wykonane operacje: {AssignmentsCount + ComparisonsCount} + {IterationsCount} iteracji";
 
         public override string ToString()
         {
