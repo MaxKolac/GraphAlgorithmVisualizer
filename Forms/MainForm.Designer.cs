@@ -44,6 +44,7 @@
             this.PreviousVertex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LB_PerformedOpetations = new System.Windows.Forms.Label();
+            this.TSMI_GraphSeries = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.PB_Canvas)).BeginInit();
             this.GB_MathObjectProperties.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -87,6 +88,7 @@
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TSMI_CreateNewGraph,
             this.TSMI_RandomGraphCreatorDialog,
+            this.TSMI_GraphSeries,
             this.TSMI_AddVertex,
             this.TSMI_AddEdge});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
@@ -208,6 +210,13 @@
             this.LB_PerformedOpetations.TabIndex = 4;
             this.LB_PerformedOpetations.Text = "Wykonanych operacji:";
             // 
+            // TSMI_GraphSeries
+            // 
+            this.TSMI_GraphSeries.Name = "TSMI_GraphSeries";
+            this.TSMI_GraphSeries.Size = new System.Drawing.Size(136, 20);
+            this.TSMI_GraphSeries.Text = "Generuj serię grafów...";
+            this.TSMI_GraphSeries.Click += new System.EventHandler(this.GraphSeriesClicked);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -254,5 +263,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.ToolStripMenuItem TSMI_RandomGraphCreatorDialog;
         private System.Windows.Forms.Label LB_PerformedOpetations;
+        private System.Windows.Forms.ToolStripMenuItem TSMI_GraphSeries;
     }
 }

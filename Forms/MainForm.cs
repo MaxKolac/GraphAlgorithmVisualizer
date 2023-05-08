@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using GraphAlgorithmVisualizer.Algorithms;
 using GraphAlgorithmVisualizer.Exceptions;
@@ -525,6 +526,35 @@ namespace GraphAlgorithmVisualizer
                 DGV_AlgorithmResult.Rows[i].Cells[2].Value = algorithm.GetSecondColumnDataForVertex(v);
             }
             LB_PerformedOpetations.Text = algorithm.GetOperationsPerformed();
+        }
+        private void GraphSeriesClicked(object sender, EventArgs e)
+        {
+            List<string> amountOfEdges = new List<string>();
+            List<string> operations = new List<string>();
+            List<string> iterations = new List<string>();
+            int verticesCount = 50;
+            int edgesCount = 10;
+
+            do
+            {
+                Graph analyzedGraph = RandomGraphCreatorDialog.GenerateRandomGraph(verticesCount, edgesCount, true, true, 5, 20);
+                Algorithm dijkstra = new DijkstraAlgorithm(analyzedGraph);
+                dijkstra.PerformAndCount(analyzedGraph.GetVertex(new Random().Next(0, verticesCount)));
+
+                amountOfEdges.Add($"{edgesCount}");
+                operations.Add($"{dijkstra.AssignmentsCount + dijkstra.ComparisonsCount}");
+                iterations.Add($"{dijkstra.IterationsCount}");
+
+                edgesCount += 10;
+            }
+            while (edgesCount <= 2000);
+
+            using (StreamWriter writer = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\csv_output.txt"))
+            {
+                writer.WriteLine("Krawędzie,Operacje,Iteracje");
+                for (int i = 0; i < amountOfEdges.Count; i++)
+                    writer.WriteLine($"{amountOfEdges[i]},{operations[i]},{iterations[i]}");
+            }
         }
     }
 }
